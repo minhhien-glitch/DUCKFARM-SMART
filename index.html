@@ -34,7 +34,7 @@
 <body>
 <div class="app">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="brand-mark">🦆</div><div><h1>DUCKFARM SMART</h1><p>Quản trị trang trại số</p></div></div>
+  <div class="brand"><div class="brand-mark">🦆</div><div><h1>DUCKFARM SMART</h1><p>Quản trị chuồng trại số</p></div></div>
   <div><div class="nav-label">KHÔNG GIAN LÀM VIỆC</div><nav class="nav" id="nav">
     <button class="active" data-page="dashboard"><span class="ico">▦</span>Tổng quan</button>
     <button data-page="flocks"><span class="ico">🦆</span>Quản lý đàn vịt</button>
@@ -43,7 +43,7 @@
     <button data-page="finance"><span class="ico">↗</span>Tài chính</button>
     <button data-page="minutes"><span class="ico">📝</span>Biên bản & nhu cầu</button>
   </nav></div>
-  <div class="side-bottom"><div class="farm-card"><small>TRANG TRẠI ĐANG QUẢN LÝ</small><strong>🌱 Trang trại GRIMAUD Việt Nam </strong><span>● Đang hoạt động</span></div><div style="font-size:10px;color:#8fb3a5;padding:17px 10px 0">DUCKFARM SMART · Bản demo 1.0</div></div>
+  <div class="side-bottom"><div class="farm-card"><small>TRANG TRẠI ĐANG QUẢN LÝ</small><strong>🌱 Chuồng trại GRIMAUD 01 </strong><span>● Đang hoạt động</span></div><div style="font-size:10px;color:#8fb3a5;padding:17px 10px 0">DUCKFARM SMART · Bản demo 1.0</div></div>
 </aside>
 <main class="main">
 <header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" id="mobileMenu" aria-label="Mở menu">☰</button><div class="crumb">Trang trại / <b id="crumbTitle">Tổng quan</b></div></div><div class="top-actions"><span class="today" id="today"></span><div class="avatar" title="Quản lý trang trại">AB</div></div></header>
@@ -389,10 +389,10 @@ const num=n=>new Intl.NumberFormat('vi-VN').format(Number(n)||0);
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initial={
  flocks:[
- {id:1,name:'Lứa vịt GRIMAUD 01',breed:'Vịt siêu thịt',count:850,date:'2026-09-12',age:46,status:'Đang nuôi',note:'Đàn phát triển ổn định'},
- {id:2,name:'Lứa vịt GRIMAUD 02',breed:'Vịt cỏ',count:600,date:'2026-09-25',age:33,status:'Đang nuôi',note:''},
- {id:3,name:'Lứa vịt GRIMAUD 03',breed:'Vịt siêu thịt',count:700,date:'2026-10-05',age:23,status:'Đang nuôi',note:''},
- {id:4,name:'Lứa vịt GRIMAUD 04',breed:'Vịt bầu',count:300,date:'2026-08-28',age:61,status:'Sắp xuất bán',note:'Chuẩn bị kiểm tra trọng lượng'}
+ {id:1,name:'Lứa vịt 01',breed:'Vịt siêu thịt',count:850,date:'2026-09-12',age:46,status:'Đang nuôi',note:'Đàn phát triển ổn định'},
+ {id:2,name:'Lứa vịt 02',breed:'Vịt cỏ',count:600,date:'2026-09-25',age:33,status:'Đang nuôi',note:''},
+ {id:3,name:'Lứa vịt 03',breed:'Vịt siêu thịt',count:700,date:'2026-10-05',age:23,status:'Đang nuôi',note:''},
+ {id:4,name:'Lứa vịt 04',breed:'Vịt bầu',count:300,date:'2026-08-28',age:61,status:'Sắp xuất bán',note:'Chuẩn bị kiểm tra trọng lượng'}
  ],
  feed:[
  {id:1,name:'Cám hỗn hợp vịt thịt',group:'Thức ăn',stock:680,unit:'kg',price:12500,min:100},
@@ -401,20 +401,20 @@ const initial={
  {id:4,name:'Dung dịch sát trùng',group:'Vệ sinh chuồng trại',stock:4,unit:'lít',price:95000,min:5}
  ],
  health:[
- {id:1,title:'Kiểm tra sức khỏe định kỳ',flock:'Lứa vịt GRIMAUD 01',date:dateOffset(0),person:'Nguyễn Văn An',status:'Chờ thực hiện',note:''},
+ {id:1,title:'Kiểm tra sức khỏe định kỳ',flock:'Lứa vịt 01',date:dateOffset(0),person:'Nguyễn Văn An',status:'Chờ thực hiện',note:''},
  {id:2,title:'Vệ sinh và sát trùng chuồng',flock:'Tất cả các lứa',date:dateOffset(1),person:'Trần Minh Hòa',status:'Chờ thực hiện',note:''},
- {id:3,title:'Theo dõi tăng trọng',flock:'Lứa vịt GRIMAUD 03',date:dateOffset(2),person:'Nguyễn Văn An',status:'Chờ thực hiện',note:''},
- {id:4,title:'Ghi nhận lịch tiêm phòng',flock:'Lứa vịt GRIMAUD 02',date:dateOffset(-2),person:'Trần Minh Hòa',status:'Đã hoàn thành',note:''},
- {id:5,title:'Kiểm tra nguồn nước',flock:'Lứa vịt GRIMAUD 01',date:dateOffset(-4),person:'Nguyễn Văn An',status:'Đã hoàn thành',note:''}
+ {id:3,title:'Theo dõi tăng trọng',flock:'Lứa vịt 03',date:dateOffset(2),person:'Nguyễn Văn An',status:'Chờ thực hiện',note:''},
+ {id:4,title:'Ghi nhận lịch tiêm phòng',flock:'Lứa vịt  02',date:dateOffset(-2),person:'Trần Minh Hòa',status:'Đã hoàn thành',note:''},
+ {id:5,title:'Kiểm tra nguồn nước',flock:'Lứa vịt 01',date:dateOffset(-4),person:'Nguyễn Văn An',status:'Đã hoàn thành',note:''}
  ],
  transactions:[
- {id:1,title:'Bán vịt thương phẩm',type:'income',date:'2026-10-02',flock:'Lứa vịt GRIMAUD 04',amount:18000000,note:''},
- {id:2,title:'Bán trứng vịt',type:'income',date:'2026-10-10',flock:'Lứa vịt GRIMAUD 02',amount:8000000,note:''},
- {id:3,title:'Bán vịt giống',type:'income',date:'2026-10-18',flock:'Lứa vịt GRIMAUD 01',amount:5000000,note:''},
- {id:4,title:'Nhập cám hỗn hợp',type:'expense',date:'2026-10-03',flock:'Lứa vịt GRIMAUD 01',amount:7200000,note:''},
- {id:5,title:'Chi phí vaccine & thú y',type:'expense',date:'2026-10-08',flock:'Lứa vịt GRIMAUD 02',amount:2400000,note:''},
+ {id:1,title:'Bán vịt thương phẩm',type:'income',date:'2026-10-02',flock:'Lứa vịt 04',amount:18000000,note:''},
+ {id:2,title:'Bán trứng vịt',type:'income',date:'2026-10-10',flock:'Lứa vịt 02',amount:8000000,note:''},
+ {id:3,title:'Bán vịt giống',type:'income',date:'2026-10-18',flock:'Lứa vịt 01',amount:5000000,note:''},
+ {id:4,title:'Nhập cám hỗn hợp',type:'expense',date:'2026-10-03',flock:'Lứa vịt 01',amount:7200000,note:''},
+ {id:5,title:'Chi phí vaccine & thú y',type:'expense',date:'2026-10-08',flock:'Lứa vịt 02',amount:2400000,note:''},
  {id:6,title:'Điện nước và vệ sinh',type:'expense',date:'2026-10-12',flock:'Tất cả các lứa',amount:1800000,note:''},
- {id:7,title:'Mua nguyên liệu thức ăn',type:'expense',date:'2026-10-19',flock:'Lứa vịt GRIMAUD 03',amount:4200000,note:''},
+ {id:7,title:'Mua nguyên liệu thức ăn',type:'expense',date:'2026-10-19',flock:'Lứa vịt 03',amount:4200000,note:''},
  {id:8,title:'Vật tư chuồng trại',type:'expense',date:'2026-10-21',flock:'Tất cả các lứa',amount:3000000,note:''}
  ]
 };
