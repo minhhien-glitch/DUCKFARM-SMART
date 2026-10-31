@@ -46,10 +46,10 @@
   <div class="side-bottom"><div class="farm-card"><small>CHUỒNG TRẠI ĐANG QUẢN LÝ</small><strong>🌱 Chuồng trại GRIMAUD 01 </strong><span>● Đang hoạt động</span></div><div style="font-size:10px;color:#8fb3a5;padding:17px 10px 0">DUCKFARM SMART · Bản demo 1.0</div></div>
 </aside>
 <main class="main">
-<header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" id="mobileMenu" aria-label="Mở menu">☰</button><div class="crumb">Trang trại / <b id="crumbTitle">Tổng quan</b></div></div><div class="top-actions"><span class="today" id="today"></span><div class="avatar" title="Quản lý trang trại">AB</div></div></header>
+<header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" id="mobileMenu" aria-label="Mở menu">☰</button><div class="crumb">chuồng trại / <b id="crumbTitle">Tổng quan</b></div></div><div class="top-actions"><span class="today" id="today"></span><div class="avatar" title="Quản lý chuồng trại">AB</div></div></header>
 <div class="content">
 <section id="page-dashboard" class="page">
-  <div class="page-head"><div><div class="eyebrow">BẢNG ĐIỀU KHIỂN</div><h2>Chào buổi sáng! 👋</h2><p>Cùng theo dõi sức khỏe và hiệu quả trang trại của bạn hôm nay.</p></div><div class="head-actions"><button class="btn" onclick="exportData()">⇩ Xuất dữ liệu</button><button class="btn btn-primary" onclick="openModal('flock')">＋ Thêm đàn vịt</button></div></div>
+  <div class="page-head"><div><div class="eyebrow">BẢNG ĐIỀU KHIỂN</div><h2>Chào buổi sáng! 👋</h2><p>Cùng theo dõi sức khỏe và hiệu quả chuồng trại của bạn hôm nay.</p></div><div class="head-actions"><button class="btn" onclick="exportData()">⇩ Xuất dữ liệu</button><button class="btn btn-primary" onclick="openModal('flock')">＋ Thêm đàn vịt</button></div></div>
   <div class="grid stats">
     <div class="card"><div class="stat-top"><span class="stat-label">Tổng đàn hiện tại</span><span class="stat-icon">🦆</span></div><div class="stat-value" id="statDucks">2.450</div><div class="stat-foot"><span class="up">● Đang theo dõi</span> · Tổng số con</div></div>
     <div class="card"><div class="stat-top"><span class="stat-label">Tỷ lệ khỏe mạnh</span><span class="stat-icon">♡</span></div><div class="stat-value" id="statHealth">96,8%</div><div class="stat-foot"><span class="up">↑ Tốt</span> · Theo dõi sức khỏe</div></div>
@@ -57,7 +57,7 @@
     <div class="card"><div class="stat-top"><span class="stat-label">Lợi nhuận dự kiến</span><span class="stat-icon">📈</span></div><div class="stat-value" id="statProfit">12,4 tr</div><div class="stat-foot"><span class="up">● Theo dữ liệu demo</span></div></div>
   </div>
   <div class="grid dashboard-grid">
-    <div class="card"><div class="card-head"><div><h3>Thu chi trang trại</h3><p>Theo dõi doanh thu và chi phí theo tháng</p></div><select class="select-mini" id="chartPeriod" onchange="drawFinanceChart()"><option value="6">6 tháng gần đây</option><option value="4">4 tháng gần đây</option></select></div><div class="chart-wrap"><canvas id="financeChart"></canvas></div><div class="legend"><span>Doanh thu</span><span class="orange">Chi phí</span></div></div>
+    <div class="card"><div class="card-head"><div><h3>Thu chi chuồng trại</h3><p>Theo dõi doanh thu và chi phí theo tháng</p></div><select class="select-mini" id="chartPeriod" onchange="drawFinanceChart()"><option value="6">6 tháng gần đây</option><option value="4">4 tháng gần đây</option></select></div><div class="chart-wrap"><canvas id="financeChart"></canvas></div><div class="legend"><span>Doanh thu</span><span class="orange">Chi phí</span></div></div>
     <div class="card"><div class="card-head"><div><h3>Tình trạng đàn vịt</h3><p>Tổng hợp tình hình sức khỏe</p></div><span class="pill pill-green">Ổn định</span></div><div class="health-score"><div class="ring"><strong>96,8%<small>khỏe mạnh</small></strong></div><div class="score-copy"><h4>Đàn vịt phát triển tốt</h4><p>Duy trì lịch chăm sóc và kiểm tra định kỳ để phát hiện sớm dấu hiệu bất thường.</p></div></div><div class="progress-row"><div class="progress-label"><span>Khỏe mạnh</span><span>96,8%</span></div><div class="progress"><i style="width:96.8%"></i></div></div><div class="progress-row"><div class="progress-label"><span>Cần theo dõi</span><span>2,4%</span></div><div class="progress"><i style="width:2.4%;background:var(--orange)"></i></div></div><div class="progress-row"><div class="progress-label"><span>Đang điều trị</span><span>0,8%</span></div><div class="progress"><i style="width:.8%;background:var(--red)"></i></div></div></div>
   </div>
   <div class="grid bottom-grid">
@@ -86,7 +86,7 @@
   <div class="notice">⚕️ Lưu ý: Lịch chăm sóc trong bản demo chỉ phục vụ quản lý. Hãy tham khảo cán bộ thú y để xác định loại vaccine, liều dùng và thời điểm phù hợp với đàn vịt thực tế.</div>
 </section>
 <section id="page-finance" class="page hide">
-  <div class="page-head"><div><div class="eyebrow">HIỆU QUẢ KINH DOANH</div><h2>Tài chính trang trại ↗</h2><p>Quản lý doanh thu, chi phí và lợi nhuận theo từng lứa nuôi.</p></div><div class="head-actions"><button class="btn" onclick="exportData()">⇩ Xuất dữ liệu</button><button class="btn btn-primary" onclick="openModal('transaction')">＋ Ghi giao dịch</button></div></div>
+  <div class="page-head"><div><div class="eyebrow">HIỆU QUẢ KINH DOANH</div><h2>Tài chính chuồng trại ↗</h2><p>Quản lý doanh thu, chi phí và lợi nhuận theo từng lứa nuôi.</p></div><div class="head-actions"><button class="btn" onclick="exportData()">⇩ Xuất dữ liệu</button><button class="btn btn-primary" onclick="openModal('transaction')">＋ Ghi giao dịch</button></div></div>
   <div class="grid finance-cards"><div class="card"><div class="stat-label">Tổng doanh thu</div><div class="finance-val" id="finRevenue">31.000.000 ₫</div><div class="finance-note">Theo giao dịch đã ghi nhận</div></div><div class="card"><div class="stat-label">Tổng chi phí</div><div class="finance-val" id="finCosts">18.600.000 ₫</div><div class="finance-note">Thức ăn, thuốc và vận hành</div></div><div class="card"><div class="stat-label">Lợi nhuận tạm tính</div><div class="finance-val" id="finProfit">12.400.000 ₫</div><div class="finance-note">Doanh thu trừ chi phí</div></div></div>
 <div class="card" style="margin-bottom:17px">
   <div class="card-head">
@@ -124,7 +124,7 @@
 
   <div class="notice" id="financeAssumptions">
     Báo cáo chỉ phản ánh các giao dịch đã nhập. Cần đối chiếu với hóa đơn,
-    sổ ghi chép và các khoản chi thực tế của trang trại.
+    sổ ghi chép và các khoản chi thực tế của chuồng trại.
   </div>
 </div>
 
@@ -136,9 +136,9 @@
 <section id="page-minutes" class="page hide">
   <div class="page-head">
     <div>
-      <div class="eyebrow">LÀM VIỆC VỚI CHỦ TRANG TRẠI</div>
+      <div class="eyebrow">LÀM VIỆC VỚI CHỦ CHUỒNG TRẠI</div>
       <h2>Biên bản & nhu cầu dịch vụ 📝</h2>
-      <p>Ghi nhận thông tin trang trại, dữ liệu cần thu thập và khả năng sử dụng dịch vụ.</p>
+      <p>Ghi nhận thông tin chuồng trại, dữ liệu cần thu thập và khả năng sử dụng dịch vụ.</p>
     </div>
     <div class="head-actions">
       <button class="btn" type="button" onclick="printMinutes()">In biên bản</button>
@@ -149,17 +149,17 @@
     <div class="card">
       <div class="card-head">
         <div>
-          <h3>1. Thông tin trang trại</h3>
+          <h3>1. Thông tin chuồng trại</h3>
           <p>Thông tin cơ bản để chuẩn bị tư vấn và triển khai.</p>
         </div>
       </div>
       <div class="form-grid">
         <div class="field">
-          <label for="minutesFarm">Tên trang trại</label>
+          <label for="minutesFarm">Tên chuồng trại</label>
           <input id="minutesFarm" name="farm" required>
         </div>
         <div class="field">
-          <label for="minutesOwner">Tên chủ trang trại/người đại diện</label>
+          <label for="minutesOwner">Tên chủ chuồng trại/người đại diện</label>
           <input id="minutesOwner" name="owner" required>
         </div>
         <div class="field">
@@ -171,12 +171,12 @@
           <input id="minutesScale" name="scale" type="number" min="0">
         </div>
         <div class="field full">
-          <label for="minutesNeeds">Vấn đề trang trại đang cần giải quyết</label>
+          <label for="minutesNeeds">Vấn đề chuồng trại đang cần giải quyết</label>
           <textarea id="minutesNeeds" name="needs" rows="3"
             placeholder="Ví dụ: khó theo dõi tồn kho, thiếu báo cáo chi phí, khó quản lý lịch tiêm phòng..."></textarea>
         </div>
         <div class="field full">
-          <label for="minutesData">Dữ liệu trang trại có thể cung cấp</label>
+          <label for="minutesData">Dữ liệu chuồng trại có thể cung cấp</label>
           <textarea id="minutesData" name="data" rows="3"
             placeholder="Ví dụ: số lượng đàn, hóa đơn thức ăn, chi phí thuốc thú y, doanh thu bán vịt..."></textarea>
         </div>
@@ -187,7 +187,7 @@
       <div class="card-head">
         <div>
           <h3>2. Nhu cầu và khả năng sử dụng dịch vụ</h3>
-          <p>Ghi nhận ý kiến của chủ trang trại, không mặc định là cam kết mua.</p>
+          <p>Ghi nhận ý kiến của chủ chuồng trại, không mặc định là cam kết mua.</p>
         </div>
       </div>
       <div class="form-grid">
@@ -195,7 +195,7 @@
           <label for="minutesService">Dịch vụ quan tâm</label>
           <select id="minutesService" name="service">
             <option value="">Chưa xác định</option>
-            <option>Quản lý trang trại bằng phần mềm</option>
+            <option>Quản lý chuồng trại bằng phần mềm</option>
             <option>Báo cáo thu chi và hiệu quả chăn nuôi</option>
             <option>Quản lý kho vật tư và nhắc lịch chăm sóc</option>
             <option>Đào tạo và hỗ trợ sử dụng</option>
@@ -257,9 +257,9 @@
 <section id="page-minutes" class="page hide">
   <div class="page-head">
     <div>
-      <div class="eyebrow">LÀM VIỆC VỚI CHỦ TRANG TRẠI</div>
+      <div class="eyebrow">LÀM VIỆC VỚI CHỦ CHUỒNG TRẠI</div>
       <h2>Biên bản & nhu cầu dịch vụ 📝</h2>
-      <p>Ghi nhận thông tin trang trại, dữ liệu cần thu thập và khả năng sử dụng dịch vụ.</p>
+      <p>Ghi nhận thông tin chuồng trại, dữ liệu cần thu thập và khả năng sử dụng dịch vụ.</p>
     </div>
     <div class="head-actions">
       <button class="btn" type="button" onclick="printMinutes()">In biên bản</button>
@@ -270,17 +270,17 @@
     <div class="card">
       <div class="card-head">
         <div>
-          <h3>1. Thông tin trang trại</h3>
+          <h3>1. Thông tin chuồng trại</h3>
           <p>Thông tin cơ bản để chuẩn bị tư vấn và triển khai.</p>
         </div>
       </div>
       <div class="form-grid">
         <div class="field">
-          <label for="minutesFarm">Tên trang trại</label>
+          <label for="minutesFarm">Tên chuồng trại</label>
           <input id="minutesFarm" name="farm" required>
         </div>
         <div class="field">
-          <label for="minutesOwner">Tên chủ trang trại/người đại diện</label>
+          <label for="minutesOwner">Tên chủ chuồng trại/người đại diện</label>
           <input id="minutesOwner" name="owner" required>
         </div>
         <div class="field">
@@ -292,12 +292,12 @@
           <input id="minutesScale" name="scale" type="number" min="0">
         </div>
         <div class="field full">
-          <label for="minutesNeeds">Vấn đề trang trại đang cần giải quyết</label>
+          <label for="minutesNeeds">Vấn đề chuồng trại đang cần giải quyết</label>
           <textarea id="minutesNeeds" name="needs" rows="3"
             placeholder="Ví dụ: khó theo dõi tồn kho, thiếu báo cáo chi phí, khó quản lý lịch tiêm phòng..."></textarea>
         </div>
         <div class="field full">
-          <label for="minutesData">Dữ liệu trang trại có thể cung cấp</label>
+          <label for="minutesData">Dữ liệu chuồng trại có thể cung cấp</label>
           <textarea id="minutesData" name="data" rows="3"
             placeholder="Ví dụ: số lượng đàn, hóa đơn thức ăn, chi phí thuốc thú y, doanh thu bán vịt..."></textarea>
         </div>
@@ -308,7 +308,7 @@
       <div class="card-head">
         <div>
           <h3>2. Nhu cầu và khả năng sử dụng dịch vụ</h3>
-          <p>Ghi nhận ý kiến của chủ trang trại, không mặc định là cam kết mua.</p>
+          <p>Ghi nhận ý kiến của chủ chuồng trại, không mặc định là cam kết mua.</p>
         </div>
       </div>
       <div class="form-grid">
@@ -316,7 +316,7 @@
           <label for="minutesService">Dịch vụ quan tâm</label>
           <select id="minutesService" name="service">
             <option value="">Chưa xác định</option>
-            <option>Quản lý trang trại bằng phần mềm</option>
+            <option>Quản lý chuồng trại bằng phần mềm</option>
             <option>Báo cáo thu chi và hiệu quả chăn nuôi</option>
             <option>Quản lý kho vật tư và nhắc lịch chăm sóc</option>
             <option>Đào tạo và hỗ trợ sử dụng</option>
@@ -524,7 +524,7 @@ function renderMinutes() {
   savedAt.textContent = 'Lưu lần gần nhất: ' + (data.savedAt || 'Không rõ');
 
   const rows = [
-    ['Tên trang trại', data.farm],
+    ['Tên chuồng trại', data.farm],
     ['Người đại diện', data.owner],
     ['Liên hệ', data.contact],
     ['Quy mô đàn', data.scale ? num(data.scale) + ' con' : 'Chưa cung cấp'],
