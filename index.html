@@ -700,8 +700,6 @@ function openBarnFlock(id) {
 }
 function renderFeed(){let q=($('feedSearch')?.value||'').toLowerCase();let arr=db.feed.filter(f=>(f.name+' '+f.group).toLowerCase().includes(q));let value=db.feed.reduce((s,f)=>s+f.stock*f.price,0);$('feedCount').textContent=db.feed.length;$('stockValue').textContent=(value/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+' tr';$('lowStock').textContent=db.feed.filter(f=>f.stock<=f.min).length+' loại';$('feedTable').innerHTML=arr.map(f=>`<tr><td><div class="duck-name"><div class="duck-icon">🌾</div><div><b>${safe(f.name)}</b><small>Mã vật tư #${f.id}</small></div></div></td><td>${safe(f.group)}</td><td><b>${num(f.stock)}</b></td><td>${safe(f.unit)}</td><td>${money(f.price)}</td><td>${f.stock<=f.min?'<span class="pill pill-red">Sắp hết</span>':'<span class="pill pill-green">Đủ hàng</span>'}</td><td><div class="actions-cell"><button class="icon-btn" onclick="editItem('feed',${f.id})">✎</button><button class="icon-btn" onclick="deleteItem('feed',${f.id})">⌫</button></div></td></tr>`).join('')||'<tr><td colspan="7" class="empty">Chưa có vật tư.</td></tr>'}
 
-let selectedBarnId = null;
-
 function addBarn() {
   const name = $('newBarnName').value.trim();
   const breed = $('newBarnBreed').value;
