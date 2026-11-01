@@ -38,6 +38,7 @@
   <div><div class="nav-label">KHÔNG GIAN LÀM VIỆC</div><nav class="nav" id="nav">
     <button class="active" data-page="dashboard"><span class="ico">▦</span>Tổng quan</button>
     <button data-page="flocks"><span class="ico">🦆</span>Quản lý đàn vịt</button>
+    <button data-page="barns"><span class="ico">🏠</span>Quản lý chuồng trại</button>
     <button data-page="feed"><span class="ico">🌾</span>Thức ăn & vật tư</button>
     <button data-page="health"><span class="ico">♡</span>Sức khỏe & tiêm phòng</button>
     <button data-page="finance"><span class="ico">↗</span>Tài chính</button>
@@ -70,6 +71,73 @@
   <div class="grid stats"><div class="card"><div class="stat-label">Số lứa đang nuôi</div><div class="stat-value" id="flockCount">4</div><div class="stat-foot">Các lứa đã ghi nhận</div></div><div class="card"><div class="stat-label">Tổng số con</div><div class="stat-value" id="flockDucks">2.450</div><div class="stat-foot">Theo hồ sơ đàn vịt</div></div><div class="card"><div class="stat-label">Tuổi trung bình</div><div class="stat-value">28 ngày</div><div class="stat-foot">Ước tính từ dữ liệu mẫu</div></div><div class="card"><div class="stat-label">Sắp đến kỳ xuất bán</div><div class="stat-value" id="readyCount">1 lứa</div><div class="stat-foot">Kiểm tra lịch dự kiến</div></div></div>
   <div class="toolbar"><div class="search"><input id="flockSearch" placeholder="Tìm theo tên lứa, giống vịt..." oninput="renderFlocks()"></div><select class="filter" id="flockFilter" onchange="renderFlocks()"><option value="">Tất cả trạng thái</option><option>Đang nuôi</option><option>Sắp xuất bán</option><option>Đã hoàn thành</option></select></div>
   <div class="card table-card"><div class="table-wrap"><table><thead><tr><th>LỨA NUÔI</th><th>GIỐNG VỊT</th><th>SỐ LƯỢNG</th><th>NGÀY NHẬP</th><th>GIAI ĐOẠN</th><th>TRẠNG THÁI</th><th>THAO TÁC</th></tr></thead><tbody id="flockTable"></tbody></table></div></div>
+</section>
+
+<section id="page-barns" class="page hide">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">QUẢN LÝ KHU CHĂN NUÔI</div>
+      <h2>Quản lý chuồng trại 🏠</h2>
+      <p>Mỗi chuồng chuyên một giống vịt, lưu trữ lịch sử các lứa nuôi.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-head">
+      <div>
+        <h3>Thêm chuồng mới</h3>
+        <p>Khai báo chuồng và giống vịt chuyên nuôi.</p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Tên chuồng</label>
+        <input id="newBarnName" placeholder="Ví dụ: Chuồng 04">
+      </div>
+
+      <div class="field">
+        <label>Giống vịt chuyên nuôi</label>
+        <select id="newBarnBreed">
+          <option>Vịt siêu thịt</option>
+          <option>Vịt cỏ</option>
+          <option>Vịt bầu</option>
+          <option>Vịt siêu trứng</option>
+          <option>Khác</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Sức chứa tối đa (con)</label>
+        <input id="newBarnCapacity" type="number" min="1" value="1000">
+      </div>
+
+      <div class="field">
+        <label>Vị trí chuồng</label>
+        <input id="newBarnLocation" placeholder="Ví dụ: Khu A">
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="addBarn()">＋ Thêm chuồng trại</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h3>Danh sách chuồng</h3>
+        <p>Chọn một chuồng để xem các lứa vịt đang nuôi và đã hoàn thành.</p>
+      </div>
+    </div>
+    <div id="barnList" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))"></div>
+  </div>
+
+  <div class="card" id="barnDetail" style="margin-top:18px">
+    <div id="barnDetailContent" class="empty">
+      Hãy chọn một chuồng để xem thông tin chi tiết.
+    </div>
+  </div>
 </section>
 <section id="page-feed" class="page hide">
   <div class="page-head"><div><div class="eyebrow">KHO & VẬT TƯ</div><h2>Thức ăn & vật tư 🌾</h2><p>Theo dõi tồn kho, giá nhập và lượng thức ăn sử dụng.</p></div><div class="head-actions"><button class="btn btn-primary" onclick="openModal('feed')">＋ Thêm vật tư</button></div></div>
@@ -388,11 +456,35 @@ const money=n=>new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND',ma
 const num=n=>new Intl.NumberFormat('vi-VN').format(Number(n)||0);
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initial={
+
+ barns: [
+  {
+    id: 1,
+    name: 'Chuồng 01',
+    breed: 'Vịt siêu thịt',
+    capacity: 1000,
+    location: 'Khu A'
+  },
+  {
+    id: 2,
+    name: 'Chuồng 02',
+    breed: 'Vịt cỏ',
+    capacity: 800,
+    location: 'Khu A'
+  },
+  {
+    id: 3,
+    name: 'Chuồng 03',
+    breed: 'Vịt bầu',
+    capacity: 800,
+    location: 'Khu B'
+  }
+ ],
  flocks:[
- {id:1,name:'Lứa vịt GRIMAUD 01',breed:'Vịt siêu thịt',count:850,date:'2026-09-12',age:46,status:'Đang nuôi',note:'Đàn phát triển ổn định'},
- {id:2,name:'Lứa vịt GRIMAUD 02',breed:'Vịt cỏ',count:600,date:'2026-09-25',age:33,status:'Đang nuôi',note:''},
- {id:3,name:'Lứa vịt GRIMAUD 03',breed:'Vịt siêu thịt',count:700,date:'2026-10-05',age:23,status:'Đang nuôi',note:''},
- {id:4,name:'Lứa vịt GRIMAUD 04',breed:'Vịt bầu',count:300,date:'2026-08-28',age:61,status:'Sắp xuất bán',note:'Chuẩn bị kiểm tra trọng lượng'}
+ {id:1,name:'Lứa vịt GRIMAUD 01',barnId:1,breed:'Vịt siêu thịt',count:850,date:'2026-09-12',age:46,status:'Đang nuôi',note:'Đàn phát triển ổn định'},
+ {id:2,name:'Lứa vịt GRIMAUD 02',barnId:2,breed:'Vịt cỏ',count:600,date:'2026-09-25',age:33,status:'Đang nuôi',note:''},
+ {id:3,name:'Lứa vịt GRIMAUD 03',barnId:1,breed:'Vịt siêu thịt',count:700,date:'2026-10-05',age:23,status:'Đang nuôi',note:''},
+ {id:4,name:'Lứa vịt GRIMAUD 04',barnId:3,breed:'Vịt bầu',count:300,date:'2026-08-28',age:61,status:'Sắp xuất bán',note:'Chuẩn bị kiểm tra trọng lượng'}
  ],
  feed:[
  {id:1,name:'Cám hỗn hợp vịt thịt',group:'Thức ăn',stock:680,unit:'kg',price:12500,min:100},
@@ -419,10 +511,10 @@ const initial={
  ]
 };
 let db=loadDB(), currentPage='dashboard', editing=null, modalType='';
-function loadDB(){try{let x=localStorage.getItem('duckfarm-smart-data-v1');return x?JSON.parse(x):JSON.parse(JSON.stringify(initial))}catch(e){return JSON.parse(JSON.stringify(initial))}}
+ function loadDB() {   try {     let saved = localStorage.getItem('duckfarm-smart-data-v1');     let data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(initial));      if (!Array.isArray(data.barns)) {       const breeds = [...new Set(data.flocks.map(f => f.breed || 'Khác'))];        data.barns = breeds.map((breed, index) => ({         id: index + 1,         name: 'Chuồng ' + String(index + 1).padStart(2, '0'),         breed: breed,         capacity: 1000,         location: ''       }));     }      data.flocks.forEach(f => {       if (!f.barnId) {         const barn = data.barns.find(b => b.breed === f.breed);         if (barn) f.barnId = barn.id;       }     });      localStorage.setItem('duckfarm-smart-data-v1', JSON.stringify(data));     return data;   } catch (e) {     return JSON.parse(JSON.stringify(initial));   } }
 function persist(){localStorage.setItem('duckfarm-smart-data-v1',JSON.stringify(db));renderAll()}
 function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2600)}
-function navigate(page){currentPage=page;document.querySelectorAll('.page').forEach(p=>p.classList.add('hide'));$('page-'+page).classList.remove('hide');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let names={   dashboard:'Tổng quan',   flocks:'Quản lý đàn vịt',   feed:'Thức ăn & vật tư',   health:'Sức khỏe & tiêm phòng',   finance:'Tài chính',   minutes:'Biên bản & nhu cầu' };$('crumbTitle').textContent=names[page];$('sidebar').classList.remove('open');if (page === 'minutes') renderMinutes();if (page === 'finance') renderFinanceReport();if (page === 'minutes') renderMinutes();if (page === 'finance') renderFinanceReport();if(page==='dashboard'||page==='finance')setTimeout(drawFinanceChart,60)}
+function navigate(page){currentPage=page;document.querySelectorAll('.page').forEach(p=>p.classList.add('hide'));$('page-'+page).classList.remove('hide');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let names={   dashboard:'Tổng quan',   flocks:'Quản lý đàn vịt', barns:'Quản lý chuồng trại',   feed:'Thức ăn & vật tư',   health:'Sức khỏe & tiêm phòng',   finance:'Tài chính',   minutes:'Biên bản & nhu cầu' };$('crumbTitle').textContent=names[page];$('sidebar').classList.remove('open');if (page === 'minutes') renderMinutes();if (page === 'finance') renderFinanceReport();if (page === 'minutes') renderMinutes();if (page === 'finance') renderFinanceReport();if(page==='dashboard'||page==='finance')setTimeout(drawFinanceChart,60)}
 $('nav').addEventListener('click',e=>{let b=e.target.closest('button[data-page]');if(b)navigate(b.dataset.page)});
 $('mobileMenu').onclick=()=>$('sidebar').classList.toggle('open');
 $('today').textContent=new Date().toLocaleDateString('vi-VN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
@@ -467,10 +559,289 @@ $('dashboardFlocks').innerHTML=db.flocks.slice(0,4).map(f=>`<tr><td><div class="
 }
 function formatDate(d){if(!d)return '—';let x=new Date(d+'T00:00:00');return isNaN(x)?d:x.toLocaleDateString('vi-VN')}
 function renderFlocks(){let q=($('flockSearch')?.value||'').toLowerCase(),filter=$('flockFilter')?.value||'';let arr=db.flocks.filter(f=>(!q||(f.name+' '+f.breed).toLowerCase().includes(q))&&(!filter||f.status===filter));$('flockTable').innerHTML=arr.map(f=>`<tr><td><div class="duck-name"><div class="duck-icon">🦆</div><div><b>${safe(f.name)}</b><small>${safe(f.note||'Mã lứa #'+f.id)}</small></div></div></td><td>${safe(f.breed)}</td><td><b>${num(f.count)}</b> con</td><td>${formatDate(f.date)}</td><td>${Number(f.age)||0} ngày</td><td>${badge(f.status)}</td><td><div class="actions-cell"><button class="icon-btn" onclick="viewFlock(${f.id})" title="Chi tiết">↗</button><button class="icon-btn" onclick="editItem('flock',${f.id})" title="Sửa">✎</button><button class="icon-btn" onclick="deleteItem('flock',${f.id})" title="Xóa">⌫</button></div></td></tr>`).join('')||'<tr><td colspan="7" class="empty">Không tìm thấy dữ liệu phù hợp.</td></tr>'}
+
+let selectedBarnId = null;
+
+function addBarn() {
+  const name = $('newBarnName').value.trim();
+  const breed = $('newBarnBreed').value;
+  const capacity = Number($('newBarnCapacity').value);
+  const location = $('newBarnLocation').value.trim();
+
+  if (!name || capacity <= 0) {
+    toast('Vui lòng nhập tên và sức chứa hợp lệ.');
+    return;
+  }
+
+  if (db.barns.some(b => b.name.toLowerCase() === name.toLowerCase())) {
+    toast('Tên chuồng đã tồn tại.');
+    return;
+  }
+
+  db.barns.push({
+    id: Math.max(0, ...db.barns.map(b => b.id)) + 1,
+    name,
+    breed,
+    capacity,
+    location
+  });
+
+  $('newBarnName').value = '';
+  $('newBarnCapacity').value = 1000;
+  $('newBarnLocation').value = '';
+
+  persist();
+  renderBarns();
+  toast('Đã thêm chuồng mới.');
+}
+
+function renderBarns() {
+  const list = $('barnList');
+  if (!list) return;
+
+  list.innerHTML = db.barns.map(b => {
+    const flocks = db.flocks.filter(f => Number(f.barnId) === Number(b.id));
+    const active = flocks.filter(f => f.status === 'Đang nuôi');
+    const completed = flocks.filter(f => f.status === 'Đã hoàn thành');
+    const total = active.reduce((sum, f) => sum + Number(f.count || 0), 0);
+
+    return `
+      <div class="card" style="border:1px solid var(--line)">
+        <div class="card-head">
+          <div>
+            <h3>🏠 ${safe(b.name)}</h3>
+            <p>${safe(b.location || 'Chưa cập nhật vị trí')}</p>
+          </div>
+          ${badge(active.length ? 'Đang nuôi' : 'Chưa có đàn')}
+        </div>
+        <p><strong>Giống vịt:</strong> ${safe(b.breed)}</p>
+        <p><strong>Đang nuôi:</strong> ${num(total)} con</p>
+        <p><strong>Lứa đã hoàn thành:</strong> ${completed.length}</p>
+        <p><strong>Sức chứa:</strong> ${num(b.capacity)} con</p>
+        <button class="btn btn-primary" style="width:100%"
+          onclick="openBarn(${b.id})">
+          Xem chuồng →
+        </button>
+      </div>
+    `;
+  }).join('') || '<div class="empty">Chưa có chuồng trại.</div>';
+}
+
+function openBarn(id) {
+  selectedBarnId = id;
+
+  const barn = db.barns.find(b => Number(b.id) === Number(id));
+  if (!barn) return;
+
+  const flocks = db.flocks.filter(f => Number(f.barnId) === Number(id));
+  const active = flocks.filter(f => f.status === 'Đang nuôi');
+  const history = flocks.filter(f => f.status === 'Đã hoàn thành');
+
+  $('barnDetailContent').innerHTML = `
+    <div class="card-head">
+      <div>
+        <div class="eyebrow">CHI TIẾT CHUỒNG TRẠI</div>
+        <h3>${safe(barn.name)}</h3>
+        <p>Giống chuyên nuôi: ${safe(barn.breed)}</p>
+      </div>
+      <button class="btn btn-primary"
+        onclick="openBarnFlock(${barn.id})">
+        ＋ Thêm lứa nuôi
+      </button>
+    </div>
+
+    <h3>Lứa đang nuôi (${active.length})</h3>
+    ${active.length ? active.map(f => `
+      <div class="notice">
+        <strong>${safe(f.name)}</strong><br>
+        ${num(f.count)} con · ${num(f.age)} ngày tuổi
+      </div>
+    `).join('') : '<div class="empty">Chuồng hiện chưa có lứa đang nuôi.</div>'}
+
+    <h3 style="margin-top:22px">Lịch sử lứa đã xuất bán / hoàn thành (${history.length})</h3>
+    ${history.length ? `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>TÊN LỨA</th>
+              <th>SỐ LƯỢNG</th>
+              <th>NGÀY NHẬP</th>
+              <th>GHI CHÚ</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${history.map(f => `
+              <tr>
+                <td>${safe(f.name)}</td>
+                <td>${num(f.count)} con</td>
+                <td>${formatDate(f.date)}</td>
+                <td>${safe(f.note || '—')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    ` : '<div class="empty">Chưa có lứa nào hoàn thành.</div>'}
+  `;
+
+  $('barnDetail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function openBarnFlock(id) {
+  const barn = db.barns.find(b => Number(b.id) === Number(id));
+  if (!barn) return;
+
+  openModal('flock');
+  const form = $('dataForm');
+  form.elements.namedItem('barnId').value = String(barn.id);
+  form.elements.namedItem('breed').value = barn.breed;
+  form.elements.namedItem('breed').disabled = true;
+}
 function renderFeed(){let q=($('feedSearch')?.value||'').toLowerCase();let arr=db.feed.filter(f=>(f.name+' '+f.group).toLowerCase().includes(q));let value=db.feed.reduce((s,f)=>s+f.stock*f.price,0);$('feedCount').textContent=db.feed.length;$('stockValue').textContent=(value/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+' tr';$('lowStock').textContent=db.feed.filter(f=>f.stock<=f.min).length+' loại';$('feedTable').innerHTML=arr.map(f=>`<tr><td><div class="duck-name"><div class="duck-icon">🌾</div><div><b>${safe(f.name)}</b><small>Mã vật tư #${f.id}</small></div></div></td><td>${safe(f.group)}</td><td><b>${num(f.stock)}</b></td><td>${safe(f.unit)}</td><td>${money(f.price)}</td><td>${f.stock<=f.min?'<span class="pill pill-red">Sắp hết</span>':'<span class="pill pill-green">Đủ hàng</span>'}</td><td><div class="actions-cell"><button class="icon-btn" onclick="editItem('feed',${f.id})">✎</button><button class="icon-btn" onclick="deleteItem('feed',${f.id})">⌫</button></div></td></tr>`).join('')||'<tr><td colspan="7" class="empty">Chưa có vật tư.</td></tr>'}
+
+let selectedBarnId = null;
+
+function addBarn() {
+  const name = $('newBarnName').value.trim();
+  const breed = $('newBarnBreed').value;
+  const capacity = Number($('newBarnCapacity').value);
+  const location = $('newBarnLocation').value.trim();
+
+  if (!name || capacity <= 0) {
+    toast('Vui lòng nhập tên và sức chứa hợp lệ.');
+    return;
+  }
+
+  if (db.barns.some(b => b.name.toLowerCase() === name.toLowerCase())) {
+    toast('Tên chuồng đã tồn tại.');
+    return;
+  }
+
+  db.barns.push({
+    id: Math.max(0, ...db.barns.map(b => b.id)) + 1,
+    name,
+    breed,
+    capacity,
+    location
+  });
+
+  $('newBarnName').value = '';
+  $('newBarnCapacity').value = 1000;
+  $('newBarnLocation').value = '';
+
+  persist();
+  renderBarns();
+  toast('Đã thêm chuồng mới.');
+}
+
+function renderBarns() {
+  const list = $('barnList');
+  if (!list) return;
+
+  list.innerHTML = db.barns.map(b => {
+    const flocks = db.flocks.filter(f => Number(f.barnId) === Number(b.id));
+    const active = flocks.filter(f => f.status === 'Đang nuôi');
+    const completed = flocks.filter(f => f.status === 'Đã hoàn thành');
+    const total = active.reduce((sum, f) => sum + Number(f.count || 0), 0);
+
+    return `
+      <div class="card" style="border:1px solid var(--line)">
+        <div class="card-head">
+          <div>
+            <h3>🏠 ${safe(b.name)}</h3>
+            <p>${safe(b.location || 'Chưa cập nhật vị trí')}</p>
+          </div>
+          ${badge(active.length ? 'Đang nuôi' : 'Chưa có đàn')}
+        </div>
+        <p><strong>Giống vịt:</strong> ${safe(b.breed)}</p>
+        <p><strong>Đang nuôi:</strong> ${num(total)} con</p>
+        <p><strong>Lứa đã hoàn thành:</strong> ${completed.length}</p>
+        <p><strong>Sức chứa:</strong> ${num(b.capacity)} con</p>
+        <button class="btn btn-primary" style="width:100%"
+          onclick="openBarn(${b.id})">
+          Xem chuồng →
+        </button>
+      </div>
+    `;
+  }).join('') || '<div class="empty">Chưa có chuồng trại.</div>';
+}
+
+function openBarn(id) {
+  selectedBarnId = id;
+
+  const barn = db.barns.find(b => Number(b.id) === Number(id));
+  if (!barn) return;
+
+  const flocks = db.flocks.filter(f => Number(f.barnId) === Number(id));
+  const active = flocks.filter(f => f.status === 'Đang nuôi');
+  const history = flocks.filter(f => f.status === 'Đã hoàn thành');
+
+  $('barnDetailContent').innerHTML = `
+    <div class="card-head">
+      <div>
+        <div class="eyebrow">CHI TIẾT CHUỒNG TRẠI</div>
+        <h3>${safe(barn.name)}</h3>
+        <p>Giống chuyên nuôi: ${safe(barn.breed)}</p>
+      </div>
+      <button class="btn btn-primary"
+        onclick="openBarnFlock(${barn.id})">
+        ＋ Thêm lứa nuôi
+      </button>
+    </div>
+
+    <h3>Lứa đang nuôi (${active.length})</h3>
+    ${active.length ? active.map(f => `
+      <div class="notice">
+        <strong>${safe(f.name)}</strong><br>
+        ${num(f.count)} con · ${num(f.age)} ngày tuổi
+      </div>
+    `).join('') : '<div class="empty">Chuồng hiện chưa có lứa đang nuôi.</div>'}
+
+    <h3 style="margin-top:22px">Lịch sử lứa đã xuất bán / hoàn thành (${history.length})</h3>
+    ${history.length ? `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>TÊN LỨA</th>
+              <th>SỐ LƯỢNG</th>
+              <th>NGÀY NHẬP</th>
+              <th>GHI CHÚ</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${history.map(f => `
+              <tr>
+                <td>${safe(f.name)}</td>
+                <td>${num(f.count)} con</td>
+                <td>${formatDate(f.date)}</td>
+                <td>${safe(f.note || '—')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    ` : '<div class="empty">Chưa có lứa nào hoàn thành.</div>'}
+  `;
+
+  $('barnDetail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function openBarnFlock(id) {
+  const barn = db.barns.find(b => Number(b.id) === Number(id));
+  if (!barn) return;
+
+  openModal('flock');
+  const form = $('dataForm');
+  form.elements.namedItem('barnId').value = String(barn.id);
+  form.elements.namedItem('breed').value = barn.breed;
+  form.elements.namedItem('breed').disabled = true;
+}
+
 function renderHealth(){let q=($('healthSearch')?.value||'').toLowerCase(),filter=$('healthFilter')?.value||'';let arr=db.health.filter(h=>(h.title+' '+h.flock+' '+h.person).toLowerCase().includes(q)&&(!filter||h.status===filter));$('healthUpcoming').textContent=db.health.filter(h=>h.status==='Chờ thực hiện').length;$('healthDone').textContent=db.health.filter(h=>h.status==='Đã hoàn thành').length;$('healthTable').innerHTML=arr.map(h=>`<tr><td><div class="duck-name"><div class="duck-icon">♡</div><div><b>${safe(h.title)}</b><small>${safe(h.note||'Lịch chăm sóc')}</small></div></div></td><td>${safe(h.flock)}</td><td>${formatDate(h.date)}</td><td>${safe(h.person)}</td><td>${badge(h.status)}</td><td><div class="actions-cell"><button class="icon-btn" onclick="toggleHealth(${h.id})" title="Đổi trạng thái">${h.status==='Chờ thực hiện'?'✓':'↶'}</button><button class="icon-btn" onclick="editItem('health',${h.id})">✎</button><button class="icon-btn" onclick="deleteItem('health',${h.id})">⌫</button></div></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Chưa có lịch chăm sóc.</td></tr>'}
 function renderTransactions(){let q=($('transSearch')?.value||'').toLowerCase(),filter=$('transFilter')?.value||'';let arr=db.transactions.filter(t=>(t.title+' '+t.flock).toLowerCase().includes(q)&&(!filter||t.type===filter));$('transactionTable').innerHTML=arr.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(t=>`<tr><td><div class="duck-name"><div class="duck-icon">${t.type==='income'?'💰':'🧾'}</div><div><b>${safe(t.title)}</b><small>${safe(t.note||'Giao dịch #'+t.id)}</small></div></div></td><td>${t.type==='income'?'<span class="pill pill-green">Doanh thu</span>':'<span class="pill pill-orange">Chi phí</span>'}</td><td>${formatDate(t.date)}</td><td>${safe(t.flock)}</td><td style="font-weight:800;color:${t.type==='income'?'var(--green2)':'var(--ink)'}">${t.type==='income'?'+':'−'}${money(t.amount)}</td><td><div class="actions-cell"><button class="icon-btn" onclick="editItem('transaction',${t.id})">✎</button><button class="icon-btn" onclick="deleteItem('transaction',${t.id})">⌫</button></div></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Chưa có giao dịch.</td></tr>'}
-function renderAll(){renderDashboard();renderFlocks();renderFeed();renderHealth();renderTransactions();if(currentPage==='dashboard'||currentPage==='finance')drawFinanceChart()}
+function renderAll() {   renderDashboard();   renderFlocks();   renderBarns();   renderFeed();   renderHealth();   renderTransactions();    if (currentPage === 'dashboard' || currentPage === 'finance') {     drawFinanceChart();   }    if (selectedBarnId !== null && currentPage === 'barns') {     openBarn(selectedBarnId);   } }
 
 const MINUTES_KEY = 'duckfarm-smart-minutes-v1';
 
@@ -600,14 +971,14 @@ function renderFinanceReport() {
 }
 
 const schema={
- flock:{title:'đàn vịt',subtitle:'Tạo hồ sơ theo dõi một lứa nuôi.',fields:[['name','Tên lứa nuôi','text',true],['breed','Giống vịt','select',true,['Vịt siêu thịt','Vịt cỏ','Vịt bầu','Vịt siêu trứng','Khác']],['count','Số lượng (con)','number',true],['date','Ngày nhập đàn','date',true],['age','Tuổi đàn (ngày)','number',true],['status','Trạng thái','select',true,['Đang nuôi','Sắp xuất bán','Đã hoàn thành']],['note','Ghi chú','textarea',false]]},
+ flock:{title:'đàn vịt',subtitle:'Tạo hồ sơ theo dõi một lứa nuôi.',fields:[['name','Tên lứa nuôi','text',true],['barnId','Chuồng trại','select',true,[]], ['breed','Giống vịt','select',true,['Vịt siêu thịt','Vịt cỏ','Vịt bầu','Vịt siêu trứng','Khác']],['count','Số lượng (con)','number',true],['date','Ngày nhập đàn','date',true],['age','Tuổi đàn (ngày)','number',true],['status','Trạng thái','select',true,['Đang nuôi','Sắp xuất bán','Đã hoàn thành']],['note','Ghi chú','textarea',false]]},
  feed:{title:'vật tư',subtitle:'Thêm thức ăn hoặc vật tư vào danh mục kho.',fields:[['name','Tên vật tư','text',true],['group','Nhóm vật tư','select',true,[   'Thức ăn',   'Nguyên liệu',   'Bổ sung dinh dưỡng',   'Men vi sinh',   'Khoáng chất',   'Vaccine',   'Thuốc thú y',   'Vệ sinh chuồng trại',   'Dụng cụ chăn nuôi',   'Khác' ]],['stock','Số lượng tồn','number',true],['unit','Đơn vị','select',true,['kg','bao','lít','chai','gói','con','cái']],['price','Giá nhập mỗi đơn vị (₫)','number',true],['min','Mức tồn tối thiểu','number',true]]},
  health:{title:'lịch chăm sóc',subtitle:'Ghi lại công việc chăm sóc và tiêm phòng.',fields:[['title','Tên công việc','text',true],['flock','Lứa nuôi','select',true,[]],['date','Ngày thực hiện','date',true],['person','Người phụ trách','text',true],['status','Trạng thái','select',true,['Chờ thực hiện','Đã hoàn thành']],['note','Ghi chú','textarea',false]]},
  transaction:{title:'giao dịch',subtitle:'Ghi nhận doanh thu hoặc chi phí phát sinh.',fields:[['title','Nội dung giao dịch','text',true],['type','Loại giao dịch','select',true,['expense','income']],['date','Ngày giao dịch','date',true],['flock','Lứa nuôi liên quan','select',true,[]],['amount','Số tiền (₫)','number',true],['note','Ghi chú','textarea',false]]}
 };
-function openModal(type,item=null){modalType=type;editing=item?item.id:null;let s=schema[type];$('modalTitle').textContent=(item?'Sửa ':'Thêm ')+s.title;$('modalSubtitle').textContent=s.subtitle;$('formFields').innerHTML=s.fields.map(f=>{let [key,label,kind,required,opts]=f,val=item?.[key]??(key==='date'?todayISO():key==='status'?(type==='health'?'Chờ thực hiện':'Đang nuôi'):key==='count'?100:key==='age'?1:key==='stock'?0:key==='min'?10:key==='amount'?0:key==='price'?0:key==='type'?'expense':'');let input='';if(kind==='select'){let choices=opts||[];if(key==='flock')choices=['Tất cả các lứa',...db.flocks.map(x=>x.name)];input=`<select name="${key}" ${required?'required':''}>${choices.map(o=>{let v=key==='type'?(o==='income'?'income':'expense'):o;let txt=key==='type'?(o==='income'?'Doanh thu':'Chi phí'):o;return `<option value="${safe(v)}" ${String(val)===String(v)?'selected':''}>${safe(txt)}</option>`}).join('')}</select>`}else if(kind==='textarea'){input=`<textarea name="${key}" rows="3">${safe(val)}</textarea>`}else{input=`<input name="${key}" type="${kind}" value="${safe(val)}" ${required?'required':''} ${kind==='number'?'min="0" step="any"':''}>`}return `<div class="field ${kind==='textarea'?'full':''}"><label>${label}${required?' *':''}</label>${input}</div>`}).join('');$('modalBackdrop').classList.add('open')}
+function openModal(type,item=null){modalType=type;editing=item?item.id:null;let s=schema[type];$('modalTitle').textContent=(item?'Sửa ':'Thêm ')+s.title;$('modalSubtitle').textContent=s.subtitle;$('formFields').innerHTML=s.fields.map(f=>{let [key,label,kind,required,opts]=f,val=item?.[key]??(key==='date'?todayISO():key==='status'?(type==='health'?'Chờ thực hiện':'Đang nuôi'):key==='count'?100:key==='age'?1:key==='stock'?0:key==='min'?10:key==='amount'?0:key==='price'?0:key==='type'?'expense':'');let input='';if(kind==='select'){let choices=opts||[];if(key==='flock')choices=['Tất cả các lứa',...db.flocks.map(x=>x.name)];if(key==='barnId')choices=db.barns.map(b=>String(b.id));input=`<select name="${key}" ${required?'required':''}>${choices.map(o=>{let v=key==='type'?(o==='income'?'income':'expense'):o;let txt = key === 'type'   ? (o === 'income' ? 'Doanh thu' : 'Chi phí')   : key === 'barnId'? (db.barns.find(b => String(b.id) === String(o))?.name || o)     : o;return `<option value="${safe(v)}" ${String(val)===String(v)?'selected':''}>${safe(txt)}</option>`}).join('')}</select>`}else if(kind==='textarea'){input=`<textarea name="${key}" rows="3">${safe(val)}</textarea>`}else{input=`<input name="${key}" type="${kind}" value="${safe(val)}" ${required?'required':''} ${kind==='number'?'min="0" step="any"':''}>`}return `<div class="field ${kind==='textarea'?'full':''}"><label>${label}${required?' *':''}</label>${input}</div>`}).join('');$('modalBackdrop').classList.add('open')}
 function closeModal(){$('modalBackdrop').classList.remove('open');editing=null;modalType=''}
-function saveForm(e){e.preventDefault();let form=new FormData($('dataForm')),obj={};schema[modalType].fields.forEach(f=>{let k=f[0],v=form.get(k);obj[k]=['count','age','stock','price','min','amount'].includes(k)?Number(v||0):v});let listKey={flock:'flocks',feed:'feed',health:'health',transaction:'transactions'}[modalType];if(editing!==null){let i=db[listKey].findIndex(x=>x.id===editing);if(i>=0)db[listKey][i]={...db[listKey][i],...obj}}else{obj.id=Math.max(0,...db[listKey].map(x=>x.id))+1;db[listKey].push(obj)}persist();closeModal();toast(editing!==null?'Đã cập nhật dữ liệu!':'Đã thêm dữ liệu mới!')}
+function saveForm(e){e.preventDefault();let form=new FormData($('dataForm')),obj={};schema[modalType].fields.forEach(f=>{let k=f[0],v=form.get(k);obj[k]=['count','age','stock','price','min','amount'].includes(k)?Number(v||0):v});let listKey={   flock:'flocks',   barn:'barns',   feed:'feed',   health:'health',   transaction:'transactions' }[modalType];  if (modalType === 'flock') {   const barn = db.barns.find(b => Number(b.id) === Number(obj.barnId));    if (!barn) {     toast('Vui lòng chọn chuồng trại.');     return;   }    obj.breed = barn.breed;    const otherActive = db.flocks.some(f =>     Number(f.barnId) === Number(obj.barnId) &&     f.status === 'Đang nuôi' &&     f.id !== editing   );    if (obj.status === 'Đang nuôi' && otherActive) {     toast('Chuồng này đã có một lứa đang nuôi.');     return;   } }if(editing!==null){let i=db[listKey].findIndex(x=>x.id===editing);if(i>=0)db[listKey][i]={...db[listKey][i],...obj}}else{obj.id=Math.max(0,...db[listKey].map(x=>x.id))+1;db[listKey].push(obj)}persist();closeModal();toast(editing!==null?'Đã cập nhật dữ liệu!':'Đã thêm dữ liệu mới!')}
 function editItem(type,id){let key={flock:'flocks',feed:'feed',health:'health',transaction:'transactions'}[type],item=db[key].find(x=>x.id===id);if(item)openModal(type,item)}
 function deleteItem(type,id){let labels={flock:'đàn vịt',feed:'vật tư',health:'lịch chăm sóc',transaction:'giao dịch'},key={flock:'flocks',feed:'feed',health:'health',transaction:'transactions'}[type];if(confirm('Bạn có chắc muốn xóa '+labels[type]+' này? Thao tác này không thể hoàn tác.')){db[key]=db[key].filter(x=>x.id!==id);persist();toast('Đã xóa dữ liệu.')}}
 function toggleHealth(id){let h=db.health.find(x=>x.id===id);if(h){h.status=h.status==='Chờ thực hiện'?'Đã hoàn thành':'Chờ thực hiện';persist();toast('Đã cập nhật trạng thái lịch.')}}
