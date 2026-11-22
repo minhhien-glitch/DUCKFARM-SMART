@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.vscode/
+.vercel/
+db_local_backup.js
+/backend_backup/
+/DUCKFARM_BACKUP.html
+/DUCKFARM1.html
+/frontend/index(cũ*).html
+/frontend/index(Cũ*).html
+/backend_git_backup/
