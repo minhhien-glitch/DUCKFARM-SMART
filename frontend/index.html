@@ -1891,7 +1891,7 @@
                       placeholder="Ví dụ: rét đậm, dịch bệnh..."
                   /></label>
                   <button type="submit" class="btn btn-primary">
-                    Lưu vào Azure SQL
+                    Lưu tình trạng sức khỏe
                   </button>
                 </form>
                 <p id="dfEventStatus" class="df-note"></p>
@@ -4698,7 +4698,7 @@
           $("dfVaccineDate").value = todayISO();
           $("dfEnvDate").value = todayISO();
           await dfLoadRecords();
-          toast("Đã lưu vào Azure SQL.");
+          toast("Đã lưu tình trạng sức khỏe.");
         } catch (err) {
           toast("Không lưu được: " + err.message);
         } finally {
