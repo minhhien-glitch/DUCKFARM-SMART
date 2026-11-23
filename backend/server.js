@@ -1084,35 +1084,136 @@ app.delete("/api/giaodichtaichinh/:id", (req, res) => {
 // 6. KHOI DONG BACKEND
 // =====================================
 
-
 // New monitoring APIs. Run 06_NangCap_TheoDoi.sql before enabling these routes.
-app.get('/api/theodoisuckhoe',(req,res)=>{
-  truyVan('SELECT * FROM dbo.TheoDoiSucKhoe ORDER BY NgayGhiNhan, MaTheoDoi',(err,rows)=>err?res.status(500).json({message:'Khong tai duoc lich su suc khoe'}):res.json(rows));
+
+app.get("/api/theodoisuckhoe", (req, res) => {
+  truyVan(
+    "SELECT * FROM dbo.TheoDoiSucKhoe ORDER BY NgayGhiNhan, MaTheoDoi",
+    (err, rows) => {
+      if (err) {
+        console.error("LOI API THEO DOI SUC KHOE:", err);
+
+        return res.status(500).json({
+          message: "Khong tai duoc lich su suc khoe",
+        });
+      }
+
+      res.json(rows);
+    },
+  );
 });
-app.post('/api/theodoisuckhoe',(req,res)=>{
-  const {MaDan,NgayGhiNhan,SoConBenh,SoConChet,GhiChu}=req.body||{};
-  if(!Number.isInteger(MaDan)||MaDan<=0||!/^\d{4}-\d{2}-\d{2}$/.test(NgayGhiNhan||'')||!Number.isInteger(SoConBenh)||SoConBenh<0||!Number.isInteger(SoConChet)||SoConChet<0||typeof GhiChu!=='string'||GhiChu.length>500)return res.status(400).json({message:'Du lieu theo doi khong hop le'});
-  const sql=`SET XACT_ABORT ON; BEGIN TRAN;
+
+app.post("/api/theodoisuckhoe", (req, res) => {
+  const { MaDan, NgayGhiNhan, SoConBenh, SoConChet, GhiChu } = req.body || {};
+  if (
+    !Number.isInteger(MaDan) ||
+    MaDan <= 0 ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(NgayGhiNhan || "") ||
+    !Number.isInteger(SoConBenh) ||
+    SoConBenh < 0 ||
+    !Number.isInteger(SoConChet) ||
+    SoConChet < 0 ||
+    typeof GhiChu !== "string" ||
+    GhiChu.length > 500
+  )
+    return res.status(400).json({ message: "Du lieu theo doi khong hop le" });
+  const sql = `SET XACT_ABORT ON; BEGIN TRAN;
     DECLARE @current int;
     SELECT @current=SoLuong FROM dbo.DanVit WITH (UPDLOCK,HOLDLOCK) WHERE MaDan=?;
     IF @current IS NULL OR @current < ? OR @current - ? < ? BEGIN ROLLBACK TRAN; THROW 50001,'So luong khong hop le',1; END;
     UPDATE dbo.DanVit SET SoLuong=SoLuong-? WHERE MaDan=?;
     INSERT INTO dbo.TheoDoiSucKhoe(MaDan,NgayGhiNhan,SoConBenh,SoConChet,GhiChu) VALUES(?,?,?,?,?);
     COMMIT TRAN; SELECT 1 AS ok;`;
-  const args=[MaDan,SoConChet,SoConChet,SoConBenh,SoConChet,MaDan,MaDan,NgayGhiNhan,SoConBenh,SoConChet,GhiChu||null];
-  truyVanThamSo(sql,args,(err)=>err?(console.error('Loi theo doi suc khoe:',err),res.status(400).json({message:'Khong luu duoc: kiem tra so luong con va du lieu'})):res.status(201).json({message:'Da ghi nhan'}));
+  const args = [
+    MaDan,
+    SoConChet,
+    SoConChet,
+    SoConBenh,
+    SoConChet,
+    MaDan,
+    MaDan,
+    NgayGhiNhan,
+    SoConBenh,
+    SoConChet,
+    GhiChu || null,
+  ];
+  truyVanThamSo(sql, args, (err) =>
+    err
+      ? (console.error("Loi theo doi suc khoe:", err),
+        res
+          .status(400)
+          .json({
+            message: "Khong luu duoc: kiem tra so luong con va du lieu",
+          }))
+      : res.status(201).json({ message: "Da ghi nhan" }),
+  );
 });
-app.get('/api/tiemphong',(req,res)=>truyVan('SELECT * FROM dbo.TheoDoiTiemPhong ORDER BY NgayTiem,MaTiem',(err,rows)=>err?res.status(500).json({message:'Khong tai duoc tiem phong'}):res.json(rows)));
-app.post('/api/tiemphong',(req,res)=>{
- const {MaDan,TenVacXin,NgayTiem,NgayNhacLai,GhiChu}=req.body||{};
- if(!Number.isInteger(MaDan)||MaDan<=0||typeof TenVacXin!=='string'||!TenVacXin.trim()||TenVacXin.length>150||!/^\d{4}-\d{2}-\d{2}$/.test(NgayTiem||'')||(NgayNhacLai&&!/^\d{4}-\d{2}-\d{2}$/.test(NgayNhacLai))||String(GhiChu||'').length>500)return res.status(400).json({message:'Du lieu tiem phong khong hop le'});
- truyVanThamSo('INSERT INTO dbo.TheoDoiTiemPhong(MaDan,TenVacXin,NgayTiem,NgayNhacLai,GhiChu) VALUES(?,?,?,?,?)',[MaDan,TenVacXin.trim(),NgayTiem,NgayNhacLai||null,GhiChu||null],err=>err?(console.error(err),res.status(500).json({message:'Khong luu duoc tiem phong'})):res.status(201).json({message:'Da luu'}));
+app.get("/api/tiemphong", (req, res) =>
+  truyVan(
+    "SELECT * FROM dbo.TheoDoiTiemPhong ORDER BY NgayTiem,MaTiem",
+    (err, rows) =>
+      err
+        ? res.status(500).json({ message: "Khong tai duoc tiem phong" })
+        : res.json(rows),
+  ),
+);
+app.post("/api/tiemphong", (req, res) => {
+  const { MaDan, TenVacXin, NgayTiem, NgayNhacLai, GhiChu } = req.body || {};
+  if (
+    !Number.isInteger(MaDan) ||
+    MaDan <= 0 ||
+    typeof TenVacXin !== "string" ||
+    !TenVacXin.trim() ||
+    TenVacXin.length > 150 ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(NgayTiem || "") ||
+    (NgayNhacLai && !/^\d{4}-\d{2}-\d{2}$/.test(NgayNhacLai)) ||
+    String(GhiChu || "").length > 500
+  )
+    return res.status(400).json({ message: "Du lieu tiem phong khong hop le" });
+  truyVanThamSo(
+    "INSERT INTO dbo.TheoDoiTiemPhong(MaDan,TenVacXin,NgayTiem,NgayNhacLai,GhiChu) VALUES(?,?,?,?,?)",
+    [MaDan, TenVacXin.trim(), NgayTiem, NgayNhacLai || null, GhiChu || null],
+    (err) =>
+      err
+        ? (console.error(err),
+          res.status(500).json({ message: "Khong luu duoc tiem phong" }))
+        : res.status(201).json({ message: "Da luu" }),
+  );
 });
-app.get('/api/moitruong',(req,res)=>truyVan('SELECT * FROM dbo.TheoDoiMoiTruong ORDER BY NgayDo,MaDo',(err,rows)=>err?res.status(500).json({message:'Khong tai duoc moi truong'}):res.json(rows)));
-app.post('/api/moitruong',(req,res)=>{
- const {MaChuong,NgayDo,NhietDo,DoAm,DoSach,GhiChu}=req.body||{};
- if(!Number.isInteger(MaChuong)||MaChuong<=0||!/^\d{4}-\d{2}-\d{2}$/.test(NgayDo||'')||!Number.isFinite(NhietDo)||NhietDo< -30||NhietDo>80||!Number.isFinite(DoAm)||DoAm<0||DoAm>100||!['Sạch','Bẩn'].includes(DoSach)||String(GhiChu||'').length>500)return res.status(400).json({message:'Du lieu moi truong khong hop le'});
- truyVanThamSo('INSERT INTO dbo.TheoDoiMoiTruong(MaChuong,NgayDo,NhietDo,DoAm,DoSach,GhiChu) VALUES(?,?,?,?,?,?)',[MaChuong,NgayDo,NhietDo,DoAm,DoSach,GhiChu||null],err=>err?(console.error(err),res.status(500).json({message:'Khong luu duoc moi truong'})):res.status(201).json({message:'Da luu'}));
+app.get("/api/moitruong", (req, res) =>
+  truyVan(
+    "SELECT * FROM dbo.TheoDoiMoiTruong ORDER BY NgayDo,MaDo",
+    (err, rows) =>
+      err
+        ? res.status(500).json({ message: "Khong tai duoc moi truong" })
+        : res.json(rows),
+  ),
+);
+app.post("/api/moitruong", (req, res) => {
+  const { MaChuong, NgayDo, NhietDo, DoAm, DoSach, GhiChu } = req.body || {};
+  if (
+    !Number.isInteger(MaChuong) ||
+    MaChuong <= 0 ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(NgayDo || "") ||
+    !Number.isFinite(NhietDo) ||
+    NhietDo < -30 ||
+    NhietDo > 80 ||
+    !Number.isFinite(DoAm) ||
+    DoAm < 0 ||
+    DoAm > 100 ||
+    !["Sạch", "Bẩn"].includes(DoSach) ||
+    String(GhiChu || "").length > 500
+  )
+    return res.status(400).json({ message: "Du lieu moi truong khong hop le" });
+  truyVanThamSo(
+    "INSERT INTO dbo.TheoDoiMoiTruong(MaChuong,NgayDo,NhietDo,DoAm,DoSach,GhiChu) VALUES(?,?,?,?,?,?)",
+    [MaChuong, NgayDo, NhietDo, DoAm, DoSach, GhiChu || null],
+    (err) =>
+      err
+        ? (console.error(err),
+          res.status(500).json({ message: "Khong luu duoc moi truong" }))
+        : res.status(201).json({ message: "Da luu" }),
+  );
 });
 
 app.listen(PORT, () => {
