@@ -1227,7 +1227,98 @@
         object-fit: contain;
       }
 
-      .df-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}.df-tab{border:1px solid #c9e1d5;background:#fff;color:#1b634b;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}.df-tab.active{background:#176b4f;color:#fff}.df-tab-panel.hide{display:none!important}.df-form-card{padding:22px}.df-form-card h3{margin:0 0 8px}.df-form-card p{color:#667b70}.df-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}.df-form-grid label{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:650;color:#244a39}.df-form-grid input,.df-form-grid select{border:1px solid #d8e4dc;border-radius:10px;padding:10px;width:100%;background:#fff;color:#234537;min-width:0}.df-wide{grid-column:1/-1}.df-note{font-size:12px;color:#708477;margin-top:12px}.df-pie-layout{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:20px}.df-pie-layout canvas{max-width:280px}.df-pie-layout #expensePieLegend{font-size:13px;line-height:2}.df-legend-dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:8px}@media(max-width:600px){.df-form-grid{grid-template-columns:1fr}.df-wide{grid-column:auto}}
+      .df-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 18px;
+      }
+      .df-tab {
+        border: 1px solid #c9e1d5;
+        background: #fff;
+        color: #1b634b;
+        border-radius: 12px;
+        padding: 11px 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .df-tab.active {
+        background: #176b4f;
+        color: #fff;
+      }
+      .df-tab-panel.hide {
+        display: none !important;
+      }
+      .df-form-card {
+        padding: 22px;
+      }
+      .df-form-card h3 {
+        margin: 0 0 8px;
+      }
+      .df-form-card p {
+        color: #667b70;
+      }
+      .df-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .df-form-grid label {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 650;
+        color: #244a39;
+      }
+      .df-form-grid input,
+      .df-form-grid select {
+        border: 1px solid #d8e4dc;
+        border-radius: 10px;
+        padding: 10px;
+        width: 100%;
+        background: #fff;
+        color: #234537;
+        min-width: 0;
+      }
+      .df-wide {
+        grid-column: 1/-1;
+      }
+      .df-note {
+        font-size: 12px;
+        color: #708477;
+        margin-top: 12px;
+      }
+      .df-pie-layout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .df-pie-layout canvas {
+        max-width: 280px;
+      }
+      .df-pie-layout #expensePieLegend {
+        font-size: 13px;
+        line-height: 2;
+      }
+      .df-legend-dot {
+        display: inline-block;
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        margin-right: 8px;
+      }
+      @media (max-width: 600px) {
+        .df-form-grid {
+          grid-template-columns: 1fr;
+        }
+        .df-wide {
+          grid-column: auto;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1390,14 +1481,18 @@
                 <div class="card-head">
                   <div>
                     <h3>Thu chi trang trại</h3>
-                    <p>Theo dõi thu, chi và lợi nhuận theo tháng (đơn vị: triệu đồng)</p>
+                    <p>
+                      Theo dõi thu, chi và lợi nhuận theo tháng (đơn vị: triệu
+                      đồng)
+                    </p>
                   </div>
                   <select
                     class="select-mini"
                     id="chartPeriod"
                     onchange="drawFinanceChart()"
                   >
-                    <option value="12" selected>12 tháng gần đây</option><option value="6">6 tháng gần đây</option>
+                    <option value="12" selected>12 tháng gần đây</option>
+                    <option value="6">6 tháng gần đây</option>
                     <option value="4">4 tháng gần đây</option>
                   </select>
                 </div>
@@ -1405,18 +1500,45 @@
                   <canvas id="financeChart"></canvas>
                 </div>
                 <div class="legend">
-                  <span>Doanh thu</span><span class="orange">Chi phí</span><span style="color:#3260a8">Lợi nhuận</span>
+                  <span>Doanh thu</span><span class="orange">Chi phí</span
+                  ><span style="color: #3260a8">Lợi nhuận</span>
                 </div>
               </div>
               <div class="card">
-                <div class="card-head"><div><h3>Biến động số lượng vịt</h3><p>Biểu đồ miền theo giống vịt, lấy từ lịch sử ghi nhận</p></div>
-                <select id="duckTrendPeriod" class="select-mini" onchange="drawDuckAreaChart()"><option value="day">Theo ngày (30 ngày)</option><option value="month">Theo tháng (12 tháng)</option></select></div>
-                <div class="chart-wrap"><canvas id="duckAreaChart"></canvas></div>
-                <p class="df-note">Số liệu lịch sử chỉ có từ khi bắt đầu ghi nhận biến động; không tự tạo dữ liệu quá khứ.</p>
+                <div class="card-head">
+                  <div>
+                    <h3>Biến động số lượng vịt</h3>
+                    <p>Biểu đồ miền theo giống vịt, lấy từ lịch sử ghi nhận</p>
+                  </div>
+                  <select
+                    id="duckTrendPeriod"
+                    class="select-mini"
+                    onchange="drawDuckAreaChart()"
+                  >
+                    <option value="day">Theo ngày (30 ngày)</option>
+                    <option value="month">Theo tháng (12 tháng)</option>
+                  </select>
+                </div>
+                <div class="chart-wrap">
+                  <canvas id="duckAreaChart"></canvas>
+                </div>
+                <p class="df-note">
+                  Số liệu lịch sử chỉ có từ khi bắt đầu ghi nhận biến động;
+                  không tự tạo dữ liệu quá khứ.
+                </p>
               </div>
             </div>
-            <div class="card" style="margin-top:16px"><div class="card-head"><div><h3>Cơ cấu chi phí trang trại</h3><p>Phân loại từ các giao dịch chi phí trong mục Tài chính</p></div></div>
-              <div class="df-pie-layout"><canvas id="expensePieChart" width="280" height="220"></canvas><div id="expensePieLegend"></div></div>
+            <div class="card" style="margin-top: 16px">
+              <div class="card-head">
+                <div>
+                  <h3>Cơ cấu chi phí trang trại</h3>
+                  <p>Phân loại từ các giao dịch chi phí trong mục Tài chính</p>
+                </div>
+              </div>
+              <div class="df-pie-layout">
+                <canvas id="expensePieChart" width="280" height="220"></canvas>
+                <div id="expensePieLegend"></div>
+              </div>
             </div>
             <div class="grid bottom-grid">
               <div class="card">
@@ -1703,91 +1825,267 @@
                 </button>
               </div>
             </div>
-            <div class="df-tabs" role="tablist" aria-label="Chức năng theo dõi sức khỏe">
-              <button class="df-tab active" onclick="switchHealthTab('health-log',this)">Theo dõi sức khỏe</button>
-              <button class="df-tab" onclick="switchHealthTab('vaccine',this)">Theo dõi tiêm phòng</button>
-              <button class="df-tab" onclick="switchHealthTab('environment',this)">Theo dõi môi trường</button>
-              <button class="df-tab" onclick="switchHealthTab('care',this)">Lịch chăm sóc</button>
+            <div
+              class="df-tabs"
+              role="tablist"
+              aria-label="Chức năng theo dõi sức khỏe"
+            >
+              <button
+                class="df-tab active"
+                onclick="switchHealthTab('health-log', this)"
+              >
+                Theo dõi sức khỏe
+              </button>
+              <button class="df-tab" onclick="switchHealthTab('vaccine', this)">
+                Theo dõi tiêm phòng
+              </button>
+              <button
+                class="df-tab"
+                onclick="switchHealthTab('environment', this)"
+              >
+                Theo dõi môi trường
+              </button>
+              <button class="df-tab" onclick="switchHealthTab('care', this)">
+                Lịch chăm sóc
+              </button>
             </div>
             <div id="df-health-log" class="df-tab-panel">
-              <div class="card df-form-card"><h3>Ghi nhận sức khỏe và số con chết</h3><p>Chọn đàn và ngày; số con chết sẽ được trừ khỏi số lượng hiện tại của đàn trong Azure SQL.</p>
-                <form onsubmit="saveDuckHealthEvent(event)" class="df-form-grid">
-                  <label>Đàn vịt<select id="dfEventFlock" required></select></label>
-                  <label>Ngày ghi nhận<input id="dfEventDate" type="date" required></label>
-                  <label>Số con đang bị bệnh<input id="dfEventSick" type="number" min="0" step="1" required value="0"></label>
-                  <label>Số con chết mới<input id="dfEventDead" type="number" min="0" step="1" required value="0"></label>
-                  <label class="df-wide">Ghi chú<input id="dfEventNote" maxlength="500" placeholder="Ví dụ: rét đậm, dịch bệnh..."></label>
-                  <button type="submit" class="btn btn-primary">Lưu vào Azure SQL</button>
-                </form><p id="dfEventStatus" class="df-note"></p></div>
-              <div class="card table-card" style="margin-top:16px"><h3>Lịch sử theo dõi</h3><div class="table-wrap"><table><thead><tr><th>Ngày</th><th>Đàn vịt</th><th>Bị bệnh</th><th>Chết mới</th><th>Ghi chú</th></tr></thead><tbody id="dfHealthHistory"></tbody></table></div></div>
+              <div class="card df-form-card">
+                <h3>Ghi nhận sức khỏe và số con chết</h3>
+                <p>
+                  Chọn đàn và ngày; số con chết sẽ được trừ khỏi số lượng hiện
+                  tại của đàn trong Azure SQL.
+                </p>
+                <form
+                  onsubmit="saveDuckHealthEvent(event)"
+                  class="df-form-grid"
+                >
+                  <label
+                    >Đàn vịt<select id="dfEventFlock" required></select
+                  ></label>
+                  <label
+                    >Ngày ghi nhận<input id="dfEventDate" type="date" required
+                  /></label>
+                  <label
+                    >Số con đang bị bệnh<input
+                      id="dfEventSick"
+                      type="number"
+                      min="0"
+                      step="1"
+                      required
+                      value="0"
+                  /></label>
+                  <label
+                    >Số con chết mới<input
+                      id="dfEventDead"
+                      type="number"
+                      min="0"
+                      step="1"
+                      required
+                      value="0"
+                  /></label>
+                  <label class="df-wide"
+                    >Ghi chú<input
+                      id="dfEventNote"
+                      maxlength="500"
+                      placeholder="Ví dụ: rét đậm, dịch bệnh..."
+                  /></label>
+                  <button type="submit" class="btn btn-primary">
+                    Lưu vào Azure SQL
+                  </button>
+                </form>
+                <p id="dfEventStatus" class="df-note"></p>
+              </div>
+              <div class="card table-card" style="margin-top: 16px">
+                <h3>Lịch sử theo dõi</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Ngày</th>
+                        <th>Đàn vịt</th>
+                        <th>Bị bệnh</th>
+                        <th>Chết mới</th>
+                        <th>Ghi chú</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dfHealthHistory"></tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-            <div id="df-vaccine" class="df-tab-panel hide"><div class="card df-form-card"><h3>Ghi nhận tiêm phòng</h3>
-              <form class="df-form-grid" onsubmit="saveDuckRecord(event,'vaccine')"><label>Đàn vịt<select id="dfVaccineFlock" required></select></label><label>Loại vắc-xin<input id="dfVaccineName" required maxlength="150"></label><label>Ngày tiêm<input type="date" id="dfVaccineDate" required></label><label>Ngày nhắc lại (nếu cần)<input type="date" id="dfVaccineRepeat"></label><label class="df-wide">Ghi chú<input id="dfVaccineNote" maxlength="500"></label><button class="btn btn-primary" type="submit">Lưu tiêm phòng</button></form></div><div class="card table-card" style="margin-top:16px"><div class="table-wrap"><table><thead><tr><th>Đàn vịt</th><th>Vắc-xin</th><th>Ngày tiêm</th><th>Nhắc lại</th><th>Ghi chú</th></tr></thead><tbody id="dfVaccineHistory"></tbody></table></div></div></div>
-            <div id="df-environment" class="df-tab-panel hide"><div class="card df-form-card"><h3>Nhập số đo môi trường thủ công</h3>
-              <form class="df-form-grid" onsubmit="saveDuckRecord(event,'environment')"><label>Chuồng trại<select id="dfEnvBarn" required></select></label><label>Ngày đo<input id="dfEnvDate" type="date" required></label><label>Nhiệt độ (°C)<input id="dfEnvTemp" type="number" min="-30" max="80" step="0.1" required></label><label>Độ ẩm (%)<input id="dfEnvHumidity" type="number" min="0" max="100" step="0.1" required></label><label>Độ sạch<select id="dfEnvClean"><option>Sạch</option><option>Bẩn</option></select></label><label>Ghi chú<input id="dfEnvNote" maxlength="500"></label><button class="btn btn-primary" type="submit">Lưu môi trường</button></form></div><div class="card table-card" style="margin-top:16px"><div class="table-wrap"><table><thead><tr><th>Ngày</th><th>Chuồng</th><th>Nhiệt độ</th><th>Độ ẩm</th><th>Độ sạch</th></tr></thead><tbody id="dfEnvHistory"></tbody></table></div></div></div>
+            <div id="df-vaccine" class="df-tab-panel hide">
+              <div class="card df-form-card">
+                <h3>Ghi nhận tiêm phòng</h3>
+                <form
+                  class="df-form-grid"
+                  onsubmit="saveDuckRecord(event, 'vaccine')"
+                >
+                  <label
+                    >Đàn vịt<select
+                      id="dfVaccineFlock"
+                      required
+                    ></select></label
+                  ><label
+                    >Loại vắc-xin<input
+                      id="dfVaccineName"
+                      required
+                      maxlength="150" /></label
+                  ><label
+                    >Ngày tiêm<input
+                      type="date"
+                      id="dfVaccineDate"
+                      required /></label
+                  ><label
+                    >Ngày nhắc lại (nếu cần)<input
+                      type="date"
+                      id="dfVaccineRepeat" /></label
+                  ><label class="df-wide"
+                    >Ghi chú<input id="dfVaccineNote" maxlength="500" /></label
+                  ><button class="btn btn-primary" type="submit">
+                    Lưu tiêm phòng
+                  </button>
+                </form>
+              </div>
+              <div class="card table-card" style="margin-top: 16px">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Đàn vịt</th>
+                        <th>Vắc-xin</th>
+                        <th>Ngày tiêm</th>
+                        <th>Nhắc lại</th>
+                        <th>Ghi chú</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dfVaccineHistory"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="df-environment" class="df-tab-panel hide">
+              <div class="card df-form-card">
+                <h3>Nhập số đo môi trường thủ công</h3>
+                <form
+                  class="df-form-grid"
+                  onsubmit="saveDuckRecord(event, 'environment')"
+                >
+                  <label
+                    >Chuồng trại<select id="dfEnvBarn" required></select></label
+                  ><label
+                    >Ngày đo<input id="dfEnvDate" type="date" required /></label
+                  ><label
+                    >Nhiệt độ (°C)<input
+                      id="dfEnvTemp"
+                      type="number"
+                      min="-30"
+                      max="80"
+                      step="0.1"
+                      required /></label
+                  ><label
+                    >Độ ẩm (%)<input
+                      id="dfEnvHumidity"
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      required /></label
+                  ><label
+                    >Độ sạch<select id="dfEnvClean">
+                      <option>Sạch</option>
+                      <option>Bẩn</option>
+                    </select></label
+                  ><label>Ghi chú<input id="dfEnvNote" maxlength="500" /></label
+                  ><button class="btn btn-primary" type="submit">
+                    Lưu môi trường
+                  </button>
+                </form>
+              </div>
+              <div class="card table-card" style="margin-top: 16px">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Ngày</th>
+                        <th>Chuồng</th>
+                        <th>Nhiệt độ</th>
+                        <th>Độ ẩm</th>
+                        <th>Độ sạch</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dfEnvHistory"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
             <div id="df-care" class="df-tab-panel hide">
-            <div class="grid stats">
-              <div class="card">
-                <div class="stat-label">Tỷ lệ khỏe mạnh</div>
-                <div class="stat-value" id="dfHealthRate">—</div>
-                <div class="stat-foot">Theo lần ghi nhận mới nhất của từng đàn</div>
+              <div class="grid stats">
+                <div class="card">
+                  <div class="stat-label">Tỷ lệ khỏe mạnh</div>
+                  <div class="stat-value" id="dfHealthRate">—</div>
+                  <div class="stat-foot">
+                    Theo lần ghi nhận mới nhất của từng đàn
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="stat-label">Lịch sắp tới</div>
+                  <div class="stat-value" id="healthUpcoming">2</div>
+                  <div class="stat-foot">Cần thực hiện đúng lịch</div>
+                </div>
+                <div class="card">
+                  <div class="stat-label">Đã hoàn thành</div>
+                  <div class="stat-value" id="healthDone">3</div>
+                  <div class="stat-foot">Lịch chăm sóc đã ghi nhận</div>
+                </div>
+                <div class="card">
+                  <div class="stat-label">Đàn cần theo dõi</div>
+                  <div class="stat-value" id="dfSickTotal">0</div>
+                  <div class="stat-foot">
+                    Số con đang bị bệnh theo lần ghi nhận gần nhất
+                  </div>
+                </div>
               </div>
-              <div class="card">
-                <div class="stat-label">Lịch sắp tới</div>
-                <div class="stat-value" id="healthUpcoming">2</div>
-                <div class="stat-foot">Cần thực hiện đúng lịch</div>
+              <div class="toolbar">
+                <div class="search">
+                  <input
+                    id="healthSearch"
+                    placeholder="Tìm lịch chăm sóc..."
+                    oninput="renderHealth()"
+                  />
+                </div>
+                <select
+                  id="healthFilter"
+                  class="filter"
+                  onchange="renderHealth()"
+                >
+                  <option value="">Tất cả trạng thái</option>
+                  <option>Chờ thực hiện</option>
+                  <option>Đã hoàn thành</option>
+                </select>
               </div>
-              <div class="card">
-                <div class="stat-label">Đã hoàn thành</div>
-                <div class="stat-value" id="healthDone">3</div>
-                <div class="stat-foot">Lịch chăm sóc đã ghi nhận</div>
+              <div class="card table-card">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>CÔNG VIỆC</th>
+                        <th>LỨA NUÔI</th>
+                        <th>NGÀY THỰC HIỆN</th>
+                        <th>NGƯỜI PHỤ TRÁCH</th>
+                        <th>TRẠNG THÁI</th>
+                        <th>THAO TÁC</th>
+                      </tr>
+                    </thead>
+                    <tbody id="healthTable"></tbody>
+                  </table>
+                </div>
               </div>
-              <div class="card">
-                <div class="stat-label">Đàn cần theo dõi</div>
-                <div class="stat-value" id="dfSickTotal">0</div>
-                <div class="stat-foot">Số con đang bị bệnh theo lần ghi nhận gần nhất</div>
+              <div class="notice">
+                ⚕️ Lưu ý: Lịch chăm sóc trong bản demo chỉ phục vụ quản lý. Hãy
+                tham khảo cán bộ thú y để xác định loại vaccine, liều dùng và
+                thời điểm phù hợp với đàn vịt thực tế.
               </div>
-            </div>
-            <div class="toolbar">
-              <div class="search">
-                <input
-                  id="healthSearch"
-                  placeholder="Tìm lịch chăm sóc..."
-                  oninput="renderHealth()"
-                />
-              </div>
-              <select
-                id="healthFilter"
-                class="filter"
-                onchange="renderHealth()"
-              >
-                <option value="">Tất cả trạng thái</option>
-                <option>Chờ thực hiện</option>
-                <option>Đã hoàn thành</option>
-              </select>
-            </div>
-            <div class="card table-card">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>CÔNG VIỆC</th>
-                      <th>LỨA NUÔI</th>
-                      <th>NGÀY THỰC HIỆN</th>
-                      <th>NGƯỜI PHỤ TRÁCH</th>
-                      <th>TRẠNG THÁI</th>
-                      <th>THAO TÁC</th>
-                    </tr>
-                  </thead>
-                  <tbody id="healthTable"></tbody>
-                </table>
-              </div>
-            </div>
-            <div class="notice">
-              ⚕️ Lưu ý: Lịch chăm sóc trong bản demo chỉ phục vụ quản lý. Hãy
-              tham khảo cán bộ thú y để xác định loại vaccine, liều dùng và thời
-              điểm phù hợp với đàn vịt thực tế.
-            </div>
             </div>
           </section>
           <section id="page-finance" class="page hide">
@@ -1886,7 +2184,8 @@
               </div>
               <div class="chart-wrap"><canvas id="financeChart2"></canvas></div>
               <div class="legend">
-                <span>Doanh thu</span><span class="orange">Chi phí</span><span style="color:#3260a8">Lợi nhuận</span>
+                <span>Doanh thu</span><span class="orange">Chi phí</span
+                ><span style="color: #3260a8">Lợi nhuận</span>
               </div>
             </div>
             <div class="toolbar">
@@ -2439,7 +2738,7 @@
         });
       });
 
-      const API_URL = "https://duckfarm-smart.onrender.com/api";
+      const API_URL = "https://duckfarm-smart-test.onrender.com/api";
 
       async function kiemTraKetNoiBackend() {
         try {
@@ -2785,7 +3084,11 @@
         if (page === "minutes") renderMinutes();
         if (page === "finance") renderFinanceReport();
         if (page === "dashboard" || page === "finance")
-          setTimeout(()=>{drawFinanceChart();drawDuckAreaChart();drawExpensePieChart();}, 60);
+          setTimeout(() => {
+            drawFinanceChart();
+            drawDuckAreaChart();
+            drawExpensePieChart();
+          }, 60);
       }
       $("nav").addEventListener("click", (e) => {
         let b = e.target.closest("button[data-page]");
@@ -2812,7 +3115,23 @@
       function renderDashboard() {
         let ducks = db.flocks.reduce((a, f) => a + Number(f.count || 0), 0);
         $("statDucks").textContent = num(ducks);
-        if(typeof dfEvents!=='undefined' && dfEvents.length){const latest=new Map();dfEvents.forEach(e=>{const prev=latest.get(e.MaDan);if(!prev||dfDate(e.NgayGhiNhan)>=dfDate(prev.NgayGhiNhan))latest.set(e.MaDan,e);});const sick=[...latest.values()].reduce((n,e)=>n+Number(e.SoConBenh||0),0);$("statHealth").textContent=ducks?((Math.max(0,ducks-sick)/ducks)*100).toFixed(1).replace('.',',')+'%':'—';}else $("statHealth").textContent='—';
+        if (typeof dfEvents !== "undefined" && dfEvents.length) {
+          const latest = new Map();
+          dfEvents.forEach((e) => {
+            const prev = latest.get(e.MaDan);
+            if (!prev || dfDate(e.NgayGhiNhan) >= dfDate(prev.NgayGhiNhan))
+              latest.set(e.MaDan, e);
+          });
+          const sick = [...latest.values()].reduce(
+            (n, e) => n + Number(e.SoConBenh || 0),
+            0,
+          );
+          $("statHealth").textContent = ducks
+            ? ((Math.max(0, ducks - sick) / ducks) * 100)
+                .toFixed(1)
+                .replace(".", ",") + "%"
+            : "—";
+        } else $("statHealth").textContent = "—";
         $("flockDucks").textContent = num(ducks);
         $("flockCount").textContent = db.flocks.length;
 
@@ -2882,7 +3201,7 @@
       async function taiDanVitTuSQL() {
         try {
           const response = await fetch(
-            "https://duckfarm-smart.onrender.com/api/danvit",
+            "https://duckfarm-smart-test.onrender.com/api/danvit",
           );
 
           if (!response.ok) {
@@ -3203,7 +3522,7 @@
       async function taiChuongTraiTuSQL() {
         try {
           const response = await fetch(
-            "https://duckfarm-smart.onrender.com/api/chuongtrai",
+            "https://duckfarm-smart-test.onrender.com/api/chuongtrai",
           );
 
           if (!response.ok) {
@@ -4068,15 +4387,33 @@
         $("modalBackdrop").classList.add("open");
       }
       function exportData() {
-        const items = [...db.transactions].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-        const income = items.filter(x=>x.type==='income').reduce((n,x)=>n+Number(x.amount||0),0);
-        const expense = items.filter(x=>x.type==='expense').reduce((n,x)=>n+Number(x.amount||0),0);
-        const rows=items.map(t=>`<tr><td>${safe(t.date||'')}</td><td>${safe(t.title||'')}</td><td>${t.type==='income'?'Thu':'Chi'}</td><td>${safe(t.flock||'')}</td><td style="text-align:right">${money(Number(t.amount||0))}</td></tr>`).join('');
-        const report=`<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Báo cáo tài chính DUCKFARM SMART</title><style>body{font-family:Arial,sans-serif;margin:30px;color:#173c30}h1{font-size:23px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #ccd7d0;padding:8px;text-align:left}th{background:#e9f4ee}.summary{margin:22px 0;line-height:1.8}@page{size:A4;margin:15mm}@media print{button{display:none}}</style></head><body><h1>DUCKFARM SMART – BÁO CÁO TÀI CHÍNH</h1><p>Ngày xuất: ${new Date().toLocaleDateString('vi-VN')}</p><div class="summary"><b>Tổng doanh thu:</b> ${money(income)}<br><b>Tổng chi phí:</b> ${money(expense)}<br><b>Chênh lệch thu – chi:</b> ${money(income-expense)}</div><table><thead><tr><th>Ngày</th><th>Nội dung</th><th>Loại</th><th>Đàn</th><th>Số tiền</th></tr></thead><tbody>${rows||'<tr><td colspan="5">Chưa có giao dịch</td></tr>'}</tbody></table><p><i>Báo cáo được tổng hợp từ các giao dịch đã tải về từ hệ thống.</i></p><button onclick="window.print()">In / Lưu thành PDF</button></body></html>`;
-        const win=window.open('','_blank');
-        if(!win){toast('Trình duyệt đang chặn cửa sổ. Hãy cho phép pop-up để xuất PDF.');return;}
-        win.document.write(report);win.document.close();win.focus();
-        toast('Đã mở báo cáo. Chọn In / Lưu thành PDF.');
+        const items = [...db.transactions].sort((a, b) =>
+          (a.date || "").localeCompare(b.date || ""),
+        );
+        const income = items
+          .filter((x) => x.type === "income")
+          .reduce((n, x) => n + Number(x.amount || 0), 0);
+        const expense = items
+          .filter((x) => x.type === "expense")
+          .reduce((n, x) => n + Number(x.amount || 0), 0);
+        const rows = items
+          .map(
+            (t) =>
+              `<tr><td>${safe(t.date || "")}</td><td>${safe(t.title || "")}</td><td>${t.type === "income" ? "Thu" : "Chi"}</td><td>${safe(t.flock || "")}</td><td style="text-align:right">${money(Number(t.amount || 0))}</td></tr>`,
+          )
+          .join("");
+        const report = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Báo cáo tài chính DUCKFARM SMART</title><style>body{font-family:Arial,sans-serif;margin:30px;color:#173c30}h1{font-size:23px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #ccd7d0;padding:8px;text-align:left}th{background:#e9f4ee}.summary{margin:22px 0;line-height:1.8}@page{size:A4;margin:15mm}@media print{button{display:none}}</style></head><body><h1>DUCKFARM SMART – BÁO CÁO TÀI CHÍNH</h1><p>Ngày xuất: ${new Date().toLocaleDateString("vi-VN")}</p><div class="summary"><b>Tổng doanh thu:</b> ${money(income)}<br><b>Tổng chi phí:</b> ${money(expense)}<br><b>Chênh lệch thu – chi:</b> ${money(income - expense)}</div><table><thead><tr><th>Ngày</th><th>Nội dung</th><th>Loại</th><th>Đàn</th><th>Số tiền</th></tr></thead><tbody>${rows || '<tr><td colspan="5">Chưa có giao dịch</td></tr>'}</tbody></table><p><i>Báo cáo được tổng hợp từ các giao dịch đã tải về từ hệ thống.</i></p><button onclick="window.print()">In / Lưu thành PDF</button></body></html>`;
+        const win = window.open("", "_blank");
+        if (!win) {
+          toast(
+            "Trình duyệt đang chặn cửa sổ. Hãy cho phép pop-up để xuất PDF.",
+          );
+          return;
+        }
+        win.document.write(report);
+        win.document.close();
+        win.focus();
+        toast("Đã mở báo cáo. Chọn In / Lưu thành PDF.");
       }
       function drawFinanceChart() {
         drawChart($("financeChart"));
@@ -4103,7 +4440,8 @@
         for (let i = n - 1; i >= 0; i--) {
           let d = new Date(base.getFullYear(), base.getMonth() - i, 1);
           labels.push("T" + (d.getMonth() + 1));
-          let key = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+          let key =
+            d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
           let inc =
             db.transactions
               .filter((t) => t.type === "income" && t.date.startsWith(key))
@@ -4151,8 +4489,17 @@
           ctx.fillText(lab, x, pad.t + ch + 9);
         });
         // Duong loi nhuan: duong mau xanh duong (co the am)
-        ctx.strokeStyle="#3260a8";ctx.lineWidth=2;ctx.beginPath();
-        labels.forEach((_,i)=>{const v=rev[i]-cost[i];const x=pad.l+group*i+group/2;const y=pad.t+ch-Math.max(0,v)/max*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();
+        ctx.strokeStyle = "#3260a8";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        labels.forEach((_, i) => {
+          const v = rev[i] - cost[i];
+          const x = pad.l + group * i + group / 2;
+          const y = pad.t + ch - (Math.max(0, v) / max) * ch;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
       }
       function roundRect(ctx, x, y, w, h, r) {
         if (h < 0) return;
@@ -4165,45 +4512,373 @@
         ctx.closePath();
       }
       // DUCKFARM: health monitoring, vaccination, environment and dynamic charts.
-      let dfEvents=[], dfVaccines=[], dfEnvironments=[];
-      const dfColors=['#176b4f','#369a74','#85c7a0','#c8e6a8','#9ab8d2'];
-      function switchHealthTab(id,button){document.querySelectorAll('.df-tab-panel').forEach(x=>x.classList.toggle('hide',x.id!=='df-'+id));document.querySelectorAll('.df-tab').forEach(x=>x.classList.remove('active'));button.classList.add('active');}
-      function dfDeadForFlock(id){return dfEvents.filter(e=>Number(e.MaDan)===Number(id)).reduce((n,e)=>n+Number(e.SoConChet||0),0);}
-      function dfDate(x){return String(x||'').slice(0,10);}
-      function dfSelect(id,items,placeholder){const el=$(id);if(!el)return;const v=el.value;el.innerHTML='<option value="">'+placeholder+'</option>'+items.map(x=>'<option value="'+Number(x.id)+'">'+safe(x.name)+'</option>').join('');if([...el.options].some(o=>o.value===v))el.value=v;}
-      function dfRefreshForms(){dfSelect('dfEventFlock',db.flocks,'Chọn đàn');dfSelect('dfVaccineFlock',db.flocks,'Chọn đàn');dfSelect('dfEnvBarn',db.barns,'Chọn chuồng');}
-      function dfFlockName(id){return db.flocks.find(f=>Number(f.id)===Number(id))?.name||('Đàn #'+id);}
-      function dfBarnName(id){return db.barns.find(f=>Number(f.id)===Number(id))?.name||('Chuồng #'+id);}
-      function dfRenderRecords(){
-        dfRefreshForms();
-        const latest = new Map();dfEvents.forEach(e=>{const prev=latest.get(e.MaDan);if(!prev||dfDate(e.NgayGhiNhan)>=dfDate(prev.NgayGhiNhan))latest.set(e.MaDan,e);});
-        const sick=[...latest.values()].reduce((n,e)=>n+Number(e.SoConBenh||0),0);
-        const alive=db.flocks.reduce((n,f)=>n+Number(f.count||0),0);
-        if($('dfSickTotal'))$('dfSickTotal').textContent=num(sick);
-        if($('dfHealthRate'))$('dfHealthRate').textContent=alive?((Math.max(0,alive-sick)/alive)*100).toFixed(1).replace('.',',')+'%':'—';
-        $('dfHealthHistory').innerHTML=dfEvents.slice().reverse().map(e=>`<tr><td>${safe(dfDate(e.NgayGhiNhan))}</td><td>${safe(dfFlockName(e.MaDan))}</td><td>${num(e.SoConBenh)}</td><td>${num(e.SoConChet)}</td><td>${safe(e.GhiChu||'')}</td></tr>`).join('')||'<tr><td colspan="5">Chưa có dữ liệu theo dõi</td></tr>';
-        $('dfVaccineHistory').innerHTML=dfVaccines.slice().reverse().map(e=>`<tr><td>${safe(dfFlockName(e.MaDan))}</td><td>${safe(e.TenVacXin)}</td><td>${safe(dfDate(e.NgayTiem))}</td><td>${safe(dfDate(e.NgayNhacLai))}</td><td>${safe(e.GhiChu||'')}</td></tr>`).join('')||'<tr><td colspan="5">Chưa có dữ liệu tiêm phòng</td></tr>';
-        $('dfEnvHistory').innerHTML=dfEnvironments.slice().reverse().map(e=>`<tr><td>${safe(dfDate(e.NgayDo))}</td><td>${safe(dfBarnName(e.MaChuong))}</td><td>${Number(e.NhietDo)}°C</td><td>${Number(e.DoAm)}%</td><td>${safe(e.DoSach)}</td></tr>`).join('')||'<tr><td colspan="5">Chưa có dữ liệu môi trường</td></tr>';
-        renderFlocks();renderDashboard();drawDuckAreaChart();drawExpensePieChart();
+      let dfEvents = [],
+        dfVaccines = [],
+        dfEnvironments = [];
+      const dfColors = ["#176b4f", "#369a74", "#85c7a0", "#c8e6a8", "#9ab8d2"];
+      function switchHealthTab(id, button) {
+        document
+          .querySelectorAll(".df-tab-panel")
+          .forEach((x) => x.classList.toggle("hide", x.id !== "df-" + id));
+        document
+          .querySelectorAll(".df-tab")
+          .forEach((x) => x.classList.remove("active"));
+        button.classList.add("active");
       }
-      async function dfLoadRecords(){
-        const paths=[['/theodoisuckhoe','events'],['/tiemphong','vaccines'],['/moitruong','environment']];
-        for(const [path,key] of paths){try{const result=await goiAPI(path);if(key==='events')dfEvents=result;else if(key==='vaccines')dfVaccines=result;else dfEnvironments=result;}catch(err){console.warn('Không tải được '+path,err.message);}}
+      function dfDeadForFlock(id) {
+        return dfEvents
+          .filter((e) => Number(e.MaDan) === Number(id))
+          .reduce((n, e) => n + Number(e.SoConChet || 0), 0);
+      }
+      function dfDate(x) {
+        return String(x || "").slice(0, 10);
+      }
+      function dfSelect(id, items, placeholder) {
+        const el = $(id);
+        if (!el) return;
+        const v = el.value;
+        el.innerHTML =
+          '<option value="">' +
+          placeholder +
+          "</option>" +
+          items
+            .map(
+              (x) =>
+                '<option value="' +
+                Number(x.id) +
+                '">' +
+                safe(x.name) +
+                "</option>",
+            )
+            .join("");
+        if ([...el.options].some((o) => o.value === v)) el.value = v;
+      }
+      function dfRefreshForms() {
+        dfSelect("dfEventFlock", db.flocks, "Chọn đàn");
+        dfSelect("dfVaccineFlock", db.flocks, "Chọn đàn");
+        dfSelect("dfEnvBarn", db.barns, "Chọn chuồng");
+      }
+      function dfFlockName(id) {
+        return (
+          db.flocks.find((f) => Number(f.id) === Number(id))?.name ||
+          "Đàn #" + id
+        );
+      }
+      function dfBarnName(id) {
+        return (
+          db.barns.find((f) => Number(f.id) === Number(id))?.name ||
+          "Chuồng #" + id
+        );
+      }
+      function dfRenderRecords() {
+        dfRefreshForms();
+        const latest = new Map();
+        dfEvents.forEach((e) => {
+          const prev = latest.get(e.MaDan);
+          if (!prev || dfDate(e.NgayGhiNhan) >= dfDate(prev.NgayGhiNhan))
+            latest.set(e.MaDan, e);
+        });
+        const sick = [...latest.values()].reduce(
+          (n, e) => n + Number(e.SoConBenh || 0),
+          0,
+        );
+        const alive = db.flocks.reduce((n, f) => n + Number(f.count || 0), 0);
+        if ($("dfSickTotal")) $("dfSickTotal").textContent = num(sick);
+        if ($("dfHealthRate"))
+          $("dfHealthRate").textContent = alive
+            ? ((Math.max(0, alive - sick) / alive) * 100)
+                .toFixed(1)
+                .replace(".", ",") + "%"
+            : "—";
+        $("dfHealthHistory").innerHTML =
+          dfEvents
+            .slice()
+            .reverse()
+            .map(
+              (e) =>
+                `<tr><td>${safe(dfDate(e.NgayGhiNhan))}</td><td>${safe(dfFlockName(e.MaDan))}</td><td>${num(e.SoConBenh)}</td><td>${num(e.SoConChet)}</td><td>${safe(e.GhiChu || "")}</td></tr>`,
+            )
+            .join("") ||
+          '<tr><td colspan="5">Chưa có dữ liệu theo dõi</td></tr>';
+        $("dfVaccineHistory").innerHTML =
+          dfVaccines
+            .slice()
+            .reverse()
+            .map(
+              (e) =>
+                `<tr><td>${safe(dfFlockName(e.MaDan))}</td><td>${safe(e.TenVacXin)}</td><td>${safe(dfDate(e.NgayTiem))}</td><td>${safe(dfDate(e.NgayNhacLai))}</td><td>${safe(e.GhiChu || "")}</td></tr>`,
+            )
+            .join("") ||
+          '<tr><td colspan="5">Chưa có dữ liệu tiêm phòng</td></tr>';
+        $("dfEnvHistory").innerHTML =
+          dfEnvironments
+            .slice()
+            .reverse()
+            .map(
+              (e) =>
+                `<tr><td>${safe(dfDate(e.NgayDo))}</td><td>${safe(dfBarnName(e.MaChuong))}</td><td>${Number(e.NhietDo)}°C</td><td>${Number(e.DoAm)}%</td><td>${safe(e.DoSach)}</td></tr>`,
+            )
+            .join("") ||
+          '<tr><td colspan="5">Chưa có dữ liệu môi trường</td></tr>';
+        renderFlocks();
+        renderDashboard();
+        drawDuckAreaChart();
+        drawExpensePieChart();
+      }
+      async function dfLoadRecords() {
+        const paths = [
+          ["/theodoisuckhoe", "events"],
+          ["/tiemphong", "vaccines"],
+          ["/moitruong", "environment"],
+        ];
+        for (const [path, key] of paths) {
+          try {
+            const result = await goiAPI(path);
+            if (key === "events") dfEvents = result;
+            else if (key === "vaccines") dfVaccines = result;
+            else dfEnvironments = result;
+          } catch (err) {
+            console.warn("Không tải được " + path, err.message);
+          }
+        }
         dfRenderRecords();
       }
-      async function saveDuckHealthEvent(ev){ev.preventDefault();const btn=ev.submitter;if(btn)btn.disabled=true;
-        try{const data={MaDan:Number($('dfEventFlock').value),NgayGhiNhan:$('dfEventDate').value,SoConBenh:Number($('dfEventSick').value),SoConChet:Number($('dfEventDead').value),GhiChu:$('dfEventNote').value};await goiAPI('/theodoisuckhoe','POST',data);ev.target.reset();$('dfEventDate').value=todayISO();await taiDanVitTuSQL();await dfLoadRecords();toast('Đã lưu và cập nhật số vịt còn lại trong Azure SQL.');}
-        catch(err){toast('Không lưu được: '+err.message);}finally{if(btn)btn.disabled=false;}
+      async function saveDuckHealthEvent(ev) {
+        ev.preventDefault();
+        const btn = ev.submitter;
+        if (btn) btn.disabled = true;
+        try {
+          const data = {
+            MaDan: Number($("dfEventFlock").value),
+            NgayGhiNhan: $("dfEventDate").value,
+            SoConBenh: Number($("dfEventSick").value),
+            SoConChet: Number($("dfEventDead").value),
+            GhiChu: $("dfEventNote").value,
+          };
+          await goiAPI("/theodoisuckhoe", "POST", data);
+          ev.target.reset();
+          $("dfEventDate").value = todayISO();
+          await taiDanVitTuSQL();
+          await dfLoadRecords();
+          toast("Đã lưu và cập nhật số vịt còn lại trong Azure SQL.");
+        } catch (err) {
+          toast("Không lưu được: " + err.message);
+        } finally {
+          if (btn) btn.disabled = false;
+        }
       }
-      async function saveDuckRecord(ev,type){ev.preventDefault();const btn=ev.submitter;if(btn)btn.disabled=true;
-        try{let path,data;if(type==='vaccine'){path='/tiemphong';data={MaDan:Number($('dfVaccineFlock').value),TenVacXin:$('dfVaccineName').value,NgayTiem:$('dfVaccineDate').value,NgayNhacLai:$('dfVaccineRepeat').value||null,GhiChu:$('dfVaccineNote').value};}else{path='/moitruong';data={MaChuong:Number($('dfEnvBarn').value),NgayDo:$('dfEnvDate').value,NhietDo:Number($('dfEnvTemp').value),DoAm:Number($('dfEnvHumidity').value),DoSach:$('dfEnvClean').value,GhiChu:$('dfEnvNote').value};}await goiAPI(path,'POST',data);ev.target.reset();$('dfVaccineDate').value=todayISO();$('dfEnvDate').value=todayISO();await dfLoadRecords();toast('Đã lưu vào Azure SQL.');}
-        catch(err){toast('Không lưu được: '+err.message);}finally{if(btn)btn.disabled=false;}
+      async function saveDuckRecord(ev, type) {
+        ev.preventDefault();
+        const btn = ev.submitter;
+        if (btn) btn.disabled = true;
+        try {
+          let path, data;
+          if (type === "vaccine") {
+            path = "/tiemphong";
+            data = {
+              MaDan: Number($("dfVaccineFlock").value),
+              TenVacXin: $("dfVaccineName").value,
+              NgayTiem: $("dfVaccineDate").value,
+              NgayNhacLai: $("dfVaccineRepeat").value || null,
+              GhiChu: $("dfVaccineNote").value,
+            };
+          } else {
+            path = "/moitruong";
+            data = {
+              MaChuong: Number($("dfEnvBarn").value),
+              NgayDo: $("dfEnvDate").value,
+              NhietDo: Number($("dfEnvTemp").value),
+              DoAm: Number($("dfEnvHumidity").value),
+              DoSach: $("dfEnvClean").value,
+              GhiChu: $("dfEnvNote").value,
+            };
+          }
+          await goiAPI(path, "POST", data);
+          ev.target.reset();
+          $("dfVaccineDate").value = todayISO();
+          $("dfEnvDate").value = todayISO();
+          await dfLoadRecords();
+          toast("Đã lưu vào Azure SQL.");
+        } catch (err) {
+          toast("Không lưu được: " + err.message);
+        } finally {
+          if (btn) btn.disabled = false;
+        }
       }
-      function dfDrawStackedArea(canvas,series,labels){if(!canvas||canvas.offsetParent===null)return;const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;const dpr=devicePixelRatio||1;canvas.width=w*dpr;canvas.height=h*dpr;const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);const pad={l:43,r:10,t:15,b:28},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;const totals=labels.map((_,i)=>series.reduce((sum,x)=>sum+(x.values[i]||0),0));const max=Math.max(1,...totals)*1.1;for(let j=0;j<=4;j++){const y=pad.t+j*ch/4;ctx.strokeStyle='#e4eee8';ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillStyle='#7b8b81';ctx.font='10px sans-serif';ctx.textAlign='right';ctx.fillText(Math.round(max*(1-j/4)).toLocaleString('vi-VN'),pad.l-5,y+3);}let previous=Array(labels.length).fill(0);series.forEach((part,index)=>{const next=previous.map((v,i)=>v+(part.values[i]||0));ctx.beginPath();next.forEach((v,i)=>{const x=pad.l+i*cw/Math.max(1,labels.length-1),y=pad.t+ch-v/max*ch;if(!i)ctx.moveTo(x,y);else ctx.lineTo(x,y);});for(let i=labels.length-1;i>=0;i--){const x=pad.l+i*cw/Math.max(1,labels.length-1),y=pad.t+ch-previous[i]/max*ch;ctx.lineTo(x,y);}ctx.closePath();ctx.fillStyle=dfColors[index%dfColors.length];ctx.fill();previous=next;});ctx.fillStyle='#7b8b81';ctx.font='10px sans-serif';ctx.textAlign='center';const step=Math.max(1,Math.ceil(labels.length/6));labels.forEach((lab,i)=>{if(i%step===0||i===labels.length-1)ctx.fillText(lab,pad.l+i*cw/Math.max(1,labels.length-1),h-7);});}
-      function drawDuckAreaChart(){const canvas=$('duckAreaChart');if(!canvas||canvas.offsetParent===null)return;const monthly=$('duckTrendPeriod')?.value==='month';const now=new Date();now.setHours(12,0,0,0);const days=monthly?12:30;const dates=Array.from({length:days},(_,i)=>{const d=new Date(now);if(monthly){d.setDate(1);d.setMonth(d.getMonth()-(days-1-i));}else d.setDate(d.getDate()-(days-1-i));return d.toISOString().slice(0,10);});const labels=dates.map(d=>monthly?'T'+Number(d.slice(5,7)):d.slice(8,10)+'/'+d.slice(5,7));const breeds=[...new Set(db.flocks.map(f=>f.breed||'Khác'))];const series=breeds.map(breed=>({name:breed,values:dates.map(d=>db.flocks.filter(f=>(f.breed||'Khác')===breed).reduce((sum,f)=>{let count=Number(f.count||0);for(const e of dfEvents){if(Number(e.MaDan)===Number(f.id)&&dfDate(e.NgayGhiNhan)>d)count+=Number(e.SoConChet||0);}if(f.date&&f.date>d)return sum;return sum+Math.max(0,count);},0))}));dfDrawStackedArea(canvas,series,labels);canvas.title='Số lượng theo giống: '+series.map(s=>s.name).join(', ');}
-      function drawExpensePieChart(){const canvas=$('expensePieChart');if(!canvas||canvas.offsetParent===null)return;const cats=[['Thức ăn',/thức ăn|thuc an|cám|cam|ngô|ngo|feed/i],['Con giống',/con giống|con giong|giống vịt|giong vit|mua vịt|mua vit/i],['Thuốc và vắc-xin',/thuốc|thuoc|vắc|vac|tiêm|tiem/i],['Điện nước',/điện|dien|nước|nuoc/i],['Khác',/.*/]];const sums=cats.map(()=>0);db.transactions.filter(t=>t.type==='expense').forEach(t=>{const txt=(t.title||'')+' '+(t.note||'');const idx=cats.findIndex(c=>c[1].test(txt));sums[idx<0?4:idx]+=Number(t.amount||0);});const total=sums.reduce((a,b)=>a+b,0),ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);let angle=-Math.PI/2;const cx=canvas.width/2,cy=canvas.height/2,r=85;cats.forEach((c,i)=>{const delta=total?2*Math.PI*sums[i]/total:0;if(delta>0){ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle,angle+delta);ctx.closePath();ctx.fillStyle=dfColors[i];ctx.fill();}angle+=delta;});if(!total){ctx.fillStyle='#7b8b81';ctx.font='13px sans-serif';ctx.textAlign='center';ctx.fillText('Chưa có chi phí',cx,cy);}const legend=$('expensePieLegend');legend.innerHTML=cats.map((c,i)=>`<div><span class="df-legend-dot" style="background:${dfColors[i]}"></span>${c[0]}: <b>${total?(100*sums[i]/total).toFixed(1):'0'}%</b></div>`).join('')+'<small>Phân loại theo tên/nội dung giao dịch.</small>';}
-      ['dfEventDate','dfVaccineDate','dfEnvDate'].forEach(id=>{if($(id))$(id).value=todayISO();});
-      window.addEventListener("resize", () => {drawFinanceChart();drawDuckAreaChart();drawExpensePieChart();});
+      function dfDrawStackedArea(canvas, series, labels) {
+        if (!canvas || canvas.offsetParent === null) return;
+        const w = canvas.clientWidth,
+          h = canvas.clientHeight;
+        if (!w || !h) return;
+        const dpr = devicePixelRatio || 1;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, w, h);
+        const pad = { l: 43, r: 10, t: 15, b: 28 },
+          cw = w - pad.l - pad.r,
+          ch = h - pad.t - pad.b;
+        const totals = labels.map((_, i) =>
+          series.reduce((sum, x) => sum + (x.values[i] || 0), 0),
+        );
+        const max = Math.max(1, ...totals) * 1.1;
+        for (let j = 0; j <= 4; j++) {
+          const y = pad.t + (j * ch) / 4;
+          ctx.strokeStyle = "#e4eee8";
+          ctx.beginPath();
+          ctx.moveTo(pad.l, y);
+          ctx.lineTo(w - pad.r, y);
+          ctx.stroke();
+          ctx.fillStyle = "#7b8b81";
+          ctx.font = "10px sans-serif";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            Math.round(max * (1 - j / 4)).toLocaleString("vi-VN"),
+            pad.l - 5,
+            y + 3,
+          );
+        }
+        let previous = Array(labels.length).fill(0);
+        series.forEach((part, index) => {
+          const next = previous.map((v, i) => v + (part.values[i] || 0));
+          ctx.beginPath();
+          next.forEach((v, i) => {
+            const x = pad.l + (i * cw) / Math.max(1, labels.length - 1),
+              y = pad.t + ch - (v / max) * ch;
+            if (!i) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          for (let i = labels.length - 1; i >= 0; i--) {
+            const x = pad.l + (i * cw) / Math.max(1, labels.length - 1),
+              y = pad.t + ch - (previous[i] / max) * ch;
+            ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.fillStyle = dfColors[index % dfColors.length];
+          ctx.fill();
+          previous = next;
+        });
+        ctx.fillStyle = "#7b8b81";
+        ctx.font = "10px sans-serif";
+        ctx.textAlign = "center";
+        const step = Math.max(1, Math.ceil(labels.length / 6));
+        labels.forEach((lab, i) => {
+          if (i % step === 0 || i === labels.length - 1)
+            ctx.fillText(
+              lab,
+              pad.l + (i * cw) / Math.max(1, labels.length - 1),
+              h - 7,
+            );
+        });
+      }
+      function drawDuckAreaChart() {
+        const canvas = $("duckAreaChart");
+        if (!canvas || canvas.offsetParent === null) return;
+        const monthly = $("duckTrendPeriod")?.value === "month";
+        const now = new Date();
+        now.setHours(12, 0, 0, 0);
+        const days = monthly ? 12 : 30;
+        const dates = Array.from({ length: days }, (_, i) => {
+          const d = new Date(now);
+          if (monthly) {
+            d.setDate(1);
+            d.setMonth(d.getMonth() - (days - 1 - i));
+          } else d.setDate(d.getDate() - (days - 1 - i));
+          return d.toISOString().slice(0, 10);
+        });
+        const labels = dates.map((d) =>
+          monthly
+            ? "T" + Number(d.slice(5, 7))
+            : d.slice(8, 10) + "/" + d.slice(5, 7),
+        );
+        const breeds = [...new Set(db.flocks.map((f) => f.breed || "Khác"))];
+        const series = breeds.map((breed) => ({
+          name: breed,
+          values: dates.map((d) =>
+            db.flocks
+              .filter((f) => (f.breed || "Khác") === breed)
+              .reduce((sum, f) => {
+                let count = Number(f.count || 0);
+                for (const e of dfEvents) {
+                  if (
+                    Number(e.MaDan) === Number(f.id) &&
+                    dfDate(e.NgayGhiNhan) > d
+                  )
+                    count += Number(e.SoConChet || 0);
+                }
+                if (f.date && f.date > d) return sum;
+                return sum + Math.max(0, count);
+              }, 0),
+          ),
+        }));
+        dfDrawStackedArea(canvas, series, labels);
+        canvas.title =
+          "Số lượng theo giống: " + series.map((s) => s.name).join(", ");
+      }
+      function drawExpensePieChart() {
+        const canvas = $("expensePieChart");
+        if (!canvas || canvas.offsetParent === null) return;
+        const cats = [
+          ["Thức ăn", /thức ăn|thuc an|cám|cam|ngô|ngo|feed/i],
+          [
+            "Con giống",
+            /con giống|con giong|giống vịt|giong vit|mua vịt|mua vit/i,
+          ],
+          ["Thuốc và vắc-xin", /thuốc|thuoc|vắc|vac|tiêm|tiem/i],
+          ["Điện nước", /điện|dien|nước|nuoc/i],
+          ["Khác", /.*/],
+        ];
+        const sums = cats.map(() => 0);
+        db.transactions
+          .filter((t) => t.type === "expense")
+          .forEach((t) => {
+            const txt = (t.title || "") + " " + (t.note || "");
+            const idx = cats.findIndex((c) => c[1].test(txt));
+            sums[idx < 0 ? 4 : idx] += Number(t.amount || 0);
+          });
+        const total = sums.reduce((a, b) => a + b, 0),
+          ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let angle = -Math.PI / 2;
+        const cx = canvas.width / 2,
+          cy = canvas.height / 2,
+          r = 85;
+        cats.forEach((c, i) => {
+          const delta = total ? (2 * Math.PI * sums[i]) / total : 0;
+          if (delta > 0) {
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, r, angle, angle + delta);
+            ctx.closePath();
+            ctx.fillStyle = dfColors[i];
+            ctx.fill();
+          }
+          angle += delta;
+        });
+        if (!total) {
+          ctx.fillStyle = "#7b8b81";
+          ctx.font = "13px sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("Chưa có chi phí", cx, cy);
+        }
+        const legend = $("expensePieLegend");
+        legend.innerHTML =
+          cats
+            .map(
+              (c, i) =>
+                `<div><span class="df-legend-dot" style="background:${dfColors[i]}"></span>${c[0]}: <b>${total ? ((100 * sums[i]) / total).toFixed(1) : "0"}%</b></div>`,
+            )
+            .join("") + "<small>Phân loại theo tên/nội dung giao dịch.</small>";
+      }
+      ["dfEventDate", "dfVaccineDate", "dfEnvDate"].forEach((id) => {
+        if ($(id)) $(id).value = todayISO();
+      });
+      window.addEventListener("resize", () => {
+        drawFinanceChart();
+        drawDuckAreaChart();
+        drawExpensePieChart();
+      });
       $("dataForm").addEventListener("reset", () => {});
 
       db.flocks = [];
