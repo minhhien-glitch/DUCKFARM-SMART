@@ -1321,6 +1321,7 @@
       }
     
 .smart-alert {margin:14px 0 0;padding:12px 14px;border:1px solid #dce8e1;border-radius:12px;background:#f5faf7;color:#25483a;font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.work-schedule-title{font-size:14px;margin:18px 0 10px;color:inherit;font-family:inherit}
 .smart-alert h4{margin:0 0 6px;font-size:14px}.smart-alert p{margin:5px 0}.smart-alert .warn{color:#945600}.smart-alert .danger{color:#a52323}.smart-alert .neutral{color:#61736a}.smart-alert .ok{color:#176b54}
 
 .connection-inline{display:flex;align-items:center;gap:6px;font-size:11px;color:#176b54;white-space:nowrap}.connection-inline[data-state=error]{color:#b42318}.connection-inline[data-state=loading]{color:#946000}.connection-inline .btn{font-size:11px;padding:5px 8px;min-height:0}.top-actions{flex-wrap:wrap;justify-content:flex-end;gap:8px}.topbar{height:auto;min-height:65px;padding-top:10px;padding-bottom:10px}.v2panel{font-family:inherit;font-size:13px;color:var(--ink)}.v2panel h3{font-size:16px;margin:0 0 12px}.v2panel label,.page label:has(input[id^=filter]),.page label:has(select[id^=filter]){font-size:12px;font-weight:650;color:#244a39}.v2panel input,.v2panel select,input[id^=filter],select[id^=filter]{font:inherit;font-size:13px;border:1px solid #d8e4dc;border-radius:10px;padding:9px;background:#fff;color:#234537;max-width:100%;min-width:0}.v2panel .v2form input,.v2panel .v2form select{font-weight:400}.v2panel .v2result{font-size:13px}.v2panel .v2result h3{margin-top:14px}.v2panel .btn{font-size:12px}.v2panel .growth-actions{display:flex;gap:6px}.v2panel .growth-actions button{padding:5px 9px}.v2panel .growth-edit-note{font-size:12px;color:#176b54;margin:8px 0}.v2panel .growth-edit-note[hidden]{display:none}@media(max-width:700px){.connection-inline{white-space:normal;flex-wrap:wrap}.top-actions{gap:6px}.v2panel .v2form label{min-width:130px}}
@@ -1374,7 +1375,7 @@
             ><span>● Đang hoạt động</span>
           </div>
           <div style="font-size: 10px; color: #8fb3a5; padding: 17px 10px 0">
-            DUCKFARM SMART · Bản demo 2.0
+            DUCKFARM SMART · Bản demo 1.0
           </div>
         </div>
       </aside>
@@ -1504,7 +1505,7 @@
                 <div class="chart-wrap">
                   <canvas id="financeChart"></canvas>
                 </div>
-                <div class="smart-alert" id="smartCenter" aria-live="polite"></div><div class="smart-alert" id="smartFinance" aria-live="polite"></div>
+                <div class="smart-alert" id="smartFinance" aria-live="polite"></div>
                 <div class="legend">
                   <span>Doanh thu</span><span class="orange">Chi phí</span
                   ><span style="color: #3260a8">Lợi nhuận</span>
@@ -1576,12 +1577,14 @@
                 <div class="card-head">
                   <div>
                     <h3>Việc cần chú ý</h3>
-                    <p>Lịch nhắc và hoạt động gần đây</p>
+                    <p>Lịch nhắc và gợi ý công việc cho chủ trang trại</p>
                   </div>
                   <span class="pill pill-orange" id="reminderCount"
-                    >3 việc</span
+                    >—</span
                   >
                 </div>
+                <div class="smart-alert" id="smartCenter" aria-live="polite"><p class="neutral">Đang chờ dữ liệu để tạo gợi ý.</p></div>
+                <h4 class="work-schedule-title">Lịch công việc</h4>
                 <div class="activity" id="activityList"></div>
               </div>
             </div>
@@ -3192,7 +3195,7 @@
           .filter((h) => h.status === "Chờ thực hiện")
           .sort((a, b) => a.date.localeCompare(b.date))
           .slice(0, 3);
-        $("reminderCount").textContent = upcoming.length + " việc";
+        $("reminderCount").textContent = "—";
         $("activityList").innerHTML =
           upcoming
             .map(
@@ -4884,7 +4887,11 @@
         if(smartLoaded.vaccines&&smartLoaded.flocks){const rows=smartLatest(dfVaccines,x=>String(x.MaDan)+'|'+String(x.TenVacXin||'').trim().toLowerCase(),'NgayTiem','MaTiem',today).filter(x=>db.flocks.some(y=>String(y.id)===String(x.MaDan)&&!/đã xuất|đã bán|kết thúc/i.test(y.status||'')));for(const x of rows){const date=dfDate(x.NgayNhacLai),n=smartDays(date,today),name=dfFlockName(x.MaDan)+' – '+x.TenVacXin;if(!date||!Number.isFinite(n))v.push(['neutral',name+': chưa có ngày nhắc lại.']);else if(n<=L.vaccineDays)v.push([n<=0?'danger':'warn',name+': '+(n<0?'quá hạn '+(-n)+' ngày':n===0?'đến hạn hôm nay':'còn '+n+' ngày')+' ('+date+'). Kiểm tra lịch với thú y.']);}if(!v.length)v.push([rows.length?'ok':'neutral',rows.length?'Không có lịch nhắc lại đến hạn trong 3 ngày tới.':'Chưa có lịch tiêm của đàn đang nuôi.']);}
         if(smartLoaded.environment){const rows=smartLatest(dfEnvironments,x=>String(x.MaChuong),'NgayDo','MaDo',today);for(const x of rows){const issues=[],t=Number(x.NhietDo),h=Number(x.DoAm),date=dfDate(x.NgayDo);if(x.NhietDo!=null&&(t<L.tempMin||t>L.tempMax))issues.push('nhiệt độ '+t+'°C '+(t<L.tempMin?'thấp':'cao'));if(x.DoAm!=null&&(h<L.humidityMin||h>L.humidityMax))issues.push('độ ẩm '+h+'% '+(h<L.humidityMin?'thấp':'cao'));if(String(x.DoSach).trim().toLowerCase()==='bẩn')issues.push('chuồng bẩn, cần vệ sinh');const stale=smartDays(today,date)>L.staleDays;if(issues.length||stale)e.push([issues.length&&!stale?'warn':'neutral',dfBarnName(x.MaChuong)+' ('+date+'): '+[...issues,...(stale?['số đo đã cũ, cần đo lại']:[])].join('; ')+'.']);}if(!e.length)e.push([rows.length?'ok':'neutral',rows.length?'Các số đo gần nhất chưa vượt ngưỡng demo.':'Chưa có số đo môi trường.']);e.push(['neutral','Ngưỡng demo: 20–30°C, 50–75% độ ẩm; điều chỉnh theo tuổi vịt và hướng dẫn thú y.']);}
         const all=[...f,...c,...d,...v,...e,...v2Alerts()].filter(x=>x[0]==="danger"||x[0]==="warn");
-        smartShow("smartCenter","Việc cần chú ý hôm nay",failedReads.size||loadingSQL?[["neutral","Dữ liệu đang cập nhật hoặc chưa đầy đủ; chưa thể đánh giá toàn bộ."]]:all.length?all:[["neutral","Chưa phát hiện cảnh báo từ dữ liệu đã ghi nhận."]]);
+        const incomplete = !lastSQL || failedReads.size > 0 || loadingSQL;
+        const suggestions = [...all].sort((a,b)=>Number(b[0]==="danger")-Number(a[0]==="danger"));
+        smartShow("smartCenter","Gợi ý công việc hôm nay",incomplete?[["neutral","Dữ liệu đang cập nhật hoặc chưa đầy đủ; vui lòng chờ hoặc tải lại để nhận gợi ý."]]:suggestions.length?suggestions:[["neutral","Chưa phát hiện vấn đề cần xử lý từ dữ liệu đã ghi nhận."]]);
+        const count = $("reminderCount");
+        if(count) count.textContent = incomplete ? "—" : (suggestions.length + Math.min(3,db.health.filter(h=>h.status === "Chờ thực hiện").length)) + " việc";
         smartShow('smartFinance','Nhận định thu chi',f.length?f:wait);smartShow('smartExpense','Nhận định cơ cấu chi phí',c.length?c:wait);smartShow('smartDucks','Cảnh báo hao hụt đàn',d.length?d:wait);smartShow('smartVaccine','Nhắc lịch tiêm phòng',v.length?v:wait);smartShow('smartEnvironment','Cảnh báo môi trường',e.length?e:wait);
       }
 
