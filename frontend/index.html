@@ -1502,7 +1502,7 @@
                 <div class="chart-wrap">
                   <canvas id="financeChart"></canvas>
                 </div>
-                <div class="smart-alert" id="smartFinance" aria-live="polite"></div>
+                <div class="smart-alert" id="smartCenter" aria-live="polite"></div><div class="smart-alert" id="smartFinance" aria-live="polite"></div>
                 <div class="legend">
                   <span>Doanh thu</span><span class="orange">Chi phí</span
                   ><span style="color: #3260a8">Lợi nhuận</span>
@@ -1775,8 +1775,8 @@
               </div>
               <div class="card">
                 <div class="stat-label">Tiêu thụ hôm nay</div>
-                <div class="stat-value">185 kg</div>
-                <div class="stat-foot">Số liệu minh họa</div>
+                <div class="stat-value" id="v2Today">—</div>
+                <div class="stat-foot">Vật tư đơn vị kg đã sử dụng</div>
               </div>
             </div>
             <div class="toolbar">
@@ -1904,7 +1904,8 @@
               <div class="card table-card" style="margin-top: 16px">
                 <h3>Lịch sử theo dõi</h3>
                 <div class="table-wrap">
-                  <table>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:center"><label>Từ ngày <input type="date" id="filterHealthFrom" onchange="dfRenderRecords()"></label><label>Đến ngày <input type="date" id="filterHealthTo" onchange="dfRenderRecords()"></label><label>Đàn <select id="filterHealthId" onchange="dfRenderRecords()"></select></label><button type="button" class="btn" onclick="clearHistory('Health')">Xóa bộ lọc</button></div>
+<table>
                     <thead>
                       <tr>
                         <th>Ngày</th>
@@ -1955,7 +1956,8 @@
               </div>
               <div class="card table-card" style="margin-top: 16px">
                 <div class="table-wrap">
-                  <table>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:center"><label>Từ ngày <input type="date" id="filterVaccineFrom" onchange="dfRenderRecords()"></label><label>Đến ngày <input type="date" id="filterVaccineTo" onchange="dfRenderRecords()"></label><label>Đàn <select id="filterVaccineId" onchange="dfRenderRecords()"></select></label><button type="button" class="btn" onclick="clearHistory('Vaccine')">Xóa bộ lọc</button></div>
+<table>
                     <thead>
                       <tr>
                         <th>Đàn vịt</th>
@@ -2011,7 +2013,8 @@
               </div>
               <div class="card table-card" style="margin-top: 16px">
                 <div class="table-wrap">
-                  <table>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:center"><label>Từ ngày <input type="date" id="filterEnvFrom" onchange="dfRenderRecords()"></label><label>Đến ngày <input type="date" id="filterEnvTo" onchange="dfRenderRecords()"></label><label>Chuồng <select id="filterEnvId" onchange="dfRenderRecords()"></select></label><button type="button" class="btn" onclick="clearHistory('Env')">Xóa bộ lọc</button></div>
+<table>
                     <thead>
                       <tr>
                         <th>Ngày</th>
@@ -2764,9 +2767,9 @@
         }
       }
 
-      kiemTraKetNoiBackend();
 
-      const todayISO = () => new Date().toISOString().slice(0, 10);
+
+      const todayISO = () => smartDay();
       const dateOffset = (n) => {
         let d = new Date();
         d.setDate(d.getDate() + n);
@@ -3207,15 +3210,7 @@
 
       async function taiDanVitTuSQL() {
         try {
-          const response = await fetch(
-            "https://duckfarm-smart-test.onrender.com/api/danvit",
-          );
-
-          if (!response.ok) {
-            throw new Error("Khong the lay du lieu dan vit");
-          }
-
-          const danhSach = await response.json();
+          const danhSach = await goiAPI("/danvit");
 
           db.flocks = danhSach.map((dan) => ({
             id: dan.MaDan,
@@ -3237,7 +3232,7 @@
 
           console.log("Da hien thi dan vit tu SQL Server:", db.flocks);
         } catch (error) {
-          console.error("Loi tai dan vit:", error);
+          smartLoaded.flocks = false; console.error("Loi tai dan vit:", error);
         }
       }
 
@@ -3419,7 +3414,9 @@
           options.headers["Content-Type"] = "application/json";
           options.body = JSON.stringify(data);
         }
-        const response = await fetch(API_BASE + path, options);
+        let response;
+        try { response = await fetch(API_BASE + path, {...options, signal: AbortSignal.timeout(75000)}); }
+        catch (err) { connectionFailure(path, method); throw new Error(isWrite ? "Chưa xác nhận được kết quả lưu. Hãy tải lại dữ liệu và kiểm tra trước khi gửi lại." : "Kết nối gián đoạn. Vui lòng chờ rồi tải lại dữ liệu."); }
         const raw = await response.text();
         let result;
         try {
@@ -3428,6 +3425,7 @@
           result = raw;
         }
         if (!response.ok) {
+          if (response.status >= 500 || response.status === 429) connectionFailure(path, method);
           if (isWrite && response.status === 401) {
             demoToken = "";
             sessionStorage.removeItem("duckfarm_demo_token");
@@ -3438,6 +3436,8 @@
             result?.message || `API ${path}: HTTP ${response.status}`,
           );
         }
+        if (!isWrite && !Array.isArray(result)) { connectionFailure(path, method); throw new Error("Dữ liệu trả về không hợp lệ"); }
+        if (!isWrite) failedReads.delete(path);
         return result;
       }
 
@@ -3530,15 +3530,7 @@
 
       async function taiChuongTraiTuSQL() {
         try {
-          const response = await fetch(
-            "https://duckfarm-smart-test.onrender.com/api/chuongtrai",
-          );
-
-          if (!response.ok) {
-            throw new Error("Khong the tai chuong trai");
-          }
-
-          const danhSach = await response.json();
+          const danhSach = await goiAPI("/chuongtrai");
 
           db.barns = danhSach.map((chuong) => ({
             id: chuong.MaChuong,
@@ -4582,6 +4574,7 @@
       }
       function dfRenderRecords() {
         dfRefreshForms();
+        for(const k of ["Health","Vaccine","Env"]) dfSelect("filter"+k+"Id", k==="Env"?db.barns:db.flocks,"Tất cả");
         const latest = new Map();
         dfEvents.forEach((e) => {
           const prev = latest.get(e.MaDan);
@@ -4602,34 +4595,34 @@
             : "—";
         $("dfHealthHistory").innerHTML =
           dfEvents
-            .slice()
-            .reverse()
+            .filter(e => historyMatch("Health", e, "NgayGhiNhan", "MaDan"))
+            .sort((a,b)=>dfDate(b.NgayGhiNhan).localeCompare(dfDate(a.NgayGhiNhan)))
             .map(
               (e) =>
                 `<tr><td>${safe(dfDate(e.NgayGhiNhan))}</td><td>${safe(dfFlockName(e.MaDan))}</td><td>${num(e.SoConBenh)}</td><td>${num(e.SoConChet)}</td><td>${safe(e.GhiChu || "")}</td></tr>`,
             )
             .join("") ||
-          '<tr><td colspan="5">Chưa có dữ liệu theo dõi</td></tr>';
+          '<tr><td colspan="5">Không có bản ghi phù hợp hoặc chưa tải được dữ liệu</td></tr>';
         $("dfVaccineHistory").innerHTML =
           dfVaccines
-            .slice()
-            .reverse()
+            .filter(e => historyMatch("Vaccine", e, "NgayTiem", "MaDan"))
+            .sort((a,b)=>dfDate(b.NgayTiem).localeCompare(dfDate(a.NgayTiem)))
             .map(
               (e) =>
                 `<tr><td>${safe(dfFlockName(e.MaDan))}</td><td>${safe(e.TenVacXin)}</td><td>${safe(dfDate(e.NgayTiem))}</td><td>${safe(dfDate(e.NgayNhacLai))}</td><td>${safe(e.GhiChu || "")}</td></tr>`,
             )
             .join("") ||
-          '<tr><td colspan="5">Chưa có dữ liệu tiêm phòng</td></tr>';
+          '<tr><td colspan="5">Không có bản ghi phù hợp hoặc chưa tải được dữ liệu</td></tr>';
         $("dfEnvHistory").innerHTML =
           dfEnvironments
-            .slice()
-            .reverse()
+            .filter(e => historyMatch("Env", e, "NgayDo", "MaChuong"))
+            .sort((a,b)=>dfDate(b.NgayDo).localeCompare(dfDate(a.NgayDo)))
             .map(
               (e) =>
                 `<tr><td>${safe(dfDate(e.NgayDo))}</td><td>${safe(dfBarnName(e.MaChuong))}</td><td>${Number(e.NhietDo)}°C</td><td>${Number(e.DoAm)}%</td><td>${safe(e.DoSach)}</td></tr>`,
             )
             .join("") ||
-          '<tr><td colspan="5">Chưa có dữ liệu môi trường</td></tr>';
+          '<tr><td colspan="5">Không có bản ghi phù hợp hoặc chưa tải được dữ liệu</td></tr>';
         renderFlocks();
         renderDashboard();
         drawDuckAreaChart();
@@ -4889,6 +4882,8 @@
         if(smartLoaded.flocks&&smartLoaded.events){const active=db.flocks.filter(x=>!/đã xuất|đã bán|kết thúc/i.test(x.status||''));const ids=new Set(active.map(x=>String(x.id)));const deaths=dfEvents.filter(x=>ids.has(String(x.MaDan))&&smartDays(today,dfDate(x.NgayGhiNhan))>=0&&smartDays(today,dfDate(x.NgayGhiNhan))<7).reduce((a,x)=>a+Number(x.SoConChet||0),0);const alive=active.reduce((a,x)=>a+Number(x.count||0),0);if(!active.length)d.push(['neutral','Chưa có đàn đang theo dõi.']);else if(!dfEvents.some(x=>ids.has(String(x.MaDan))))d.push(['neutral','Chưa có lịch sử hao hụt của đàn đang nuôi.']);else{const pct=alive+deaths?100*deaths/(alive+deaths):0;d.push([pct>=L.duckDrop?'danger':deaths?'warn':'ok','7 ngày gần đây ghi nhận '+num(deaths)+' con chết ở các đàn đang theo dõi'+(deaths?' (tỷ lệ ước tính '+pct.toFixed(1)+'%). Kiểm tra nguyên nhân hao hụt.':'.')]);}d.push(['neutral','Chỉ đánh giá hao hụt đã ghi nhận; không coi xuất bán là vịt chết.']);}
         if(smartLoaded.vaccines&&smartLoaded.flocks){const rows=smartLatest(dfVaccines,x=>String(x.MaDan)+'|'+String(x.TenVacXin||'').trim().toLowerCase(),'NgayTiem','MaTiem',today).filter(x=>db.flocks.some(y=>String(y.id)===String(x.MaDan)&&!/đã xuất|đã bán|kết thúc/i.test(y.status||'')));for(const x of rows){const date=dfDate(x.NgayNhacLai),n=smartDays(date,today),name=dfFlockName(x.MaDan)+' – '+x.TenVacXin;if(!date||!Number.isFinite(n))v.push(['neutral',name+': chưa có ngày nhắc lại.']);else if(n<=L.vaccineDays)v.push([n<=0?'danger':'warn',name+': '+(n<0?'quá hạn '+(-n)+' ngày':n===0?'đến hạn hôm nay':'còn '+n+' ngày')+' ('+date+'). Kiểm tra lịch với thú y.']);}if(!v.length)v.push([rows.length?'ok':'neutral',rows.length?'Không có lịch nhắc lại đến hạn trong 3 ngày tới.':'Chưa có lịch tiêm của đàn đang nuôi.']);}
         if(smartLoaded.environment){const rows=smartLatest(dfEnvironments,x=>String(x.MaChuong),'NgayDo','MaDo',today);for(const x of rows){const issues=[],t=Number(x.NhietDo),h=Number(x.DoAm),date=dfDate(x.NgayDo);if(x.NhietDo!=null&&(t<L.tempMin||t>L.tempMax))issues.push('nhiệt độ '+t+'°C '+(t<L.tempMin?'thấp':'cao'));if(x.DoAm!=null&&(h<L.humidityMin||h>L.humidityMax))issues.push('độ ẩm '+h+'% '+(h<L.humidityMin?'thấp':'cao'));if(String(x.DoSach).trim().toLowerCase()==='bẩn')issues.push('chuồng bẩn, cần vệ sinh');const stale=smartDays(today,date)>L.staleDays;if(issues.length||stale)e.push([issues.length&&!stale?'warn':'neutral',dfBarnName(x.MaChuong)+' ('+date+'): '+[...issues,...(stale?['số đo đã cũ, cần đo lại']:[])].join('; ')+'.']);}if(!e.length)e.push([rows.length?'ok':'neutral',rows.length?'Các số đo gần nhất chưa vượt ngưỡng demo.':'Chưa có số đo môi trường.']);e.push(['neutral','Ngưỡng demo: 20–30°C, 50–75% độ ẩm; điều chỉnh theo tuổi vịt và hướng dẫn thú y.']);}
+        const all=[...f,...c,...d,...v,...e,...v2Alerts()].filter(x=>x[0]==="danger"||x[0]==="warn");
+        smartShow("smartCenter","Việc cần chú ý hôm nay",failedReads.size||loadingSQL?[["neutral","Dữ liệu đang cập nhật hoặc chưa đầy đủ; chưa thể đánh giá toàn bộ."]]:all.length?all:[["neutral","Chưa phát hiện cảnh báo từ dữ liệu đã ghi nhận."]]);
         smartShow('smartFinance','Nhận định thu chi',f.length?f:wait);smartShow('smartExpense','Nhận định cơ cấu chi phí',c.length?c:wait);smartShow('smartDucks','Cảnh báo hao hụt đàn',d.length?d:wait);smartShow('smartVaccine','Nhắc lịch tiêm phòng',v.length?v:wait);smartShow('smartEnvironment','Cảnh báo môi trường',e.length?e:wait);
       }
 
@@ -4907,9 +4902,26 @@
       db.feed = [];
       db.health = [];
       db.transactions = [];
-      renderAll();
-
+      const failedReads = new Set();
+      let loadingSQL = false, lastSQL = null, retryTimer;
+      const banner = document.createElement("div");
+      banner.style.cssText="position:fixed;bottom:16px;right:16px;max-width:420px;z-index:9999;background:#fff;border:1px solid #d3e4d8;border-radius:12px;padding:14px;box-shadow:0 4px 20px #0002;color:#174d39";
+      banner.innerHTML='<span id="connectionMessage" role="status"></span> <button type="button" id="retrySQL" class="btn">Tải lại dữ liệu</button>';
+      document.body.appendChild(banner);
+      $("retrySQL").onclick=()=>khoiTaoDuLieuSQL();
+      function connectionFailure(path,method){
+        if(method==="GET") failedReads.add(path);
+        $("connectionMessage").textContent=method==="GET"?"Chưa cập nhật được dữ liệu. Vui lòng chờ rồi thử lại. Dữ liệu đang hiển thị có thể đã cũ hoặc chưa đầy đủ.":"Chưa xác nhận được thao tác. Hãy kiểm tra dữ liệu trước khi gửi lại.";
+        banner.hidden=false;
+      }
+      function historyMatch(k,e,date,id){const a=$("filter"+k+"From").value,b=$("filter"+k+"To").value,v=$("filter"+k+"Id").value,d=dfDate(e[date]);return (!a||d>=a)&&(!b||d<=b)&&(!v||String(e[id])===v);}
+      function clearHistory(k){for(const x of ["From","To","Id"]) $("filter"+k+x).value="";dfRenderRecords();}
       async function khoiTaoDuLieuSQL() {
+        if(loadingSQL)return;
+        loadingSQL=true; clearTimeout(retryTimer); $("retrySQL").disabled=true;
+        $("connectionMessage").textContent="Đang kết nối và cập nhật dữ liệu. Vui lòng chờ…";
+        banner.hidden=false;
+        try {
         await taiDanVitTuSQL();
         await taiChuongTraiTuSQL();
         await dfLoadRecords();
@@ -4919,12 +4931,49 @@
           } catch (err) {
             console.error("Không tải được SQL " + type + ":", err);
             // Khong hien thi du lieu demo nhu du lieu that khi API loi.
-            db[sqlConfig[type].key] = [];
+            if(type==="transaction") smartLoaded.finance=false;
+            failedReads.add(sqlConfig[type].path);
             renderAll();
           }
         }
+        await v2Load();
+        } finally {
+          loadingSQL=false; $("retrySQL").disabled=false;
+          if(failedReads.size){$("connectionMessage").textContent="Chưa tải đủ dữ liệu. Dữ liệu có thể cũ hoặc thiếu. Hệ thống sẽ thử lại sau 60 giây.";retryTimer=setTimeout(khoiTaoDuLieuSQL,60000);}
+          else {lastSQL=new Date();$("connectionMessage").textContent="Đã cập nhật: "+lastSQL.toLocaleTimeString("vi-VN");}
+          smartRender();
+        }
       }
 
+let v2Data=null, v2Busy=false, v2Request=null;
+function v2Init(){
+ const field=(name,label,type='number',extra='')=>`<label>${label}<input name="${name}" type="${type}" required ${extra}></label>`;
+ const select=(name,label)=>`<label>${label}<select name="${name}" required></select></label>`;
+ const panel=(id,title,body)=>{const el=document.createElement('div');el.className='card';el.style.marginTop='18px';el.innerHTML=`<h3>${title}</h3>${body}`;$(id).append(el);};
+ const form=(id,body)=>`<form id="${id}" class="v2form">${body}<button class="btn" type="submit">Lưu thông tin</button></form>`;
+ const style=document.createElement('style');style.textContent='.v2form{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:15px 0}.v2form label{display:grid;gap:5px;flex:1;min-width:145px}.v2form input,.v2form select{padding:10px;border:1px solid #cdded4;border-radius:8px;width:100%;background:white;color:#174d39}.v2result{overflow:auto;line-height:1.8}.v2result table{width:100%}';document.head.append(style);
+ panel('page-feed','Ghi nhận sử dụng thức ăn & vật tư',form('v2Use',select('MaDan','Đàn vịt')+select('MaThucAn','Vật tư (theo đơn vị kho)')+field('Ngay','Ngày sử dụng','date')+field('SoLuong','Số lượng','number','min="0.01" step="0.01"')+'<label>Ghi chú<input name="GhiChu" maxlength="500"></label>')+'<div id="v2Stock" class="v2result"></div><h3>Lịch sử sử dụng</h3><label>Từ ngày <input type="date" id="v2From"></label> <label>Đến ngày <input type="date" id="v2To"></label><div id="v2History" class="v2result"></div>');
+ panel('page-flocks','Theo dõi tăng trưởng',form('v2Growth',select('MaDan','Đàn vịt')+field('Ngay','Ngày cân','date')+field('CanNang','Cân nặng TB (kg)','number','min="0.001" step="0.001"')+'<label>Mục tiêu (kg)<input name="MucTieu" type="number" min="0.001" step="0.001"></label>'+field('SoCon','Số con trong đàn tại ngày cân','number','min="1" step="1"'))+'<label>Chọn đàn <select id="v2GrowthFilter"></select></label><div id="v2GrowthResult" class="v2result"></div>');
+ panel('page-finance','Hiệu quả kinh tế theo đàn & dự kiến xuất bán',form('v2Plan',select('MaDan','Đàn vịt')+field('Ngay','Ngày dự kiến bán','date')+field('SoCon','Số con dự kiến bán','number','min="1" step="1"')+field('CanNang','Cân nặng dự kiến (kg)','number','min="0.001" step="0.001"')+field('Gia','Giá bán/kg (đ)','number','min="0" step="1"')+field('ChiPhiThem','Chi phí còn dự kiến (đ)','number','min="0" step="1"'))+'<div id="v2Finance" class="v2result"></div>');
+ for(const [id,path] of [['v2Use','sudungvattu'],['v2Growth','tangtruong'],['v2Plan','kehoachxuatban']]){const f=$(id);f.elements.Ngay.value=smartDay();f.onsubmit=async ev=>{ev.preventDefault();if(v2Busy||!v2Data)return;const data=Object.fromEntries(new FormData(f));for(const k of ['MaDan','MaThucAn','SoLuong','CanNang','MucTieu','SoCon','Gia','ChiPhiThem'])if(k in data)data[k]=data[k]===''?null:Number(data[k]);if(id==='v2Use'){const signature=JSON.stringify(data);if(!v2Request||v2Request.signature!==signature)v2Request={signature,id:crypto.randomUUID()};data.RequestId=v2Request.id;}v2Busy=true;const btn=f.querySelector('button');btn.disabled=true;try{await goiAPI('/'+path,'POST',data);if(id==='v2Use')v2Request=null;toast('Đã lưu thông tin');await khoiTaoDuLieuSQL();}catch(e){toast(e.message);}finally{v2Busy=false;btn.disabled=false;}};}
+ for(const id of ['v2From','v2To','v2GrowthFilter'])$(id).onchange=v2Render;
+}
+async function v2Load(){try{const [use,growth,plans]=await Promise.all(['sudungvattu','tangtruong','kehoachxuatban'].map(x=>goiAPI('/'+x)));v2Data={use,growth,plans};}catch(e){v2Data=null;}v2Render();}
+function v2Options(el,rows,label){const old=el.value;el.innerHTML=rows.map(x=>`<option value="${x.id}">${safe(label(x))}</option>`).join('');if(rows.some(x=>String(x.id)===old))el.value=old;}
+function v2Forecast(){if(!v2Data)return [];const today=smartDay();return db.feed.map(f=>{const rows=v2Data.use.filter(r=>r.MaThucAn===f.id&&r.DonVi===f.unit&&smartDays(today,dfDate(r.Ngay))>=1&&smartDays(today,dfDate(r.Ngay))<=7);const days=new Set(rows.map(r=>dfDate(r.Ngay))).size;const avg=rows.reduce((s,r)=>s+Number(r.SoLuong),0)/7;return {f,days,left:days===7&&avg>0?f.stock/avg:null};});}
+function v2Alerts(){return v2Forecast().filter(x=>x.left!==null&&x.left<=3).map(x=>['warn',x.f.name+' còn khoảng '+x.left.toFixed(1)+' ngày sử dụng.']);}
+function v2Table(headers,rows){return '<table><thead><tr>'+headers.map(x=>'<th>'+safe(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+safe(String(x))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';}
+function v2Render(){if(!$('v2Use'))return;for(const id of ['v2Use','v2Growth','v2Plan'])v2Options($(id).elements.MaDan,db.flocks,x=>x.name);v2Options($('v2Use').elements.MaThucAn,db.feed,x=>x.name+' ('+x.unit+', tồn '+num(x.stock)+')');v2Options($('v2GrowthFilter'),db.flocks,x=>x.name);
+ if(!v2Data){$('v2Today').textContent='—';for(const id of ['v2Stock','v2History','v2GrowthResult','v2Finance'])$(id).textContent='Chưa tải được dữ liệu mới. Vui lòng tải lại.';return;}
+ const today=smartDay(),kg=r=>String(r.DonVi).trim().toLowerCase()==='kg',sum=rs=>rs.reduce((s,r)=>s+Number(r.SoLuong),0);$('v2Today').textContent=num(sum(v2Data.use.filter(r=>kg(r)&&dfDate(r.Ngay)===today)))+' kg';
+ $('v2Stock').innerHTML='<h3>Tiêu thụ theo kỳ (kg)</h3>'+[1,7,30].map(n=>`${n} ngày: ${num(sum(v2Data.use.filter(r=>kg(r)&&smartDays(today,dfDate(r.Ngay))>=0&&smartDays(today,dfDate(r.Ngay))<n)))} kg`).join(' · ')+'<h3>Dự báo tồn kho</h3>'+v2Table(['Vật tư','Số ngày còn lại'],v2Forecast().map(x=>[x.f.name,x.left===null?'Chưa đủ 7 ngày ghi nhận':x.left.toFixed(1)+' ngày']));
+ $('v2History').innerHTML=v2Table(['Ngày','Đàn','Vật tư','Số lượng','Ghi chú'],v2Data.use.filter(r=>(!$('v2From').value||dfDate(r.Ngay)>=$('v2From').value)&&(!$('v2To').value||dfDate(r.Ngay)<=$('v2To').value)).sort((a,b)=>dfDate(b.Ngay).localeCompare(dfDate(a.Ngay))).map(r=>[dfDate(r.Ngay),dfFlockName(r.MaDan),db.feed.find(f=>f.id===r.MaThucAn)?.name||r.MaThucAn,num(r.SoLuong)+' '+r.DonVi,r.GhiChu||'']));
+ const id=Number($('v2GrowthFilter').value),g=v2Data.growth.filter(r=>r.MaDan===id).sort((a,b)=>dfDate(a.Ngay).localeCompare(dfDate(b.Ngay)));let fcr='Chưa đủ dữ liệu';if(g.length>=2){const a=g[0],b=g.at(-1),gain=(Number(b.CanNang)-Number(a.CanNang))*a.SoCon;const feed=v2Data.use.filter(r=>r.MaDan===id&&kg(r)&&dfDate(r.Ngay)>dfDate(a.Ngay)&&dfDate(r.Ngay)<=dfDate(b.Ngay));if(g.every(r=>r.SoCon===a.SoCon)&&gain>0&&feed.length&&new Set(feed.map(r=>dfDate(r.Ngay))).size===smartDays(dfDate(b.Ngay),dfDate(a.Ngay)))fcr=(sum(feed)/gain).toFixed(2)+' (ước tính, giả định không thay đổi đàn và kg ghi nhận là thức ăn)';}
+ const max=Math.max(1,...g.flatMap(r=>[Number(r.CanNang),Number(r.MucTieu)||0]));$('v2GrowthResult').innerHTML='<p>FCR: '+safe(fcr)+'</p>'+g.map(r=>`<div>${safe(dfDate(r.Ngay))} · ${num(r.CanNang)} kg / mục tiêu ${r.MucTieu??'—'}<div style="background:#238363;height:9px;width:${100*r.CanNang/max}%"></div><div style="background:#d6ae55;height:5px;width:${100*(r.MucTieu||0)/max}%"></div></div>`).join('')+v2Table(['Ngày','Thực tế (kg)','Mục tiêu (kg)','Số con'],g.map(r=>[dfDate(r.Ngay),r.CanNang,r.MucTieu??'—',r.SoCon]));
+ $('v2Finance').innerHTML=failedReads.has('/giaodichtaichinh')?'Chưa tải được tài chính': '<p>Chỉ tính giao dịch gắn mã đàn; chưa gồm chi phí chung chưa phân bổ. Chênh lệch thu chi không đồng nghĩa lợi nhuận kế toán.</p>'+v2Table(['Đàn','Thu','Chi','Chênh lệch','Ngày bán dự kiến','Doanh thu dự kiến','Chênh lệch dự kiến cả lứa','Giá hòa vốn/kg'],db.flocks.map(f=>{const tx=db.transactions.filter(t=>Number(t.flockId)===f.id),inc=tx.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0),cost=tx.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0),p=v2Data.plans.find(r=>r.MaDan===f.id),kg=p?p.SoCon*p.CanNang:0;return [f.name,money(inc),money(cost),money(inc-cost),p?dfDate(p.Ngay):'—',p?money(kg*p.Gia):'—',p?money(inc+kg*p.Gia-cost-p.ChiPhiThem):'—',p&&kg?money(Math.max(0,cost+p.ChiPhiThem-inc)/kg):'—'];}));
+}
+
+      v2Init();
       khoiTaoDuLieuSQL();
       setInterval(smartRender, 60000);
     </script>

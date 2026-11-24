@@ -14,11 +14,11 @@ const PORT = process.env.PORT || 3001;
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 600, // limit each IP to 100 requests per windowMs
 });
 
-app.use(limiter);
 app.use(cors());
+app.use(limiter);
 app.use(express.json());
 // =====================================
 // XAC THUC TAI KHOAN DEMO
@@ -1214,6 +1214,38 @@ app.post("/api/moitruong", (req, res) => {
           res.status(500).json({ message: "Khong luu duoc moi truong" }))
         : res.status(201).json({ message: "Da luu" }),
   );
+});
+
+
+// V2: existing authentication middleware protects writes.
+const v2Date = x => typeof x === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x) && !isNaN(Date.parse(x)) && new Date(x).toISOString().slice(0,10) === x;
+const v2Today = () => new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Ho_Chi_Minh'}).format(new Date());
+const v2Id = x => Number.isInteger(x) && x>0;
+const v2Num = (x,min,max) => typeof x==='number' && Number.isFinite(x) && x>=min && x<=max;
+for(const [path,table] of [['sudungvattu','SuDungVatTu'],['tangtruong','TheoDoiTangTruong'],['kehoachxuatban','KeHoachXuatBan']]) {
+ app.get('/api/'+path,(req,res)=>truyVan('SELECT * FROM dbo.'+table,(err,rows)=>err?res.status(503).json({message:'Chua tai duoc du lieu V2'}):res.json(rows)));
+}
+app.post('/api/sudungvattu',(req,res)=>{
+ const {MaThucAn,MaDan,Ngay,SoLuong,GhiChu,RequestId}=req.body||{};
+ if(!v2Id(MaThucAn)||!v2Id(MaDan)||!v2Date(Ngay)||Ngay>v2Today()||!v2Num(SoLuong,0.01,100000000)||Math.abs(SoLuong*100-Math.round(SoLuong*100))>0.00001||typeof RequestId!=='string'||! /^[0-9a-f-]{36}$/i.test(RequestId)||String(GhiChu||'').length>500) return res.status(400).json({message:'Du lieu su dung khong hop le'});
+ truyVanThamSo(`SET XACT_ABORT ON; BEGIN TRY BEGIN TRAN;
+ DECLARE @rid uniqueidentifier=CONVERT(uniqueidentifier,?);
+ IF EXISTS(SELECT 1 FROM dbo.SuDungVatTu WITH(UPDLOCK,HOLDLOCK) WHERE RequestId=@rid) BEGIN COMMIT; SELECT 1 AS Ok; RETURN; END;
+ DECLARE @vat int=?, @dan int=?, @ngay date=?, @sl decimal(18,2)=?, @note nvarchar(500)=?;
+ UPDATE dbo.ThucAn SET SoLuongTon=SoLuongTon-@sl WHERE MaThucAn=@vat AND SoLuongTon>=@sl AND DonViTinh IS NOT NULL;
+ IF @@ROWCOUNT=0 THROW 50002,N'Khong du ton kho',1;
+ INSERT dbo.SuDungVatTu(MaThucAn,MaDan,Ngay,SoLuong,DonVi,GhiChu,RequestId) SELECT @vat,@dan,@ngay,@sl,DonViTinh,@note,@rid FROM dbo.ThucAn WHERE MaThucAn=@vat;
+ COMMIT; SELECT 1 AS Ok; END TRY BEGIN CATCH IF @@TRANCOUNT>0 ROLLBACK; THROW; END CATCH`,[RequestId,MaThucAn,MaDan,Ngay,SoLuong,GhiChu||null],(err)=>err?res.status(err.number===50002?409:500).json({message:err.number===50002?'Khong du ton kho':'Chua xac nhan luu; kiem tra lich su'}):res.status(201).json({message:'Da luu'}));
+});
+app.post('/api/tangtruong',(req,res)=>{
+ const {MaDan,Ngay,CanNang,MucTieu,SoCon}=req.body||{};
+ if(!v2Id(MaDan)||!v2Date(Ngay)||Ngay>v2Today()||!v2Num(CanNang,.001,30)||!(MucTieu===null||v2Num(MucTieu,.001,30))||!v2Id(SoCon))return res.status(400).json({message:'Du lieu tang truong khong hop le'});
+ truyVanThamSo('INSERT dbo.TheoDoiTangTruong(MaDan,Ngay,CanNang,MucTieu,SoCon) VALUES(?,?,?,?,?)',[MaDan,Ngay,CanNang,MucTieu,SoCon],err=>err?res.status([2601,2627].includes(err.number)?409:500).json({message:'Khong luu duoc; moi dan chi co mot ban ghi moi ngay'}):res.status(201).json({message:'Da luu'}));
+});
+app.post('/api/kehoachxuatban',(req,res)=>{
+ const {MaDan,Ngay,SoCon,CanNang,Gia,ChiPhiThem}=req.body||{};
+ if(!v2Id(MaDan)||!v2Date(Ngay)||!v2Id(SoCon)||!v2Num(CanNang,.001,30)||!v2Num(Gia,0,1e9)||!v2Num(ChiPhiThem,0,1e12))return res.status(400).json({message:'Ke hoach khong hop le'});
+ truyVanThamSo(`SET XACT_ABORT ON; BEGIN TRAN; DECLARE @id int=?,@d date=?,@n int=?,@w decimal(10,3)=?,@g decimal(18,2)=?,@c decimal(18,2)=?; UPDATE dbo.KeHoachXuatBan WITH(UPDLOCK,SERIALIZABLE) SET Ngay=@d,SoCon=@n,CanNang=@w,Gia=@g,ChiPhiThem=@c WHERE MaDan=@id; IF @@ROWCOUNT=0 INSERT dbo.KeHoachXuatBan VALUES(@id,@d,@n,@w,@g,@c); COMMIT;`,[MaDan,Ngay,SoCon,CanNang,Gia,ChiPhiThem],err=>err?res.status(500).json({message:'Chua xac nhan luu ke hoach'}):res.json({message:'Da luu'}));
 });
 
 app.listen(PORT, () => {
