@@ -1248,6 +1248,17 @@ app.post('/api/kehoachxuatban',(req,res)=>{
  truyVanThamSo(`SET XACT_ABORT ON; BEGIN TRAN; DECLARE @id int=?,@d date=?,@n int=?,@w decimal(10,3)=?,@g decimal(18,2)=?,@c decimal(18,2)=?; UPDATE dbo.KeHoachXuatBan WITH(UPDLOCK,SERIALIZABLE) SET Ngay=@d,SoCon=@n,CanNang=@w,Gia=@g,ChiPhiThem=@c WHERE MaDan=@id; IF @@ROWCOUNT=0 INSERT dbo.KeHoachXuatBan VALUES(@id,@d,@n,@w,@g,@c); COMMIT;`,[MaDan,Ngay,SoCon,CanNang,Gia,ChiPhiThem],err=>err?res.status(500).json({message:'Chua xac nhan luu ke hoach'}):res.json({message:'Da luu'}));
 });
 
+
+app.put('/api/tangtruong/:id',(req,res)=>{
+ const id=Number(req.params.id),{MaDan,Ngay,CanNang,MucTieu,SoCon}=req.body||{};
+ if(!v2Id(id)||!v2Id(MaDan)||!v2Date(Ngay)||Ngay>v2Today()||!v2Num(CanNang,.001,30)||!(MucTieu===null||v2Num(MucTieu,.001,30))||!v2Id(SoCon))return res.status(400).json({message:'Dữ liệu tăng trưởng không hợp lệ'});
+ truyVanThamSo('UPDATE dbo.TheoDoiTangTruong SET MaDan=?,Ngay=?,CanNang=?,MucTieu=?,SoCon=? WHERE Id=?; SELECT @@ROWCOUNT AS Affected;',[MaDan,Ngay,CanNang,MucTieu,SoCon,id],(err,rows)=>{if(err)return res.status([2601,2627].includes(err.number)?409:500).json({message:'Không cập nhật được; kiểm tra ngày cân và dữ liệu'});if(!rows?.[0]?.Affected)return res.status(404).json({message:'Không tìm thấy bản ghi'});res.json({message:'Đã cập nhật'});});
+});
+app.delete('/api/tangtruong/:id',(req,res)=>{
+ const id=Number(req.params.id);if(!v2Id(id))return res.status(400).json({message:'Mã bản ghi không hợp lệ'});
+ truyVanThamSo('DELETE FROM dbo.TheoDoiTangTruong WHERE Id=?; SELECT @@ROWCOUNT AS Affected;',[id],(err,rows)=>{if(err)return res.status(500).json({message:'Chưa xác nhận xóa; hãy tải lại dữ liệu'});if(!rows?.[0]?.Affected)return res.status(404).json({message:'Không tìm thấy bản ghi'});res.json({message:'Đã xóa'});});
+});
+
 app.listen(PORT, () => {
   console.log(`Backend dang chay tai http://localhost:${PORT}`);
 

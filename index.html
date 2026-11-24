@@ -1322,6 +1322,8 @@
     
 .smart-alert {margin:14px 0 0;padding:12px 14px;border:1px solid #dce8e1;border-radius:12px;background:#f5faf7;color:#25483a;font-size:13px;line-height:1.55;overflow-wrap:anywhere}
 .smart-alert h4{margin:0 0 6px;font-size:14px}.smart-alert p{margin:5px 0}.smart-alert .warn{color:#945600}.smart-alert .danger{color:#a52323}.smart-alert .neutral{color:#61736a}.smart-alert .ok{color:#176b54}
+
+.connection-inline{display:flex;align-items:center;gap:6px;font-size:11px;color:#176b54;white-space:nowrap}.connection-inline[data-state=error]{color:#b42318}.connection-inline[data-state=loading]{color:#946000}.connection-inline .btn{font-size:11px;padding:5px 8px;min-height:0}.top-actions{flex-wrap:wrap;justify-content:flex-end;gap:8px}.topbar{height:auto;min-height:65px;padding-top:10px;padding-bottom:10px}.v2panel{font-family:inherit;font-size:13px;color:var(--ink)}.v2panel h3{font-size:16px;margin:0 0 12px}.v2panel label,.page label:has(input[id^=filter]),.page label:has(select[id^=filter]){font-size:12px;font-weight:650;color:#244a39}.v2panel input,.v2panel select,input[id^=filter],select[id^=filter]{font:inherit;font-size:13px;border:1px solid #d8e4dc;border-radius:10px;padding:9px;background:#fff;color:#234537;max-width:100%;min-width:0}.v2panel .v2form input,.v2panel .v2form select{font-weight:400}.v2panel .v2result{font-size:13px}.v2panel .v2result h3{margin-top:14px}.v2panel .btn{font-size:12px}.v2panel .growth-actions{display:flex;gap:6px}.v2panel .growth-actions button{padding:5px 9px}.v2panel .growth-edit-note{font-size:12px;color:#176b54;margin:8px 0}.v2panel .growth-edit-note[hidden]{display:none}@media(max-width:700px){.connection-inline{white-space:normal;flex-wrap:wrap}.top-actions{gap:6px}.v2panel .v2form label{min-width:130px}}
 </style>
   </head>
   <body>
@@ -4905,13 +4907,14 @@
       const failedReads = new Set();
       let loadingSQL = false, lastSQL = null, retryTimer;
       const banner = document.createElement("div");
-      banner.style.cssText="position:fixed;bottom:16px;right:16px;max-width:420px;z-index:9999;background:#fff;border:1px solid #d3e4d8;border-radius:12px;padding:14px;box-shadow:0 4px 20px #0002;color:#174d39";
-      banner.innerHTML='<span id="connectionMessage" role="status"></span> <button type="button" id="retrySQL" class="btn">Tải lại dữ liệu</button>';
-      document.body.appendChild(banner);
+      banner.className="connection-inline";
+      banner.innerHTML='<span id="connectionMessage" role="status"></span> <button type="button" id="retrySQL" class="btn">↻ Tải lại</button>';
+      document.querySelector(".top-actions").prepend(banner);
       $("retrySQL").onclick=()=>khoiTaoDuLieuSQL();
+      function setConnection(short, detail, state){const el=$("connectionMessage");el.textContent=short;el.title=detail;banner.dataset.state=state;}
       function connectionFailure(path,method){
         if(method==="GET") failedReads.add(path);
-        $("connectionMessage").textContent=method==="GET"?"Chưa cập nhật được dữ liệu. Vui lòng chờ rồi thử lại. Dữ liệu đang hiển thị có thể đã cũ hoặc chưa đầy đủ.":"Chưa xác nhận được thao tác. Hãy kiểm tra dữ liệu trước khi gửi lại.";
+        setConnection(method==="GET"?"Lỗi kết nối":"Chưa xác nhận lưu",method==="GET"?"Vui lòng chờ rồi tải lại. Dữ liệu có thể cũ hoặc thiếu.":"Kiểm tra dữ liệu trước khi gửi lại.","error");
         banner.hidden=false;
       }
       function historyMatch(k,e,date,id){const a=$("filter"+k+"From").value,b=$("filter"+k+"To").value,v=$("filter"+k+"Id").value,d=dfDate(e[date]);return (!a||d>=a)&&(!b||d<=b)&&(!v||String(e[id])===v);}
@@ -4919,7 +4922,7 @@
       async function khoiTaoDuLieuSQL() {
         if(loadingSQL)return;
         loadingSQL=true; clearTimeout(retryTimer); $("retrySQL").disabled=true;
-        $("connectionMessage").textContent="Đang kết nối và cập nhật dữ liệu. Vui lòng chờ…";
+        setConnection("Đang kết nối…","Vui lòng chờ cập nhật dữ liệu.","loading");
         banner.hidden=false;
         try {
         await taiDanVitTuSQL();
@@ -4939,25 +4942,32 @@
         await v2Load();
         } finally {
           loadingSQL=false; $("retrySQL").disabled=false;
-          if(failedReads.size){$("connectionMessage").textContent="Chưa tải đủ dữ liệu. Dữ liệu có thể cũ hoặc thiếu. Hệ thống sẽ thử lại sau 60 giây.";retryTimer=setTimeout(khoiTaoDuLieuSQL,60000);}
-          else {lastSQL=new Date();$("connectionMessage").textContent="Đã cập nhật: "+lastSQL.toLocaleTimeString("vi-VN");}
+          if(failedReads.size){setConnection("Chưa tải đủ · thử lại 60s","Dữ liệu có thể cũ hoặc thiếu. Vui lòng chờ hoặc nhấn tải lại.","error");retryTimer=setTimeout(khoiTaoDuLieuSQL,60000);}
+          else {lastSQL=new Date();setConnection("Đã cập nhật "+lastSQL.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"}),"Dữ liệu đã được cập nhật.","ok");}
           smartRender();
         }
       }
 
-let v2Data=null, v2Busy=false, v2Request=null;
+let v2Data=null, v2Busy=false, v2Request=null, growthEditId=null;
 function v2Init(){
  const field=(name,label,type='number',extra='')=>`<label>${label}<input name="${name}" type="${type}" required ${extra}></label>`;
  const select=(name,label)=>`<label>${label}<select name="${name}" required></select></label>`;
- const panel=(id,title,body)=>{const el=document.createElement('div');el.className='card';el.style.marginTop='18px';el.innerHTML=`<h3>${title}</h3>${body}`;$(id).append(el);};
+ const panel=(id,title,body)=>{const el=document.createElement('div');el.className='card v2panel';el.style.marginTop='18px';el.innerHTML=`<h3>${title}</h3>${body}`;$(id).append(el);};
  const form=(id,body)=>`<form id="${id}" class="v2form">${body}<button class="btn" type="submit">Lưu thông tin</button></form>`;
  const style=document.createElement('style');style.textContent='.v2form{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:15px 0}.v2form label{display:grid;gap:5px;flex:1;min-width:145px}.v2form input,.v2form select{padding:10px;border:1px solid #cdded4;border-radius:8px;width:100%;background:white;color:#174d39}.v2result{overflow:auto;line-height:1.8}.v2result table{width:100%}';document.head.append(style);
  panel('page-feed','Ghi nhận sử dụng thức ăn & vật tư',form('v2Use',select('MaDan','Đàn vịt')+select('MaThucAn','Vật tư (theo đơn vị kho)')+field('Ngay','Ngày sử dụng','date')+field('SoLuong','Số lượng','number','min="0.01" step="0.01"')+'<label>Ghi chú<input name="GhiChu" maxlength="500"></label>')+'<div id="v2Stock" class="v2result"></div><h3>Lịch sử sử dụng</h3><label>Từ ngày <input type="date" id="v2From"></label> <label>Đến ngày <input type="date" id="v2To"></label><div id="v2History" class="v2result"></div>');
- panel('page-flocks','Theo dõi tăng trưởng',form('v2Growth',select('MaDan','Đàn vịt')+field('Ngay','Ngày cân','date')+field('CanNang','Cân nặng TB (kg)','number','min="0.001" step="0.001"')+'<label>Mục tiêu (kg)<input name="MucTieu" type="number" min="0.001" step="0.001"></label>'+field('SoCon','Số con trong đàn tại ngày cân','number','min="1" step="1"'))+'<label>Chọn đàn <select id="v2GrowthFilter"></select></label><div id="v2GrowthResult" class="v2result"></div>');
+ panel('page-flocks','Theo dõi tăng trưởng',form('v2Growth',select('MaDan','Đàn vịt')+field('Ngay','Ngày cân','date')+field('CanNang','Cân nặng TB (kg)','number','min="0.001" step="0.001"')+'<label>Mục tiêu (kg)<input name="MucTieu" type="number" min="0.001" step="0.001"></label>'+field('SoCon','Số con trong đàn tại ngày cân','number','min="1" step="1"'))+'<div id="growthEditNote" class="growth-edit-note" hidden>Đang chỉnh sửa bản ghi. <button type="button" class="btn" id="growthCancel">Hủy chỉnh sửa</button></div><label>Chọn đàn <select id="v2GrowthFilter"></select></label><div id="v2GrowthResult" class="v2result"></div>');
  panel('page-finance','Hiệu quả kinh tế theo đàn & dự kiến xuất bán',form('v2Plan',select('MaDan','Đàn vịt')+field('Ngay','Ngày dự kiến bán','date')+field('SoCon','Số con dự kiến bán','number','min="1" step="1"')+field('CanNang','Cân nặng dự kiến (kg)','number','min="0.001" step="0.001"')+field('Gia','Giá bán/kg (đ)','number','min="0" step="1"')+field('ChiPhiThem','Chi phí còn dự kiến (đ)','number','min="0" step="1"'))+'<div id="v2Finance" class="v2result"></div>');
- for(const [id,path] of [['v2Use','sudungvattu'],['v2Growth','tangtruong'],['v2Plan','kehoachxuatban']]){const f=$(id);f.elements.Ngay.value=smartDay();f.onsubmit=async ev=>{ev.preventDefault();if(v2Busy||!v2Data)return;const data=Object.fromEntries(new FormData(f));for(const k of ['MaDan','MaThucAn','SoLuong','CanNang','MucTieu','SoCon','Gia','ChiPhiThem'])if(k in data)data[k]=data[k]===''?null:Number(data[k]);if(id==='v2Use'){const signature=JSON.stringify(data);if(!v2Request||v2Request.signature!==signature)v2Request={signature,id:crypto.randomUUID()};data.RequestId=v2Request.id;}v2Busy=true;const btn=f.querySelector('button');btn.disabled=true;try{await goiAPI('/'+path,'POST',data);if(id==='v2Use')v2Request=null;toast('Đã lưu thông tin');await khoiTaoDuLieuSQL();}catch(e){toast(e.message);}finally{v2Busy=false;btn.disabled=false;}};}
+ for(const [id,path] of [['v2Use','sudungvattu'],['v2Growth','tangtruong'],['v2Plan','kehoachxuatban']]){const f=$(id);f.elements.Ngay.value=smartDay();f.onsubmit=async ev=>{ev.preventDefault();if(v2Busy||loadingSQL||!v2Data)return;const data=Object.fromEntries(new FormData(f));for(const k of ['MaDan','MaThucAn','SoLuong','CanNang','MucTieu','SoCon','Gia','ChiPhiThem'])if(k in data)data[k]=data[k]===''?null:Number(data[k]);if(id==='v2Use'){const signature=JSON.stringify(data);if(!v2Request||v2Request.signature!==signature)v2Request={signature,id:crypto.randomUUID()};data.RequestId=v2Request.id;}v2Busy=true;const btn=f.querySelector('button');btn.disabled=true;try{await goiAPI('/'+path+(id==='v2Growth'&&growthEditId!==null?'/'+growthEditId:''),id==='v2Growth'&&growthEditId!==null?'PUT':'POST',data);if(id==='v2Growth'){ $('v2GrowthFilter').value=String(data.MaDan);growthReset(); }if(id==='v2Use')v2Request=null;toast('Đã lưu thông tin');await khoiTaoDuLieuSQL();}catch(e){toast(e.message);}finally{v2Busy=false;btn.disabled=false;}};}
+ $('growthCancel').onclick=growthReset;
+ $('v2GrowthResult').addEventListener('click',e=>{const btn=e.target.closest('button[data-growth]');if(!btn)return;const id=Number(btn.dataset.growth);if(btn.dataset.action==='edit')growthEdit(id);else growthDelete(id);});
  for(const id of ['v2From','v2To','v2GrowthFilter'])$(id).onchange=v2Render;
 }
+function growthReset(){growthEditId=null;const f=$('v2Growth');f.reset();f.elements.Ngay.value=smartDay();f.elements.MaDan.value=$('v2GrowthFilter').value;f.querySelector('button[type=submit]').textContent='Thêm bản ghi';$('growthEditNote').hidden=true;}
+function growthEdit(id){if(v2Busy||loadingSQL||!v2Data)return;const r=v2Data.growth.find(x=>Number(x.Id)===id);if(!r)return;growthEditId=id;const f=$('v2Growth');for(const k of ['MaDan','Ngay','CanNang','MucTieu','SoCon'])f.elements[k].value=k==='Ngay'?dfDate(r[k]):r[k]??'';f.querySelector('button[type=submit]').textContent='Lưu chỉnh sửa';$('growthEditNote').hidden=false;f.scrollIntoView({block:'center',behavior:'smooth'});}
+async function growthDelete(id){if(v2Busy||loadingSQL||!v2Data)return;if(!confirm('Bạn có chắc muốn xóa bản ghi tăng trưởng này?'))return;v2Busy=true;try{await goiAPI('/tangtruong/'+id,'DELETE');if(growthEditId===id)growthReset();toast('Đã xóa bản ghi');await khoiTaoDuLieuSQL();}catch(e){toast(e.message);}finally{v2Busy=false;}}
+function v2DisplayDate(d){return dfDate(d).split('-').reverse().join('/');}
+function growthTable(g){return '<table><thead><tr>'+['Ngày cân','Thực tế (kg)','Mục tiêu (kg)','Số con','Thao tác'].map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+g.map(r=>'<tr>'+[v2DisplayDate(r.Ngay),num(r.CanNang),r.MucTieu==null?'—':num(r.MucTieu),num(r.SoCon)].map(x=>'<td>'+safe(String(x))+'</td>').join('')+'<td><div class="growth-actions"><button type="button" class="btn" data-growth="'+Number(r.Id)+'" data-action="edit">Sửa</button><button type="button" class="btn" data-growth="'+Number(r.Id)+'" data-action="delete">Xóa</button></div></td></tr>').join('')+(g.length?'':'<tr><td colspan="5">Chưa có bản ghi tăng trưởng.</td></tr>')+'</tbody></table>';}
 async function v2Load(){try{const [use,growth,plans]=await Promise.all(['sudungvattu','tangtruong','kehoachxuatban'].map(x=>goiAPI('/'+x)));v2Data={use,growth,plans};}catch(e){v2Data=null;}v2Render();}
 function v2Options(el,rows,label){const old=el.value;el.innerHTML=rows.map(x=>`<option value="${x.id}">${safe(label(x))}</option>`).join('');if(rows.some(x=>String(x.id)===old))el.value=old;}
 function v2Forecast(){if(!v2Data)return [];const today=smartDay();return db.feed.map(f=>{const rows=v2Data.use.filter(r=>r.MaThucAn===f.id&&r.DonVi===f.unit&&smartDays(today,dfDate(r.Ngay))>=1&&smartDays(today,dfDate(r.Ngay))<=7);const days=new Set(rows.map(r=>dfDate(r.Ngay))).size;const avg=rows.reduce((s,r)=>s+Number(r.SoLuong),0)/7;return {f,days,left:days===7&&avg>0?f.stock/avg:null};});}
@@ -4969,11 +4979,12 @@ function v2Render(){if(!$('v2Use'))return;for(const id of ['v2Use','v2Growth','v
  $('v2Stock').innerHTML='<h3>Tiêu thụ theo kỳ (kg)</h3>'+[1,7,30].map(n=>`${n} ngày: ${num(sum(v2Data.use.filter(r=>kg(r)&&smartDays(today,dfDate(r.Ngay))>=0&&smartDays(today,dfDate(r.Ngay))<n)))} kg`).join(' · ')+'<h3>Dự báo tồn kho</h3>'+v2Table(['Vật tư','Số ngày còn lại'],v2Forecast().map(x=>[x.f.name,x.left===null?'Chưa đủ 7 ngày ghi nhận':x.left.toFixed(1)+' ngày']));
  $('v2History').innerHTML=v2Table(['Ngày','Đàn','Vật tư','Số lượng','Ghi chú'],v2Data.use.filter(r=>(!$('v2From').value||dfDate(r.Ngay)>=$('v2From').value)&&(!$('v2To').value||dfDate(r.Ngay)<=$('v2To').value)).sort((a,b)=>dfDate(b.Ngay).localeCompare(dfDate(a.Ngay))).map(r=>[dfDate(r.Ngay),dfFlockName(r.MaDan),db.feed.find(f=>f.id===r.MaThucAn)?.name||r.MaThucAn,num(r.SoLuong)+' '+r.DonVi,r.GhiChu||'']));
  const id=Number($('v2GrowthFilter').value),g=v2Data.growth.filter(r=>r.MaDan===id).sort((a,b)=>dfDate(a.Ngay).localeCompare(dfDate(b.Ngay)));let fcr='Chưa đủ dữ liệu';if(g.length>=2){const a=g[0],b=g.at(-1),gain=(Number(b.CanNang)-Number(a.CanNang))*a.SoCon;const feed=v2Data.use.filter(r=>r.MaDan===id&&kg(r)&&dfDate(r.Ngay)>dfDate(a.Ngay)&&dfDate(r.Ngay)<=dfDate(b.Ngay));if(g.every(r=>r.SoCon===a.SoCon)&&gain>0&&feed.length&&new Set(feed.map(r=>dfDate(r.Ngay))).size===smartDays(dfDate(b.Ngay),dfDate(a.Ngay)))fcr=(sum(feed)/gain).toFixed(2)+' (ước tính, giả định không thay đổi đàn và kg ghi nhận là thức ăn)';}
- const max=Math.max(1,...g.flatMap(r=>[Number(r.CanNang),Number(r.MucTieu)||0]));$('v2GrowthResult').innerHTML='<p>FCR: '+safe(fcr)+'</p>'+g.map(r=>`<div>${safe(dfDate(r.Ngay))} · ${num(r.CanNang)} kg / mục tiêu ${r.MucTieu??'—'}<div style="background:#238363;height:9px;width:${100*r.CanNang/max}%"></div><div style="background:#d6ae55;height:5px;width:${100*(r.MucTieu||0)/max}%"></div></div>`).join('')+v2Table(['Ngày','Thực tế (kg)','Mục tiêu (kg)','Số con'],g.map(r=>[dfDate(r.Ngay),r.CanNang,r.MucTieu??'—',r.SoCon]));
+ const max=Math.max(1,...g.flatMap(r=>[Number(r.CanNang),Number(r.MucTieu)||0]));$('v2GrowthResult').innerHTML='<p>FCR: '+safe(fcr)+'</p>'+g.map(r=>`<div>${safe(v2DisplayDate(r.Ngay))} · ${num(r.CanNang)} kg / mục tiêu ${r.MucTieu??'—'}<div style="background:#238363;height:9px;width:${100*r.CanNang/max}%"></div><div style="background:#d6ae55;height:5px;width:${100*(r.MucTieu||0)/max}%"></div></div>`).join('')+growthTable(g);
  $('v2Finance').innerHTML=failedReads.has('/giaodichtaichinh')?'Chưa tải được tài chính': '<p>Chỉ tính giao dịch gắn mã đàn; chưa gồm chi phí chung chưa phân bổ. Chênh lệch thu chi không đồng nghĩa lợi nhuận kế toán.</p>'+v2Table(['Đàn','Thu','Chi','Chênh lệch','Ngày bán dự kiến','Doanh thu dự kiến','Chênh lệch dự kiến cả lứa','Giá hòa vốn/kg'],db.flocks.map(f=>{const tx=db.transactions.filter(t=>Number(t.flockId)===f.id),inc=tx.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0),cost=tx.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0),p=v2Data.plans.find(r=>r.MaDan===f.id),kg=p?p.SoCon*p.CanNang:0;return [f.name,money(inc),money(cost),money(inc-cost),p?dfDate(p.Ngay):'—',p?money(kg*p.Gia):'—',p?money(inc+kg*p.Gia-cost-p.ChiPhiThem):'—',p&&kg?money(Math.max(0,cost+p.ChiPhiThem-inc)/kg):'—'];}));
 }
 
       v2Init();
+      growthReset();
       khoiTaoDuLieuSQL();
       setInterval(smartRender, 60000);
     </script>
