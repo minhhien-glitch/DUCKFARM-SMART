@@ -1319,7 +1319,10 @@
           grid-column: auto;
         }
       }
-    </style>
+    
+.smart-alert {margin:14px 0 0;padding:12px 14px;border:1px solid #dce8e1;border-radius:12px;background:#f5faf7;color:#25483a;font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.smart-alert h4{margin:0 0 6px;font-size:14px}.smart-alert p{margin:5px 0}.smart-alert .warn{color:#945600}.smart-alert .danger{color:#a52323}.smart-alert .neutral{color:#61736a}.smart-alert .ok{color:#176b54}
+</style>
   </head>
   <body>
     <div class="app">
@@ -1499,6 +1502,7 @@
                 <div class="chart-wrap">
                   <canvas id="financeChart"></canvas>
                 </div>
+                <div class="smart-alert" id="smartFinance" aria-live="polite"></div>
                 <div class="legend">
                   <span>Doanh thu</span><span class="orange">Chi phí</span
                   ><span style="color: #3260a8">Lợi nhuận</span>
@@ -1522,6 +1526,7 @@
                 <div class="chart-wrap">
                   <canvas id="duckAreaChart"></canvas>
                 </div>
+                <div class="smart-alert" id="smartDucks" aria-live="polite"></div>
                 <p class="df-note">
                   Số liệu lịch sử chỉ có từ khi bắt đầu ghi nhận biến động;
                   không tự tạo dữ liệu quá khứ.
@@ -1538,7 +1543,7 @@
               <div class="df-pie-layout">
                 <canvas id="expensePieChart" width="280" height="220"></canvas>
                 <div id="expensePieLegend"></div>
-              </div>
+              </div><div class="smart-alert" id="smartExpense"></div>
             </div>
             <div class="grid bottom-grid">
               <div class="card">
@@ -1915,6 +1920,7 @@
               </div>
             </div>
             <div id="df-vaccine" class="df-tab-panel hide">
+<div class="smart-alert" id="smartVaccine" style="margin:0 0 16px"></div>
               <div class="card df-form-card">
                 <h3>Ghi nhận tiêm phòng</h3>
                 <form
@@ -1965,6 +1971,7 @@
               </div>
             </div>
             <div id="df-environment" class="df-tab-panel hide">
+<div class="smart-alert" id="smartEnvironment" style="margin:0 0 16px"></div>
               <div class="card df-form-card">
                 <h3>Nhập số đo môi trường thủ công</h3>
                 <form
@@ -3222,6 +3229,7 @@
             barnId: dan.MaChuong,
           }));
 
+          smartLoaded.flocks = true;
           renderDashboard();
           renderFlocks();
           renderBarns();
@@ -3515,6 +3523,7 @@
         if (!Array.isArray(rows))
           throw new Error("API không trả về danh sách: " + cfg.path);
         db[cfg.key] = rows.map(cfg.from);
+        if(type === "transaction") smartLoaded.finance = true;
         renderAll();
         console.log("Đã tải SQL " + type + ":", db[cfg.key]);
       }
@@ -4512,6 +4521,7 @@
         ctx.closePath();
       }
       // DUCKFARM: health monitoring, vaccination, environment and dynamic charts.
+      const smartLoaded = {finance:false, flocks:false, events:false, vaccines:false, environment:false};
       let dfEvents = [],
         dfVaccines = [],
         dfEnvironments = [];
@@ -4624,6 +4634,7 @@
         renderDashboard();
         drawDuckAreaChart();
         drawExpensePieChart();
+        smartRender();
       }
       async function dfLoadRecords() {
         const paths = [
@@ -4634,10 +4645,13 @@
         for (const [path, key] of paths) {
           try {
             const result = await goiAPI(path);
+            if (!Array.isArray(result)) throw new Error("Dữ liệu không hợp lệ");
+            smartLoaded[key] = true;
             if (key === "events") dfEvents = result;
             else if (key === "vaccines") dfVaccines = result;
             else dfEnvironments = result;
           } catch (err) {
+            smartLoaded[key] = false;
             console.warn("Không tải được " + path, err.message);
           }
         }
@@ -4819,31 +4833,13 @@
       function drawExpensePieChart() {
         const canvas = $("expensePieChart");
         if (!canvas || canvas.offsetParent === null) return;
-        const cats = [
-          ["Thức ăn", /thức ăn|thuc an|cám|cam|ngô|ngo|feed/i],
-          [
-            "Con giống",
-            /con giống|con giong|giống vịt|giong vit|mua vịt|mua vit/i,
-          ],
-          ["Thuốc và vắc-xin", /thuốc|thuoc|vắc|vac|tiêm|tiem/i],
-          ["Điện nước", /điện|dien|nước|nuoc/i],
-          ["Khác", /.*/],
-        ];
-        const sums = cats.map(() => 0);
-        db.transactions
-          .filter((t) => t.type === "expense")
-          .forEach((t) => {
-            const txt = (t.title || "") + " " + (t.note || "");
-            const idx = cats.findIndex((c) => c[1].test(txt));
-            sums[idx < 0 ? 4 : idx] += Number(t.amount || 0);
-          });
+        const cats = smartCategories();
+        const sums = smartExpenseSums(cats);
         const total = sums.reduce((a, b) => a + b, 0),
           ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         let angle = -Math.PI / 2;
-        const cx = canvas.width / 2,
-          cy = canvas.height / 2,
-          r = 85;
+        const cx = canvas.width / 2, cy = canvas.height / 2, r = 85;
         cats.forEach((c, i) => {
           const delta = total ? (2 * Math.PI * sums[i]) / total : 0;
           if (delta > 0) {
@@ -4871,6 +4867,31 @@
             )
             .join("") + "<small>Phân loại theo tên/nội dung giao dịch.</small>";
       }
+
+      // SMART ALERTS: ngưỡng demo, không thay thế tư vấn thú y.
+      const SMART_LIMITS = {costShare:65, duckDrop:5, vaccineDays:3, tempMin:20,tempMax:30,humidityMin:50,humidityMax:75,staleDays:2};
+      function smartCategories(){return [["Thức ăn",/thức ăn|thuc an|cám|cam\b|ngô|ngo\b|feed/i],["Con giống",/con giống|con giong|giống vịt|giong vit|mua vịt|mua vit/i],["Thuốc và vắc-xin",/thuốc|thuoc|vắc|vac|tiêm|tiem/i],["Điện nước",/điện|dien|nước|nuoc/i],["Khác",/.*/]];}
+      function smartExpenseSums(cats){const sums=cats.map(()=>0);db.transactions.filter(t=>t.type==="expense").forEach(t=>{const i=cats.findIndex(c=>c[1].test((t.title||"")+" "+(t.note||"")));sums[i<0?4:i]+=Number(t.amount||0);});return sums;}
+      function smartDay(d=new Date()){return new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Ho_Chi_Minh",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);}
+      function smartDays(a,b){return (Date.parse(a)-Date.parse(b))/86400000;}
+      function smartLatest(rows,key,date,id,today){const m=new Map();for(const r of rows){const d=dfDate(r[date]);if(!d||d>today)continue;const k=key(r),p=m.get(k);if(!p||d>dfDate(p[date])||(d===dfDate(p[date])&&Number(r[id]||0)>Number(p[id]||0)))m.set(k,r);}return [...m.values()];}
+      function smartShow(id,title,items){const el=$(id);if(!el)return;el.innerHTML='<h4>🔔 '+safe(title)+'</h4>'+items.map(([level,msg])=>'<p class="'+level+'">'+safe(({danger:"● Cần xử lý: ",warn:"● Lưu ý: ",ok:"✓ ",neutral:""})[level]+msg)+'</p>').join('');}
+      function smartRender(){
+        const today=smartDay(), L=SMART_LIMITS, wait=[["neutral","Chưa có dữ liệu đã tải để đánh giá."]];
+        let f=[],c=[],d=[],v=[],e=[];
+        if(smartLoaded.finance){
+          const month=today.slice(0,7), prev=new Date(Date.UTC(+today.slice(0,4),+today.slice(5,7)-2,1)).toISOString().slice(0,7), day=+today.slice(8);
+          const totals=key=>{const rows=db.transactions.filter(t=>String(t.date).startsWith(key)&&+String(t.date).slice(8,10)<=day);return {n:rows.length,income:rows.filter(t=>t.type==='income').reduce((a,t)=>a+Number(t.amount||0),0),expense:rows.filter(t=>t.type==='expense').reduce((a,t)=>a+Number(t.amount||0),0)};};
+          const a=totals(month),b=totals(prev),net=a.income-a.expense,old=b.income-b.expense;
+          if(!a.n)f.push(['neutral','Chưa có giao dịch tháng này.']);else{if(net<0)f.push(['danger','Chi vượt thu tháng này '+money(-net)+'. Kiểm tra các khoản chi và dòng tiền.']);if(b.n&&net<old)f.push(['warn','Chênh lệch thu chi giảm '+money(old-net)+' so với cùng kỳ tháng trước (đến ngày '+day+').']);if(!f.length)f.push(['ok','Chưa phát hiện chi vượt thu hoặc chênh lệch giảm trong kỳ có dữ liệu.']);if(!b.n)f.push(['neutral','Thiếu giao dịch cùng kỳ tháng trước để so sánh.']);}
+          const cats=smartCategories(), sums=smartExpenseSums(cats), total=sums.reduce((a,b)=>a+b,0);if(total>0){const i=sums.indexOf(Math.max(...sums)), share=100*sums[i]/total;c.push([share>=L.costShare?'warn':'ok',cats[i][0]+' chiếm '+share.toFixed(1)+'% tổng chi phí đã ghi nhận. '+(share>=L.costShare?'Kiểm tra định mức và giá mua; tỷ trọng cao chưa chắc là bất thường.':'Chưa vượt ngưỡng tập trung '+L.costShare+'%.')]);}else c.push(['neutral','Chưa có chi phí để phân tích.']);
+        }
+        if(smartLoaded.flocks&&smartLoaded.events){const active=db.flocks.filter(x=>!/đã xuất|đã bán|kết thúc/i.test(x.status||''));const ids=new Set(active.map(x=>String(x.id)));const deaths=dfEvents.filter(x=>ids.has(String(x.MaDan))&&smartDays(today,dfDate(x.NgayGhiNhan))>=0&&smartDays(today,dfDate(x.NgayGhiNhan))<7).reduce((a,x)=>a+Number(x.SoConChet||0),0);const alive=active.reduce((a,x)=>a+Number(x.count||0),0);if(!active.length)d.push(['neutral','Chưa có đàn đang theo dõi.']);else if(!dfEvents.some(x=>ids.has(String(x.MaDan))))d.push(['neutral','Chưa có lịch sử hao hụt của đàn đang nuôi.']);else{const pct=alive+deaths?100*deaths/(alive+deaths):0;d.push([pct>=L.duckDrop?'danger':deaths?'warn':'ok','7 ngày gần đây ghi nhận '+num(deaths)+' con chết ở các đàn đang theo dõi'+(deaths?' (tỷ lệ ước tính '+pct.toFixed(1)+'%). Kiểm tra nguyên nhân hao hụt.':'.')]);}d.push(['neutral','Chỉ đánh giá hao hụt đã ghi nhận; không coi xuất bán là vịt chết.']);}
+        if(smartLoaded.vaccines&&smartLoaded.flocks){const rows=smartLatest(dfVaccines,x=>String(x.MaDan)+'|'+String(x.TenVacXin||'').trim().toLowerCase(),'NgayTiem','MaTiem',today).filter(x=>db.flocks.some(y=>String(y.id)===String(x.MaDan)&&!/đã xuất|đã bán|kết thúc/i.test(y.status||'')));for(const x of rows){const date=dfDate(x.NgayNhacLai),n=smartDays(date,today),name=dfFlockName(x.MaDan)+' – '+x.TenVacXin;if(!date||!Number.isFinite(n))v.push(['neutral',name+': chưa có ngày nhắc lại.']);else if(n<=L.vaccineDays)v.push([n<=0?'danger':'warn',name+': '+(n<0?'quá hạn '+(-n)+' ngày':n===0?'đến hạn hôm nay':'còn '+n+' ngày')+' ('+date+'). Kiểm tra lịch với thú y.']);}if(!v.length)v.push([rows.length?'ok':'neutral',rows.length?'Không có lịch nhắc lại đến hạn trong 3 ngày tới.':'Chưa có lịch tiêm của đàn đang nuôi.']);}
+        if(smartLoaded.environment){const rows=smartLatest(dfEnvironments,x=>String(x.MaChuong),'NgayDo','MaDo',today);for(const x of rows){const issues=[],t=Number(x.NhietDo),h=Number(x.DoAm),date=dfDate(x.NgayDo);if(x.NhietDo!=null&&(t<L.tempMin||t>L.tempMax))issues.push('nhiệt độ '+t+'°C '+(t<L.tempMin?'thấp':'cao'));if(x.DoAm!=null&&(h<L.humidityMin||h>L.humidityMax))issues.push('độ ẩm '+h+'% '+(h<L.humidityMin?'thấp':'cao'));if(String(x.DoSach).trim().toLowerCase()==='bẩn')issues.push('chuồng bẩn, cần vệ sinh');const stale=smartDays(today,date)>L.staleDays;if(issues.length||stale)e.push([issues.length&&!stale?'warn':'neutral',dfBarnName(x.MaChuong)+' ('+date+'): '+[...issues,...(stale?['số đo đã cũ, cần đo lại']:[])].join('; ')+'.']);}if(!e.length)e.push([rows.length?'ok':'neutral',rows.length?'Các số đo gần nhất chưa vượt ngưỡng demo.':'Chưa có số đo môi trường.']);e.push(['neutral','Ngưỡng demo: 20–30°C, 50–75% độ ẩm; điều chỉnh theo tuổi vịt và hướng dẫn thú y.']);}
+        smartShow('smartFinance','Nhận định thu chi',f.length?f:wait);smartShow('smartExpense','Nhận định cơ cấu chi phí',c.length?c:wait);smartShow('smartDucks','Cảnh báo hao hụt đàn',d.length?d:wait);smartShow('smartVaccine','Nhắc lịch tiêm phòng',v.length?v:wait);smartShow('smartEnvironment','Cảnh báo môi trường',e.length?e:wait);
+      }
+
       ["dfEventDate", "dfVaccineDate", "dfEnvDate"].forEach((id) => {
         if ($(id)) $(id).value = todayISO();
       });
@@ -4905,6 +4926,7 @@
       }
 
       khoiTaoDuLieuSQL();
+      setInterval(smartRender, 60000);
     </script>
   </body>
 </html>
