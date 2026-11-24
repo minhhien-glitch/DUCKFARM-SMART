@@ -20,6 +20,7 @@ const limiter = rateLimit({
 app.use(cors());
 app.use(limiter);
 app.use(express.json());
+app.use("/api", (req,res,next)=>{res.set("Cache-Control","no-store");next();});
 // =====================================
 // XAC THUC TAI KHOAN DEMO
 // =====================================

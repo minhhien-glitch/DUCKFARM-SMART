@@ -18,16 +18,19 @@ let poolPromise;
 
 function getPool() {
   if (!poolPromise) {
-    poolPromise = new sql.ConnectionPool(config).connect().catch((err) => {
-      poolPromise = undefined;
-      throw err;
-    });
+    const pool = new sql.ConnectionPool(config);
+    const pending = pool.connect();
+    poolPromise = pending;
+    const invalidate = () => {
+      if (poolPromise === pending) poolPromise = undefined;
+    };
+    pool.on("error", (err) => { console.error("SQL pool:", err.code); invalidate(); });
+    pending.catch(invalidate);
   }
-
   return poolPromise;
 }
 
-async function run(cauLenh, thamSo = []) {
+async function runOnce(cauLenh, thamSo = []) {
   const pool = await getPool();
   const request = pool.request();
 
@@ -49,6 +52,18 @@ async function run(cauLenh, thamSo = []) {
   const result = await request.query(query);
 
   return result.recordset || [];
+}
+
+async function run(cauLenh, thamSo = []) {
+  // Never replay a write: its first attempt may already have committed.
+  const readOnly = /^\s*SELECT\b/i.test(cauLenh) && !/;\s*\S/.test(cauLenh) && !/\b(INTO|INSERT|UPDATE|DELETE|EXEC|MERGE)\b/i.test(cauLenh);
+  try { return await runOnce(cauLenh, thamSo); }
+  catch (err) {
+    const transient = ["ETIMEOUT","ESOCKET","ECONNCLOSED","ENOTOPEN","ECONNRESET"].includes(err.code) || [40613,40197,40501,10928,10929].includes(err.number) || [40613,40197,40501].includes(err.originalError?.info?.number);
+    if (!transient || !readOnly) throw err;
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    return runOnce(cauLenh, thamSo);
+  }
 }
 
 function truyVan(cauLenh, callback) {

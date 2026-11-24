@@ -3410,6 +3410,7 @@
       async function goiAPI(path, method = "GET", data) {
         method = method.toUpperCase();
         const isWrite = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
+        if (isWrite && (!lastSQL || failedReads.size || loadingSQL || !navigator.onLine)) throw new Error("Dữ liệu chưa đồng bộ. Vui lòng tải lại trước khi lưu, sửa hoặc xóa.");
         if (isWrite && !yeuCauDangNhap())
           throw new Error("Vui lòng đăng nhập Demo trước khi thay đổi dữ liệu");
         const options = { method, headers: {} };
@@ -3419,9 +3420,11 @@
           options.body = JSON.stringify(data);
         }
         let response;
-        try { response = await fetch(API_BASE + path, {...options, signal: AbortSignal.timeout(75000)}); }
+        if(isWrite) activeWrites++;
+        try {
+        try { response = await fetch(API_BASE + path, {...options, cache:"no-store", signal: AbortSignal.timeout(120000)}); }
         catch (err) { connectionFailure(path, method); throw new Error(isWrite ? "Chưa xác nhận được kết quả lưu. Hãy tải lại dữ liệu và kiểm tra trước khi gửi lại." : "Kết nối gián đoạn. Vui lòng chờ rồi tải lại dữ liệu."); }
-        const raw = await response.text();
+        let raw; try {raw=await response.text();} catch(err){connectionFailure(path,method);throw err;}
         let result;
         try {
           result = raw ? JSON.parse(raw) : null;
@@ -3429,7 +3432,7 @@
           result = raw;
         }
         if (!response.ok) {
-          if (response.status >= 500 || response.status === 429) connectionFailure(path, method);
+          if (!isWrite || response.status >= 500 || response.status === 429) connectionFailure(path, method);
           if (isWrite && response.status === 401) {
             demoToken = "";
             sessionStorage.removeItem("duckfarm_demo_token");
@@ -3443,6 +3446,7 @@
         if (!isWrite && !Array.isArray(result)) { connectionFailure(path, method); throw new Error("Dữ liệu trả về không hợp lệ"); }
         if (!isWrite) failedReads.delete(path);
         return result;
+        } finally {if(isWrite) activeWrites--;}
       }
 
       // Chuyen ten cot SQL sang cau truc hien tai cua giao dien.
@@ -4911,6 +4915,12 @@
       db.health = [];
       db.transactions = [];
       const failedReads = new Set();
+      let activeWrites=0, lastEdit=0, retryDelay=30000;
+      document.documentElement.classList.add("df-await-data");
+      const stabilityStyle=document.createElement("style");
+      stabilityStyle.textContent=`.df-await-data .page:not([id="page-minutes"]) > :not(.page-head):not(.df-wait){display:none!important}.df-wait{display:none;padding:24px;background:white;border-radius:16px;color:#176b54;margin:16px 0}.df-await-data .df-wait{display:block}`;
+      document.head.append(stabilityStyle);
+      document.querySelectorAll(".page:not([id=page-minutes])").forEach(page=>{const msg=document.createElement("div");msg.className="df-wait";msg.setAttribute("role","status");msg.textContent="Đang kết nối dữ liệu trang trại. Vui lòng chờ hoặc nhấn Tải lại ở đầu trang.";page.append(msg);});
       let loadingSQL = false, lastSQL = null, retryTimer;
       const banner = document.createElement("div");
       banner.className="connection-inline";
@@ -4919,21 +4929,21 @@
       $("retrySQL").onclick=()=>khoiTaoDuLieuSQL();
       function setConnection(short, detail, state){const el=$("connectionMessage");el.textContent=short;el.title=detail;banner.dataset.state=state;}
       function connectionFailure(path,method){
-        if(method==="GET") failedReads.add(path);
+        if(method==="GET") failedReads.add(path); else failedReads.add("/write-uncertain");
         setConnection(method==="GET"?"Lỗi kết nối":"Chưa xác nhận lưu",method==="GET"?"Vui lòng chờ rồi tải lại. Dữ liệu có thể cũ hoặc thiếu.":"Kiểm tra dữ liệu trước khi gửi lại.","error");
         banner.hidden=false;
       }
       function historyMatch(k,e,date,id){const a=$("filter"+k+"From").value,b=$("filter"+k+"To").value,v=$("filter"+k+"Id").value,d=dfDate(e[date]);return (!a||d>=a)&&(!b||d<=b)&&(!v||String(e[id])===v);}
       function clearHistory(k){for(const x of ["From","To","Id"]) $("filter"+k+x).value="";dfRenderRecords();}
       async function khoiTaoDuLieuSQL() {
-        if(loadingSQL)return;
+        if(loadingSQL||activeWrites)return;
+        failedReads.delete("/write-uncertain");
         loadingSQL=true; clearTimeout(retryTimer); $("retrySQL").disabled=true;
         setConnection("Đang kết nối…","Vui lòng chờ cập nhật dữ liệu.","loading");
         banner.hidden=false;
         try {
         await taiDanVitTuSQL();
-        await taiChuongTraiTuSQL();
-        await dfLoadRecords();
+        await Promise.all([taiChuongTraiTuSQL(),dfLoadRecords()]);
         for (const type of ["feed", "health", "transaction"]) {
           try {
             await taiDuLieuSQL(type);
@@ -4948,8 +4958,8 @@
         await v2Load();
         } finally {
           loadingSQL=false; $("retrySQL").disabled=false;
-          if(failedReads.size){setConnection("Chưa tải đủ · thử lại 60s","Dữ liệu có thể cũ hoặc thiếu. Vui lòng chờ hoặc nhấn tải lại.","error");retryTimer=setTimeout(khoiTaoDuLieuSQL,60000);}
-          else {lastSQL=new Date();setConnection("Đã cập nhật "+lastSQL.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"}),"Dữ liệu đã được cập nhật.","ok");}
+          if(failedReads.size){setConnection(lastSQL?"Mất kết nối · dữ liệu có thể cũ":"Chưa kết nối · đang thử lại","Vui lòng chờ hoặc nhấn tải lại.","error");retryDelay=Math.min(retryDelay*2,120000);retryTimer=setTimeout(autoSync,retryDelay);}
+          else {lastSQL=new Date();retryDelay=30000;document.documentElement.classList.remove("df-await-data");setConnection("Đã cập nhật "+lastSQL.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"}),"Dữ liệu đã được cập nhật.","ok");}
           smartRender();
         }
       }
@@ -4974,7 +4984,7 @@ function growthEdit(id){if(v2Busy||loadingSQL||!v2Data)return;const r=v2Data.gro
 async function growthDelete(id){if(v2Busy||loadingSQL||!v2Data)return;if(!confirm('Bạn có chắc muốn xóa bản ghi tăng trưởng này?'))return;v2Busy=true;try{await goiAPI('/tangtruong/'+id,'DELETE');if(growthEditId===id)growthReset();toast('Đã xóa bản ghi');await khoiTaoDuLieuSQL();}catch(e){toast(e.message);}finally{v2Busy=false;}}
 function v2DisplayDate(d){return dfDate(d).split('-').reverse().join('/');}
 function growthTable(g){return '<table><thead><tr>'+['Ngày cân','Thực tế (kg)','Mục tiêu (kg)','Số con','Thao tác'].map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+g.map(r=>'<tr>'+[v2DisplayDate(r.Ngay),num(r.CanNang),r.MucTieu==null?'—':num(r.MucTieu),num(r.SoCon)].map(x=>'<td>'+safe(String(x))+'</td>').join('')+'<td><div class="growth-actions"><button type="button" class="btn" data-growth="'+Number(r.Id)+'" data-action="edit">Sửa</button><button type="button" class="btn" data-growth="'+Number(r.Id)+'" data-action="delete">Xóa</button></div></td></tr>').join('')+(g.length?'':'<tr><td colspan="5">Chưa có bản ghi tăng trưởng.</td></tr>')+'</tbody></table>';}
-async function v2Load(){try{const [use,growth,plans]=await Promise.all(['sudungvattu','tangtruong','kehoachxuatban'].map(x=>goiAPI('/'+x)));v2Data={use,growth,plans};}catch(e){v2Data=null;}v2Render();}
+async function v2Load(){try{const [use,growth,plans]=await Promise.all(['sudungvattu','tangtruong','kehoachxuatban'].map(x=>goiAPI('/'+x)));v2Data={use,growth,plans};failedReads.delete("/v2-batch");}catch(e){failedReads.add("/v2-batch");}v2Render();}
 function v2Options(el,rows,label){const old=el.value;el.innerHTML=rows.map(x=>`<option value="${x.id}">${safe(label(x))}</option>`).join('');if(rows.some(x=>String(x.id)===old))el.value=old;}
 function v2Forecast(){if(!v2Data)return [];const today=smartDay();return db.feed.map(f=>{const rows=v2Data.use.filter(r=>r.MaThucAn===f.id&&r.DonVi===f.unit&&smartDays(today,dfDate(r.Ngay))>=1&&smartDays(today,dfDate(r.Ngay))<=7);const days=new Set(rows.map(r=>dfDate(r.Ngay))).size;const avg=rows.reduce((s,r)=>s+Number(r.SoLuong),0)/7;return {f,days,left:days===7&&avg>0?f.stock/avg:null};});}
 function v2Alerts(){return v2Forecast().filter(x=>x.left!==null&&x.left<=3).map(x=>['warn',x.f.name+' còn khoảng '+x.left.toFixed(1)+' ngày sử dụng.']);}
@@ -4992,7 +5002,17 @@ function v2Render(){if(!$('v2Use'))return;for(const id of ['v2Use','v2Growth','v
       v2Init();
       growthReset();
       khoiTaoDuLieuSQL();
-      setInterval(smartRender, 60000);
+      function autoSync(){
+        if(document.hidden||!navigator.onLine||loadingSQL||activeWrites||v2Busy||growthEditId!==null||document.querySelector('.modal-backdrop.open')||document.activeElement?.matches('input,select,textarea,[contenteditable=true]')||Date.now()-lastEdit<120000)return;
+        khoiTaoDuLieuSQL();
+      }
+      document.addEventListener('input',()=>{lastEdit=Date.now();});
+      document.addEventListener('change',()=>{lastEdit=Date.now();});
+      document.addEventListener('visibilitychange',()=>{if(!document.hidden)autoSync();});
+      window.addEventListener('online',autoSync);
+      window.addEventListener('offline',()=>setConnection('Mất kết nối mạng','Dữ liệu có thể cũ.','error'));
+      setInterval(autoSync,120000);
+      setInterval(smartRender,60000);
     </script>
   </body>
 </html>
