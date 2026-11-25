@@ -1319,13 +1319,145 @@
           grid-column: auto;
         }
       }
-    
-.smart-alert {margin:14px 0 0;padding:12px 14px;border:1px solid #dce8e1;border-radius:12px;background:#f5faf7;color:#25483a;font-size:13px;line-height:1.55;overflow-wrap:anywhere}
-.work-schedule-title{font-size:14px;margin:18px 0 10px;color:inherit;font-family:inherit}
-.smart-alert h4{margin:0 0 6px;font-size:14px}.smart-alert p{margin:5px 0}.smart-alert .warn{color:#945600}.smart-alert .danger{color:#a52323}.smart-alert .neutral{color:#61736a}.smart-alert .ok{color:#176b54}
 
-.connection-inline{display:flex;align-items:center;gap:6px;font-size:11px;color:#176b54;white-space:nowrap}.connection-inline[data-state=error]{color:#b42318}.connection-inline[data-state=loading]{color:#946000}.connection-inline .btn{font-size:11px;padding:5px 8px;min-height:0}.top-actions{flex-wrap:wrap;justify-content:flex-end;gap:8px}.topbar{height:auto;min-height:65px;padding-top:10px;padding-bottom:10px}.v2panel{font-family:inherit;font-size:13px;color:var(--ink)}.v2panel h3{font-size:16px;margin:0 0 12px}.v2panel label,.page label:has(input[id^=filter]),.page label:has(select[id^=filter]){font-size:12px;font-weight:650;color:#244a39}.v2panel input,.v2panel select,input[id^=filter],select[id^=filter]{font:inherit;font-size:13px;border:1px solid #d8e4dc;border-radius:10px;padding:9px;background:#fff;color:#234537;max-width:100%;min-width:0}.v2panel .v2form input,.v2panel .v2form select{font-weight:400}.v2panel .v2result{font-size:13px}.v2panel .v2result h3{margin-top:14px}.v2panel .btn{font-size:12px}.v2panel .growth-actions{display:flex;gap:6px}.v2panel .growth-actions button{padding:5px 9px}.v2panel .growth-edit-note{font-size:12px;color:#176b54;margin:8px 0}.v2panel .growth-edit-note[hidden]{display:none}@media(max-width:700px){.connection-inline{white-space:normal;flex-wrap:wrap}.top-actions{gap:6px}.v2panel .v2form label{min-width:130px}}
-</style>
+      .smart-alert {
+        margin: 14px 0 0;
+        padding: 12px 14px;
+        border: 1px solid #dce8e1;
+        border-radius: 12px;
+        background: #f5faf7;
+        color: #25483a;
+        font-size: 13px;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+      }
+      .work-schedule-title {
+        font-size: 14px;
+        margin: 18px 0 10px;
+        color: inherit;
+        font-family: inherit;
+      }
+      .smart-alert h4 {
+        margin: 0 0 6px;
+        font-size: 14px;
+      }
+      .smart-alert p {
+        margin: 5px 0;
+      }
+      .smart-alert .warn {
+        color: #945600;
+      }
+      .smart-alert .danger {
+        color: #a52323;
+      }
+      .smart-alert .neutral {
+        color: #61736a;
+      }
+      .smart-alert .ok {
+        color: #176b54;
+      }
+
+      .connection-inline {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: #176b54;
+        white-space: nowrap;
+      }
+      .connection-inline[data-state="error"] {
+        color: #b42318;
+      }
+      .connection-inline[data-state="loading"] {
+        color: #946000;
+      }
+      .connection-inline .btn {
+        font-size: 11px;
+        padding: 5px 8px;
+        min-height: 0;
+      }
+      .top-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+      .topbar {
+        height: auto;
+        min-height: 65px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      .v2panel {
+        font-family: inherit;
+        font-size: 13px;
+        color: var(--ink);
+      }
+      .v2panel h3 {
+        font-size: 16px;
+        margin: 0 0 12px;
+      }
+      .v2panel label,
+      .page label:has(input[id^="filter"]),
+      .page label:has(select[id^="filter"]) {
+        font-size: 12px;
+        font-weight: 650;
+        color: #244a39;
+      }
+      .v2panel input,
+      .v2panel select,
+      input[id^="filter"],
+      select[id^="filter"] {
+        font: inherit;
+        font-size: 13px;
+        border: 1px solid #d8e4dc;
+        border-radius: 10px;
+        padding: 9px;
+        background: #fff;
+        color: #234537;
+        max-width: 100%;
+        min-width: 0;
+      }
+      .v2panel .v2form input,
+      .v2panel .v2form select {
+        font-weight: 400;
+      }
+      .v2panel .v2result {
+        font-size: 13px;
+      }
+      .v2panel .v2result h3 {
+        margin-top: 14px;
+      }
+      .v2panel .btn {
+        font-size: 12px;
+      }
+      .v2panel .growth-actions {
+        display: flex;
+        gap: 6px;
+      }
+      .v2panel .growth-actions button {
+        padding: 5px 9px;
+      }
+      .v2panel .growth-edit-note {
+        font-size: 12px;
+        color: #176b54;
+        margin: 8px 0;
+      }
+      .v2panel .growth-edit-note[hidden] {
+        display: none;
+      }
+      @media (max-width: 700px) {
+        .connection-inline {
+          white-space: normal;
+          flex-wrap: wrap;
+        }
+        .top-actions {
+          gap: 6px;
+        }
+        .v2panel .v2form label {
+          min-width: 130px;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="app">
@@ -1505,7 +1637,11 @@
                 <div class="chart-wrap">
                   <canvas id="financeChart"></canvas>
                 </div>
-                <div class="smart-alert" id="smartFinance" aria-live="polite"></div>
+                <div
+                  class="smart-alert"
+                  id="smartFinance"
+                  aria-live="polite"
+                ></div>
                 <div class="legend">
                   <span>Doanh thu</span><span class="orange">Chi phí</span
                   ><span style="color: #3260a8">Lợi nhuận</span>
@@ -1529,7 +1665,11 @@
                 <div class="chart-wrap">
                   <canvas id="duckAreaChart"></canvas>
                 </div>
-                <div class="smart-alert" id="smartDucks" aria-live="polite"></div>
+                <div
+                  class="smart-alert"
+                  id="smartDucks"
+                  aria-live="polite"
+                ></div>
                 <p class="df-note">
                   Số liệu lịch sử chỉ có từ khi bắt đầu ghi nhận biến động;
                   không tự tạo dữ liệu quá khứ.
@@ -1546,7 +1686,8 @@
               <div class="df-pie-layout">
                 <canvas id="expensePieChart" width="280" height="220"></canvas>
                 <div id="expensePieLegend"></div>
-              </div><div class="smart-alert" id="smartExpense"></div>
+              </div>
+              <div class="smart-alert" id="smartExpense"></div>
             </div>
             <div class="grid bottom-grid" style="margin-top: 20px">
               <div class="card">
@@ -1579,11 +1720,11 @@
                     <h3>Việc cần chú ý</h3>
                     <p>Lịch nhắc và gợi ý công việc cho chủ trang trại</p>
                   </div>
-                  <span class="pill pill-orange" id="reminderCount"
-                    >—</span
-                  >
+                  <span class="pill pill-orange" id="reminderCount">—</span>
                 </div>
-                <div class="smart-alert" id="smartCenter" aria-live="polite"><p class="neutral">Đang chờ dữ liệu để tạo gợi ý.</p></div>
+                <div class="smart-alert" id="smartCenter" aria-live="polite">
+                  <p class="neutral">Đang chờ dữ liệu để tạo gợi ý.</p>
+                </div>
                 <h4 class="work-schedule-title">Lịch công việc</h4>
                 <div class="activity" id="activityList"></div>
               </div>
@@ -1909,8 +2050,42 @@
               <div class="card table-card" style="margin-top: 16px">
                 <h3>Lịch sử theo dõi</h3>
                 <div class="table-wrap">
-                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:center"><label>Từ ngày <input type="date" id="filterHealthFrom" onchange="dfRenderRecords()"></label><label>Đến ngày <input type="date" id="filterHealthTo" onchange="dfRenderRecords()"></label><label>Đàn <select id="filterHealthId" onchange="dfRenderRecords()"></select></label><button type="button" class="btn" onclick="clearHistory('Health')">Xóa bộ lọc</button></div>
-<table>
+                  <div
+                    style="
+                      display: flex;
+                      gap: 10px;
+                      flex-wrap: wrap;
+                      margin: 12px 0;
+                      align-items: center;
+                    "
+                  >
+                    <label
+                      >Từ ngày
+                      <input
+                        type="date"
+                        id="filterHealthFrom"
+                        onchange="dfRenderRecords()" /></label
+                    ><label
+                      >Đến ngày
+                      <input
+                        type="date"
+                        id="filterHealthTo"
+                        onchange="dfRenderRecords()" /></label
+                    ><label
+                      >Đàn
+                      <select
+                        id="filterHealthId"
+                        onchange="dfRenderRecords()"
+                      ></select></label
+                    ><button
+                      type="button"
+                      class="btn"
+                      onclick="clearHistory('Health')"
+                    >
+                      Xóa bộ lọc
+                    </button>
+                  </div>
+                  <table>
                     <thead>
                       <tr>
                         <th>Ngày</th>
@@ -1926,7 +2101,11 @@
               </div>
             </div>
             <div id="df-vaccine" class="df-tab-panel hide">
-<div class="smart-alert" id="smartVaccine" style="margin:0 0 16px"></div>
+              <div
+                class="smart-alert"
+                id="smartVaccine"
+                style="margin: 0 0 16px"
+              ></div>
               <div class="card df-form-card">
                 <h3>Ghi nhận tiêm phòng</h3>
                 <form
@@ -1961,8 +2140,42 @@
               </div>
               <div class="card table-card" style="margin-top: 16px">
                 <div class="table-wrap">
-                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:center"><label>Từ ngày <input type="date" id="filterVaccineFrom" onchange="dfRenderRecords()"></label><label>Đến ngày <input type="date" id="filterVaccineTo" onchange="dfRenderRecords()"></label><label>Đàn <select id="filterVaccineId" onchange="dfRenderRecords()"></select></label><button type="button" class="btn" onclick="clearHistory('Vaccine')">Xóa bộ lọc</button></div>
-<table>
+                  <div
+                    style="
+                      display: flex;
+                      gap: 10px;
+                      flex-wrap: wrap;
+                      margin: 12px 0;
+                      align-items: center;
+                    "
+                  >
+                    <label
+                      >Từ ngày
+                      <input
+                        type="date"
+                        id="filterVaccineFrom"
+                        onchange="dfRenderRecords()" /></label
+                    ><label
+                      >Đến ngày
+                      <input
+                        type="date"
+                        id="filterVaccineTo"
+                        onchange="dfRenderRecords()" /></label
+                    ><label
+                      >Đàn
+                      <select
+                        id="filterVaccineId"
+                        onchange="dfRenderRecords()"
+                      ></select></label
+                    ><button
+                      type="button"
+                      class="btn"
+                      onclick="clearHistory('Vaccine')"
+                    >
+                      Xóa bộ lọc
+                    </button>
+                  </div>
+                  <table>
                     <thead>
                       <tr>
                         <th>Đàn vịt</th>
@@ -1978,7 +2191,11 @@
               </div>
             </div>
             <div id="df-environment" class="df-tab-panel hide">
-<div class="smart-alert" id="smartEnvironment" style="margin:0 0 16px"></div>
+              <div
+                class="smart-alert"
+                id="smartEnvironment"
+                style="margin: 0 0 16px"
+              ></div>
               <div class="card df-form-card">
                 <h3>Nhập số đo môi trường thủ công</h3>
                 <form
@@ -2018,8 +2235,42 @@
               </div>
               <div class="card table-card" style="margin-top: 16px">
                 <div class="table-wrap">
-                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:center"><label>Từ ngày <input type="date" id="filterEnvFrom" onchange="dfRenderRecords()"></label><label>Đến ngày <input type="date" id="filterEnvTo" onchange="dfRenderRecords()"></label><label>Chuồng <select id="filterEnvId" onchange="dfRenderRecords()"></select></label><button type="button" class="btn" onclick="clearHistory('Env')">Xóa bộ lọc</button></div>
-<table>
+                  <div
+                    style="
+                      display: flex;
+                      gap: 10px;
+                      flex-wrap: wrap;
+                      margin: 12px 0;
+                      align-items: center;
+                    "
+                  >
+                    <label
+                      >Từ ngày
+                      <input
+                        type="date"
+                        id="filterEnvFrom"
+                        onchange="dfRenderRecords()" /></label
+                    ><label
+                      >Đến ngày
+                      <input
+                        type="date"
+                        id="filterEnvTo"
+                        onchange="dfRenderRecords()" /></label
+                    ><label
+                      >Chuồng
+                      <select
+                        id="filterEnvId"
+                        onchange="dfRenderRecords()"
+                      ></select></label
+                    ><button
+                      type="button"
+                      class="btn"
+                      onclick="clearHistory('Env')"
+                    >
+                      Xóa bộ lọc
+                    </button>
+                  </div>
+                  <table>
                     <thead>
                       <tr>
                         <th>Ngày</th>
@@ -2771,8 +3022,6 @@
         }
       }
 
-
-
       const todayISO = () => smartDay();
       const dateOffset = (n) => {
         let d = new Date();
@@ -3236,7 +3485,8 @@
 
           console.log("Da hien thi dan vit tu SQL Server:", db.flocks);
         } catch (error) {
-          smartLoaded.flocks = false; console.error("Loi tai dan vit:", error);
+          smartLoaded.flocks = false;
+          console.error("Loi tai dan vit:", error);
         }
       }
 
@@ -3410,7 +3660,13 @@
       async function goiAPI(path, method = "GET", data) {
         method = method.toUpperCase();
         const isWrite = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
-        if (isWrite && (!lastSQL || failedReads.size || loadingSQL || !navigator.onLine)) throw new Error("Dữ liệu chưa đồng bộ. Vui lòng tải lại trước khi lưu, sửa hoặc xóa.");
+        if (
+          isWrite &&
+          (!lastSQL || failedReads.size || loadingSQL || !navigator.onLine)
+        )
+          throw new Error(
+            "Dữ liệu chưa đồng bộ. Vui lòng tải lại trước khi lưu, sửa hoặc xóa.",
+          );
         if (isWrite && !yeuCauDangNhap())
           throw new Error("Vui lòng đăng nhập Demo trước khi thay đổi dữ liệu");
         const options = { method, headers: {} };
@@ -3420,33 +3676,57 @@
           options.body = JSON.stringify(data);
         }
         let response;
-        if(isWrite) activeWrites++;
+        if (isWrite) activeWrites++;
         try {
-        try { response = await fetch(API_BASE + path, {...options, cache:"no-store", signal: AbortSignal.timeout(120000)}); }
-        catch (err) { connectionFailure(path, method); throw new Error(isWrite ? "Chưa xác nhận được kết quả lưu. Hãy tải lại dữ liệu và kiểm tra trước khi gửi lại." : "Kết nối gián đoạn. Vui lòng chờ rồi tải lại dữ liệu."); }
-        let raw; try {raw=await response.text();} catch(err){connectionFailure(path,method);throw err;}
-        let result;
-        try {
-          result = raw ? JSON.parse(raw) : null;
-        } catch {
-          result = raw;
-        }
-        if (!response.ok) {
-          if (!isWrite || response.status >= 500 || response.status === 429) connectionFailure(path, method);
-          if (isWrite && response.status === 401) {
-            demoToken = "";
-            sessionStorage.removeItem("duckfarm_demo_token");
-            capNhatNutDangNhap();
-            moDangNhap();
+          try {
+            response = await fetch(API_BASE + path, {
+              ...options,
+              cache: "no-store",
+              signal: AbortSignal.timeout(120000),
+            });
+          } catch (err) {
+            connectionFailure(path, method);
+            throw new Error(
+              isWrite
+                ? "Chưa xác nhận được kết quả lưu. Hãy tải lại dữ liệu và kiểm tra trước khi gửi lại."
+                : "Kết nối gián đoạn. Vui lòng chờ rồi tải lại dữ liệu.",
+            );
           }
-          throw new Error(
-            result?.message || `API ${path}: HTTP ${response.status}`,
-          );
+          let raw;
+          try {
+            raw = await response.text();
+          } catch (err) {
+            connectionFailure(path, method);
+            throw err;
+          }
+          let result;
+          try {
+            result = raw ? JSON.parse(raw) : null;
+          } catch {
+            result = raw;
+          }
+          if (!response.ok) {
+            if (!isWrite || response.status >= 500 || response.status === 429)
+              connectionFailure(path, method);
+            if (isWrite && response.status === 401) {
+              demoToken = "";
+              sessionStorage.removeItem("duckfarm_demo_token");
+              capNhatNutDangNhap();
+              moDangNhap();
+            }
+            throw new Error(
+              result?.message || `API ${path}: HTTP ${response.status}`,
+            );
+          }
+          if (!isWrite && !Array.isArray(result)) {
+            connectionFailure(path, method);
+            throw new Error("Dữ liệu trả về không hợp lệ");
+          }
+          if (!isWrite) failedReads.delete(path);
+          return result;
+        } finally {
+          if (isWrite) activeWrites--;
         }
-        if (!isWrite && !Array.isArray(result)) { connectionFailure(path, method); throw new Error("Dữ liệu trả về không hợp lệ"); }
-        if (!isWrite) failedReads.delete(path);
-        return result;
-        } finally {if(isWrite) activeWrites--;}
       }
 
       // Chuyen ten cot SQL sang cau truc hien tai cua giao dien.
@@ -3531,7 +3811,7 @@
         if (!Array.isArray(rows))
           throw new Error("API không trả về danh sách: " + cfg.path);
         db[cfg.key] = rows.map(cfg.from);
-        if(type === "transaction") smartLoaded.finance = true;
+        if (type === "transaction") smartLoaded.finance = true;
         renderAll();
         console.log("Đã tải SQL " + type + ":", db[cfg.key]);
       }
@@ -4521,7 +4801,13 @@
         ctx.closePath();
       }
       // DUCKFARM: health monitoring, vaccination, environment and dynamic charts.
-      const smartLoaded = {finance:false, flocks:false, events:false, vaccines:false, environment:false};
+      const smartLoaded = {
+        finance: false,
+        flocks: false,
+        events: false,
+        vaccines: false,
+        environment: false,
+      };
       let dfEvents = [],
         dfVaccines = [],
         dfEnvironments = [];
@@ -4582,7 +4868,12 @@
       }
       function dfRenderRecords() {
         dfRefreshForms();
-        for(const k of ["Health","Vaccine","Env"]) dfSelect("filter"+k+"Id", k==="Env"?db.barns:db.flocks,"Tất cả");
+        for (const k of ["Health", "Vaccine", "Env"])
+          dfSelect(
+            "filter" + k + "Id",
+            k === "Env" ? db.barns : db.flocks,
+            "Tất cả",
+          );
         const latest = new Map();
         dfEvents.forEach((e) => {
           const prev = latest.get(e.MaDan);
@@ -4603,8 +4894,10 @@
             : "—";
         $("dfHealthHistory").innerHTML =
           dfEvents
-            .filter(e => historyMatch("Health", e, "NgayGhiNhan", "MaDan"))
-            .sort((a,b)=>dfDate(b.NgayGhiNhan).localeCompare(dfDate(a.NgayGhiNhan)))
+            .filter((e) => historyMatch("Health", e, "NgayGhiNhan", "MaDan"))
+            .sort((a, b) =>
+              dfDate(b.NgayGhiNhan).localeCompare(dfDate(a.NgayGhiNhan)),
+            )
             .map(
               (e) =>
                 `<tr><td>${safe(dfDate(e.NgayGhiNhan))}</td><td>${safe(dfFlockName(e.MaDan))}</td><td>${num(e.SoConBenh)}</td><td>${num(e.SoConChet)}</td><td>${safe(e.GhiChu || "")}</td></tr>`,
@@ -4613,8 +4906,10 @@
           '<tr><td colspan="5">Không có bản ghi phù hợp hoặc chưa tải được dữ liệu</td></tr>';
         $("dfVaccineHistory").innerHTML =
           dfVaccines
-            .filter(e => historyMatch("Vaccine", e, "NgayTiem", "MaDan"))
-            .sort((a,b)=>dfDate(b.NgayTiem).localeCompare(dfDate(a.NgayTiem)))
+            .filter((e) => historyMatch("Vaccine", e, "NgayTiem", "MaDan"))
+            .sort((a, b) =>
+              dfDate(b.NgayTiem).localeCompare(dfDate(a.NgayTiem)),
+            )
             .map(
               (e) =>
                 `<tr><td>${safe(dfFlockName(e.MaDan))}</td><td>${safe(e.TenVacXin)}</td><td>${safe(dfDate(e.NgayTiem))}</td><td>${safe(dfDate(e.NgayNhacLai))}</td><td>${safe(e.GhiChu || "")}</td></tr>`,
@@ -4623,8 +4918,8 @@
           '<tr><td colspan="5">Không có bản ghi phù hợp hoặc chưa tải được dữ liệu</td></tr>';
         $("dfEnvHistory").innerHTML =
           dfEnvironments
-            .filter(e => historyMatch("Env", e, "NgayDo", "MaChuong"))
-            .sort((a,b)=>dfDate(b.NgayDo).localeCompare(dfDate(a.NgayDo)))
+            .filter((e) => historyMatch("Env", e, "NgayDo", "MaChuong"))
+            .sort((a, b) => dfDate(b.NgayDo).localeCompare(dfDate(a.NgayDo)))
             .map(
               (e) =>
                 `<tr><td>${safe(dfDate(e.NgayDo))}</td><td>${safe(dfBarnName(e.MaChuong))}</td><td>${Number(e.NhietDo)}°C</td><td>${Number(e.DoAm)}%</td><td>${safe(e.DoSach)}</td></tr>`,
@@ -4840,7 +5135,9 @@
           ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         let angle = -Math.PI / 2;
-        const cx = canvas.width / 2, cy = canvas.height / 2, r = 85;
+        const cx = canvas.width / 2,
+          cy = canvas.height / 2,
+          r = 85;
         cats.forEach((c, i) => {
           const delta = total ? (2 * Math.PI * sums[i]) / total : 0;
           if (delta > 0) {
@@ -4870,33 +5167,359 @@
       }
 
       // SMART ALERTS: ngưỡng demo, không thay thế tư vấn thú y.
-      const SMART_LIMITS = {costShare:65, duckDrop:5, vaccineDays:3, tempMin:20,tempMax:30,humidityMin:50,humidityMax:75,staleDays:2};
-      function smartCategories(){return [["Thức ăn",/thức ăn|thuc an|cám|cam\b|ngô|ngo\b|feed/i],["Con giống",/con giống|con giong|giống vịt|giong vit|mua vịt|mua vit/i],["Thuốc và vắc-xin",/thuốc|thuoc|vắc|vac|tiêm|tiem/i],["Điện nước",/điện|dien|nước|nuoc/i],["Khác",/.*/]];}
-      function smartExpenseSums(cats){const sums=cats.map(()=>0);db.transactions.filter(t=>t.type==="expense").forEach(t=>{const i=cats.findIndex(c=>c[1].test((t.title||"")+" "+(t.note||"")));sums[i<0?4:i]+=Number(t.amount||0);});return sums;}
-      function smartDay(d=new Date()){return new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Ho_Chi_Minh",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);}
-      function smartDays(a,b){return (Date.parse(a)-Date.parse(b))/86400000;}
-      function smartLatest(rows,key,date,id,today){const m=new Map();for(const r of rows){const d=dfDate(r[date]);if(!d||d>today)continue;const k=key(r),p=m.get(k);if(!p||d>dfDate(p[date])||(d===dfDate(p[date])&&Number(r[id]||0)>Number(p[id]||0)))m.set(k,r);}return [...m.values()];}
-      function smartShow(id,title,items){const el=$(id);if(!el)return;el.innerHTML='<h4>🔔 '+safe(title)+'</h4>'+items.map(([level,msg])=>'<p class="'+level+'">'+safe(({danger:"● Cần xử lý: ",warn:"● Lưu ý: ",ok:"✓ ",neutral:""})[level]+msg)+'</p>').join('');}
-      function smartRender(){
-        const today=smartDay(), L=SMART_LIMITS, wait=[["neutral","Chưa có dữ liệu đã tải để đánh giá."]];
-        let f=[],c=[],d=[],v=[],e=[];
-        if(smartLoaded.finance){
-          const month=today.slice(0,7), prev=new Date(Date.UTC(+today.slice(0,4),+today.slice(5,7)-2,1)).toISOString().slice(0,7), day=+today.slice(8);
-          const totals=key=>{const rows=db.transactions.filter(t=>String(t.date).startsWith(key)&&+String(t.date).slice(8,10)<=day);return {n:rows.length,income:rows.filter(t=>t.type==='income').reduce((a,t)=>a+Number(t.amount||0),0),expense:rows.filter(t=>t.type==='expense').reduce((a,t)=>a+Number(t.amount||0),0)};};
-          const a=totals(month),b=totals(prev),net=a.income-a.expense,old=b.income-b.expense;
-          if(!a.n)f.push(['neutral','Chưa có giao dịch tháng này.']);else{if(net<0)f.push(['danger','Chi vượt thu tháng này '+money(-net)+'. Kiểm tra các khoản chi và dòng tiền.']);if(b.n&&net<old)f.push(['warn','Chênh lệch thu chi giảm '+money(old-net)+' so với cùng kỳ tháng trước (đến ngày '+day+').']);if(!f.length)f.push(['ok','Chưa phát hiện chi vượt thu hoặc chênh lệch giảm trong kỳ có dữ liệu.']);if(!b.n)f.push(['neutral','Thiếu giao dịch cùng kỳ tháng trước để so sánh.']);}
-          const cats=smartCategories(), sums=smartExpenseSums(cats), total=sums.reduce((a,b)=>a+b,0);if(total>0){const i=sums.indexOf(Math.max(...sums)), share=100*sums[i]/total;c.push([share>=L.costShare?'warn':'ok',cats[i][0]+' chiếm '+share.toFixed(1)+'% tổng chi phí đã ghi nhận. '+(share>=L.costShare?'Kiểm tra định mức và giá mua; tỷ trọng cao chưa chắc là bất thường.':'Chưa vượt ngưỡng tập trung '+L.costShare+'%.')]);}else c.push(['neutral','Chưa có chi phí để phân tích.']);
+      const SMART_LIMITS = {
+        costShare: 65,
+        duckDrop: 5,
+        vaccineDays: 3,
+        tempMin: 20,
+        tempMax: 30,
+        humidityMin: 50,
+        humidityMax: 75,
+        staleDays: 2,
+      };
+      function smartCategories() {
+        return [
+          ["Thức ăn", /thức ăn|thuc an|cám|cam\b|ngô|ngo\b|feed/i],
+          [
+            "Con giống",
+            /con giống|con giong|giống vịt|giong vit|mua vịt|mua vit/i,
+          ],
+          ["Thuốc và vắc-xin", /thuốc|thuoc|vắc|vac|tiêm|tiem/i],
+          ["Điện nước", /điện|dien|nước|nuoc/i],
+          ["Khác", /.*/],
+        ];
+      }
+      function smartExpenseSums(cats) {
+        const sums = cats.map(() => 0);
+        db.transactions
+          .filter((t) => t.type === "expense")
+          .forEach((t) => {
+            const i = cats.findIndex((c) =>
+              c[1].test((t.title || "") + " " + (t.note || "")),
+            );
+            sums[i < 0 ? 4 : i] += Number(t.amount || 0);
+          });
+        return sums;
+      }
+      function smartDay(d = new Date()) {
+        return new Intl.DateTimeFormat("sv-SE", {
+          timeZone: "Asia/Ho_Chi_Minh",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(d);
+      }
+      function smartDays(a, b) {
+        return (Date.parse(a) - Date.parse(b)) / 86400000;
+      }
+      function smartLatest(rows, key, date, id, today) {
+        const m = new Map();
+        for (const r of rows) {
+          const d = dfDate(r[date]);
+          if (!d || d > today) continue;
+          const k = key(r),
+            p = m.get(k);
+          if (
+            !p ||
+            d > dfDate(p[date]) ||
+            (d === dfDate(p[date]) && Number(r[id] || 0) > Number(p[id] || 0))
+          )
+            m.set(k, r);
         }
-        if(smartLoaded.flocks&&smartLoaded.events){const active=db.flocks.filter(x=>!/đã xuất|đã bán|kết thúc/i.test(x.status||''));const ids=new Set(active.map(x=>String(x.id)));const deaths=dfEvents.filter(x=>ids.has(String(x.MaDan))&&smartDays(today,dfDate(x.NgayGhiNhan))>=0&&smartDays(today,dfDate(x.NgayGhiNhan))<7).reduce((a,x)=>a+Number(x.SoConChet||0),0);const alive=active.reduce((a,x)=>a+Number(x.count||0),0);if(!active.length)d.push(['neutral','Chưa có đàn đang theo dõi.']);else if(!dfEvents.some(x=>ids.has(String(x.MaDan))))d.push(['neutral','Chưa có lịch sử hao hụt của đàn đang nuôi.']);else{const pct=alive+deaths?100*deaths/(alive+deaths):0;d.push([pct>=L.duckDrop?'danger':deaths?'warn':'ok','7 ngày gần đây ghi nhận '+num(deaths)+' con chết ở các đàn đang theo dõi'+(deaths?' (tỷ lệ ước tính '+pct.toFixed(1)+'%). Kiểm tra nguyên nhân hao hụt.':'.')]);}d.push(['neutral','Chỉ đánh giá hao hụt đã ghi nhận; không coi xuất bán là vịt chết.']);}
-        if(smartLoaded.vaccines&&smartLoaded.flocks){const rows=smartLatest(dfVaccines,x=>String(x.MaDan)+'|'+String(x.TenVacXin||'').trim().toLowerCase(),'NgayTiem','MaTiem',today).filter(x=>db.flocks.some(y=>String(y.id)===String(x.MaDan)&&!/đã xuất|đã bán|kết thúc/i.test(y.status||'')));for(const x of rows){const date=dfDate(x.NgayNhacLai),n=smartDays(date,today),name=dfFlockName(x.MaDan)+' – '+x.TenVacXin;if(!date||!Number.isFinite(n))v.push(['neutral',name+': chưa có ngày nhắc lại.']);else if(n<=L.vaccineDays)v.push([n<=0?'danger':'warn',name+': '+(n<0?'quá hạn '+(-n)+' ngày':n===0?'đến hạn hôm nay':'còn '+n+' ngày')+' ('+date+'). Kiểm tra lịch với thú y.']);}if(!v.length)v.push([rows.length?'ok':'neutral',rows.length?'Không có lịch nhắc lại đến hạn trong 3 ngày tới.':'Chưa có lịch tiêm của đàn đang nuôi.']);}
-        if(smartLoaded.environment){const rows=smartLatest(dfEnvironments,x=>String(x.MaChuong),'NgayDo','MaDo',today);for(const x of rows){const issues=[],t=Number(x.NhietDo),h=Number(x.DoAm),date=dfDate(x.NgayDo);if(x.NhietDo!=null&&(t<L.tempMin||t>L.tempMax))issues.push('nhiệt độ '+t+'°C '+(t<L.tempMin?'thấp':'cao'));if(x.DoAm!=null&&(h<L.humidityMin||h>L.humidityMax))issues.push('độ ẩm '+h+'% '+(h<L.humidityMin?'thấp':'cao'));if(String(x.DoSach).trim().toLowerCase()==='bẩn')issues.push('chuồng bẩn, cần vệ sinh');const stale=smartDays(today,date)>L.staleDays;if(issues.length||stale)e.push([issues.length&&!stale?'warn':'neutral',dfBarnName(x.MaChuong)+' ('+date+'): '+[...issues,...(stale?['số đo đã cũ, cần đo lại']:[])].join('; ')+'.']);}if(!e.length)e.push([rows.length?'ok':'neutral',rows.length?'Các số đo gần nhất chưa vượt ngưỡng demo.':'Chưa có số đo môi trường.']);e.push(['neutral','Ngưỡng demo: 20–30°C, 50–75% độ ẩm; điều chỉnh theo tuổi vịt và hướng dẫn thú y.']);}
-        const all=[...f,...c,...d,...v,...e,...v2Alerts()].filter(x=>x[0]==="danger"||x[0]==="warn");
+        return [...m.values()];
+      }
+      function smartShow(id, title, items) {
+        const el = $(id);
+        if (!el) return;
+        el.innerHTML =
+          "<h4>🔔 " +
+          safe(title) +
+          "</h4>" +
+          items
+            .map(
+              ([level, msg]) =>
+                '<p class="' +
+                level +
+                '">' +
+                safe(
+                  {
+                    danger: "● Cần xử lý: ",
+                    warn: "● Lưu ý: ",
+                    ok: "✓ ",
+                    neutral: "",
+                  }[level] + msg,
+                ) +
+                "</p>",
+            )
+            .join("");
+      }
+      function smartRender() {
+        const today = smartDay(),
+          L = SMART_LIMITS,
+          wait = [["neutral", "Chưa có dữ liệu đã tải để đánh giá."]];
+        let f = [],
+          c = [],
+          d = [],
+          v = [],
+          e = [];
+        if (smartLoaded.finance) {
+          const month = today.slice(0, 7),
+            prev = new Date(
+              Date.UTC(+today.slice(0, 4), +today.slice(5, 7) - 2, 1),
+            )
+              .toISOString()
+              .slice(0, 7),
+            day = +today.slice(8);
+          const totals = (key) => {
+            const rows = db.transactions.filter(
+              (t) =>
+                String(t.date).startsWith(key) &&
+                +String(t.date).slice(8, 10) <= day,
+            );
+            return {
+              n: rows.length,
+              income: rows
+                .filter((t) => t.type === "income")
+                .reduce((a, t) => a + Number(t.amount || 0), 0),
+              expense: rows
+                .filter((t) => t.type === "expense")
+                .reduce((a, t) => a + Number(t.amount || 0), 0),
+            };
+          };
+          const a = totals(month),
+            b = totals(prev),
+            net = a.income - a.expense,
+            old = b.income - b.expense;
+          if (!a.n) f.push(["neutral", "Chưa có giao dịch tháng này."]);
+          else {
+            if (net < 0)
+              f.push([
+                "danger",
+                "Chi vượt thu tháng này " +
+                  money(-net) +
+                  ". Kiểm tra các khoản chi và dòng tiền.",
+              ]);
+            if (b.n && net < old)
+              f.push([
+                "warn",
+                "Chênh lệch thu chi giảm " +
+                  money(old - net) +
+                  " so với cùng kỳ tháng trước (đến ngày " +
+                  day +
+                  ").",
+              ]);
+            if (!f.length)
+              f.push([
+                "ok",
+                "Chưa phát hiện chi vượt thu hoặc chênh lệch giảm trong kỳ có dữ liệu.",
+              ]);
+            if (!b.n)
+              f.push([
+                "neutral",
+                "Thiếu giao dịch cùng kỳ tháng trước để so sánh.",
+              ]);
+          }
+          const cats = smartCategories(),
+            sums = smartExpenseSums(cats),
+            total = sums.reduce((a, b) => a + b, 0);
+          if (total > 0) {
+            const i = sums.indexOf(Math.max(...sums)),
+              share = (100 * sums[i]) / total;
+            c.push([
+              share >= L.costShare ? "warn" : "ok",
+              cats[i][0] +
+                " chiếm " +
+                share.toFixed(1) +
+                "% tổng chi phí đã ghi nhận. " +
+                (share >= L.costShare
+                  ? "Kiểm tra định mức và giá mua; tỷ trọng cao chưa chắc là bất thường."
+                  : "Chưa vượt ngưỡng tập trung " + L.costShare + "%."),
+            ]);
+          } else c.push(["neutral", "Chưa có chi phí để phân tích."]);
+        }
+        if (smartLoaded.flocks && smartLoaded.events) {
+          const active = db.flocks.filter(
+            (x) => !/đã xuất|đã bán|kết thúc/i.test(x.status || ""),
+          );
+          const ids = new Set(active.map((x) => String(x.id)));
+          const deaths = dfEvents
+            .filter(
+              (x) =>
+                ids.has(String(x.MaDan)) &&
+                smartDays(today, dfDate(x.NgayGhiNhan)) >= 0 &&
+                smartDays(today, dfDate(x.NgayGhiNhan)) < 7,
+            )
+            .reduce((a, x) => a + Number(x.SoConChet || 0), 0);
+          const alive = active.reduce((a, x) => a + Number(x.count || 0), 0);
+          if (!active.length) d.push(["neutral", "Chưa có đàn đang theo dõi."]);
+          else if (!dfEvents.some((x) => ids.has(String(x.MaDan))))
+            d.push(["neutral", "Chưa có lịch sử hao hụt của đàn đang nuôi."]);
+          else {
+            const pct = alive + deaths ? (100 * deaths) / (alive + deaths) : 0;
+            d.push([
+              pct >= L.duckDrop ? "danger" : deaths ? "warn" : "ok",
+              "7 ngày gần đây ghi nhận " +
+                num(deaths) +
+                " con chết ở các đàn đang theo dõi" +
+                (deaths
+                  ? " (tỷ lệ ước tính " +
+                    pct.toFixed(1) +
+                    "%). Kiểm tra nguyên nhân hao hụt."
+                  : "."),
+            ]);
+          }
+          d.push([
+            "neutral",
+            "Chỉ đánh giá hao hụt đã ghi nhận; không coi xuất bán là vịt chết.",
+          ]);
+        }
+        if (smartLoaded.vaccines && smartLoaded.flocks) {
+          const rows = smartLatest(
+            dfVaccines,
+            (x) =>
+              String(x.MaDan) +
+              "|" +
+              String(x.TenVacXin || "")
+                .trim()
+                .toLowerCase(),
+            "NgayTiem",
+            "MaTiem",
+            today,
+          ).filter((x) =>
+            db.flocks.some(
+              (y) =>
+                String(y.id) === String(x.MaDan) &&
+                !/đã xuất|đã bán|kết thúc/i.test(y.status || ""),
+            ),
+          );
+          for (const x of rows) {
+            const date = dfDate(x.NgayNhacLai),
+              n = smartDays(date, today),
+              name = dfFlockName(x.MaDan) + " – " + x.TenVacXin;
+            if (!date || !Number.isFinite(n))
+              v.push(["neutral", name + ": chưa có ngày nhắc lại."]);
+            else if (n <= L.vaccineDays)
+              v.push([
+                n <= 0 ? "danger" : "warn",
+                name +
+                  ": " +
+                  (n < 0
+                    ? "quá hạn " + -n + " ngày"
+                    : n === 0
+                      ? "đến hạn hôm nay"
+                      : "còn " + n + " ngày") +
+                  " (" +
+                  date +
+                  "). Kiểm tra lịch với thú y.",
+              ]);
+          }
+          if (!v.length)
+            v.push([
+              rows.length ? "ok" : "neutral",
+              rows.length
+                ? "Không có lịch nhắc lại đến hạn trong 3 ngày tới."
+                : "Chưa có lịch tiêm của đàn đang nuôi.",
+            ]);
+        }
+        if (smartLoaded.environment) {
+          const rows = smartLatest(
+            dfEnvironments,
+            (x) => String(x.MaChuong),
+            "NgayDo",
+            "MaDo",
+            today,
+          );
+          for (const x of rows) {
+            const issues = [],
+              t = Number(x.NhietDo),
+              h = Number(x.DoAm),
+              date = dfDate(x.NgayDo);
+            if (x.NhietDo != null && (t < L.tempMin || t > L.tempMax))
+              issues.push(
+                "nhiệt độ " + t + "°C " + (t < L.tempMin ? "thấp" : "cao"),
+              );
+            if (x.DoAm != null && (h < L.humidityMin || h > L.humidityMax))
+              issues.push(
+                "độ ẩm " + h + "% " + (h < L.humidityMin ? "thấp" : "cao"),
+              );
+            if (String(x.DoSach).trim().toLowerCase() === "bẩn")
+              issues.push("chuồng bẩn, cần vệ sinh");
+            const stale = smartDays(today, date) > L.staleDays;
+            if (issues.length || stale)
+              e.push([
+                issues.length && !stale ? "warn" : "neutral",
+                dfBarnName(x.MaChuong) +
+                  " (" +
+                  date +
+                  "): " +
+                  [
+                    ...issues,
+                    ...(stale ? ["số đo đã cũ, cần đo lại"] : []),
+                  ].join("; ") +
+                  ".",
+              ]);
+          }
+          if (!e.length)
+            e.push([
+              rows.length ? "ok" : "neutral",
+              rows.length
+                ? "Các số đo gần nhất chưa vượt ngưỡng demo."
+                : "Chưa có số đo môi trường.",
+            ]);
+          e.push([
+            "neutral",
+            "Ngưỡng demo: 20–30°C, 50–75% độ ẩm; điều chỉnh theo tuổi vịt và hướng dẫn thú y.",
+          ]);
+        }
+        const all = [...f, ...c, ...d, ...v, ...e, ...v2Alerts()].filter(
+          (x) => x[0] === "danger" || x[0] === "warn",
+        );
         const incomplete = !lastSQL || failedReads.size > 0 || loadingSQL;
-        const suggestions = [...all].sort((a,b)=>Number(b[0]==="danger")-Number(a[0]==="danger"));
-        smartShow("smartCenter","Gợi ý công việc hôm nay",incomplete?[["neutral","Dữ liệu đang cập nhật hoặc chưa đầy đủ; vui lòng chờ hoặc tải lại để nhận gợi ý."]]:suggestions.length?suggestions:[["neutral","Chưa phát hiện vấn đề cần xử lý từ dữ liệu đã ghi nhận."]]);
+        const suggestions = [...all].sort(
+          (a, b) => Number(b[0] === "danger") - Number(a[0] === "danger"),
+        );
+        smartShow(
+          "smartCenter",
+          "Gợi ý công việc hôm nay",
+          incomplete
+            ? [
+                [
+                  "neutral",
+                  "Dữ liệu đang cập nhật hoặc chưa đầy đủ; vui lòng chờ hoặc tải lại để nhận gợi ý.",
+                ],
+              ]
+            : suggestions.length
+              ? suggestions
+              : [
+                  [
+                    "neutral",
+                    "Chưa phát hiện vấn đề cần xử lý từ dữ liệu đã ghi nhận.",
+                  ],
+                ],
+        );
         const count = $("reminderCount");
-        if(count) count.textContent = incomplete ? "—" : (suggestions.length + Math.min(3,db.health.filter(h=>h.status === "Chờ thực hiện").length)) + " việc";
-        smartShow('smartFinance','Nhận định thu chi',f.length?f:wait);smartShow('smartExpense','Nhận định cơ cấu chi phí',c.length?c:wait);smartShow('smartDucks','Cảnh báo hao hụt đàn',d.length?d:wait);smartShow('smartVaccine','Nhắc lịch tiêm phòng',v.length?v:wait);smartShow('smartEnvironment','Cảnh báo môi trường',e.length?e:wait);
+        if (count)
+          count.textContent = incomplete
+            ? "—"
+            : suggestions.length +
+              Math.min(
+                3,
+                db.health.filter((h) => h.status === "Chờ thực hiện").length,
+              ) +
+              " việc";
+        smartShow("smartFinance", "Nhận định thu chi", f.length ? f : wait);
+        smartShow(
+          "smartExpense",
+          "Nhận định cơ cấu chi phí",
+          c.length ? c : wait,
+        );
+        smartShow("smartDucks", "Cảnh báo hao hụt đàn", d.length ? d : wait);
+        smartShow("smartVaccine", "Nhắc lịch tiêm phòng", v.length ? v : wait);
+        smartShow(
+          "smartEnvironment",
+          "Cảnh báo môi trường",
+          e.length ? e : wait,
+        );
       }
 
       ["dfEventDate", "dfVaccineDate", "dfEnvDate"].forEach((id) => {
@@ -4915,104 +5538,586 @@
       db.health = [];
       db.transactions = [];
       const failedReads = new Set();
-      let activeWrites=0, lastEdit=0, retryDelay=30000;
+      let activeWrites = 0,
+        lastEdit = 0,
+        retryDelay = 30000;
       document.documentElement.classList.add("df-await-data");
-      const stabilityStyle=document.createElement("style");
-      stabilityStyle.textContent=`.df-await-data .page:not([id="page-minutes"]) > :not(.page-head):not(.df-wait){display:none!important}.df-wait{display:none;padding:24px;background:white;border-radius:16px;color:#176b54;margin:16px 0}.df-await-data .df-wait{display:block}`;
+      const stabilityStyle = document.createElement("style");
+      stabilityStyle.textContent = `.df-await-data .page:not([id="page-minutes"]) > :not(.page-head):not(.df-wait){display:none!important}.df-wait{display:none;padding:24px;background:white;border-radius:16px;color:#176b54;margin:16px 0}.df-await-data .df-wait{display:block}`;
       document.head.append(stabilityStyle);
-      document.querySelectorAll(".page:not([id=page-minutes])").forEach(page=>{const msg=document.createElement("div");msg.className="df-wait";msg.setAttribute("role","status");msg.textContent="Đang kết nối dữ liệu trang trại. Vui lòng chờ hoặc nhấn Tải lại ở đầu trang.";page.append(msg);});
-      let loadingSQL = false, lastSQL = null, retryTimer;
+      document
+        .querySelectorAll(".page:not([id=page-minutes])")
+        .forEach((page) => {
+          const msg = document.createElement("div");
+          msg.className = "df-wait";
+          msg.setAttribute("role", "status");
+          msg.textContent =
+            "Đang kết nối dữ liệu trang trại. Vui lòng nhấn Tải lại ở đầu trang và chờ khoảng 1 phút để hệ thống cập nhật.";
+          page.append(msg);
+        });
+      let loadingSQL = false,
+        lastSQL = null,
+        retryTimer;
       const banner = document.createElement("div");
-      banner.className="connection-inline";
-      banner.innerHTML='<span id="connectionMessage" role="status"></span> <button type="button" id="retrySQL" class="btn">↻ Tải lại</button>';
+      banner.className = "connection-inline";
+      banner.innerHTML =
+        '<span id="connectionMessage" role="status"></span> <button type="button" id="retrySQL" class="btn">↻ Tải lại</button>';
       document.querySelector(".top-actions").prepend(banner);
-      $("retrySQL").onclick=()=>khoiTaoDuLieuSQL();
-      function setConnection(short, detail, state){const el=$("connectionMessage");el.textContent=short;el.title=detail;banner.dataset.state=state;}
-      function connectionFailure(path,method){
-        if(method==="GET") failedReads.add(path); else failedReads.add("/write-uncertain");
-        setConnection(method==="GET"?"Lỗi kết nối":"Chưa xác nhận lưu",method==="GET"?"Vui lòng chờ rồi tải lại. Dữ liệu có thể cũ hoặc thiếu.":"Kiểm tra dữ liệu trước khi gửi lại.","error");
-        banner.hidden=false;
+      $("retrySQL").onclick = () => khoiTaoDuLieuSQL();
+      function setConnection(short, detail, state) {
+        const el = $("connectionMessage");
+        el.textContent = short;
+        el.title = detail;
+        banner.dataset.state = state;
       }
-      function historyMatch(k,e,date,id){const a=$("filter"+k+"From").value,b=$("filter"+k+"To").value,v=$("filter"+k+"Id").value,d=dfDate(e[date]);return (!a||d>=a)&&(!b||d<=b)&&(!v||String(e[id])===v);}
-      function clearHistory(k){for(const x of ["From","To","Id"]) $("filter"+k+x).value="";dfRenderRecords();}
+      function connectionFailure(path, method) {
+        if (method === "GET") failedReads.add(path);
+        else failedReads.add("/write-uncertain");
+        setConnection(
+          method === "GET" ? "Lỗi kết nối" : "Chưa xác nhận lưu",
+          method === "GET"
+            ? "Vui lòng chờ rồi tải lại. Dữ liệu có thể cũ hoặc thiếu."
+            : "Kiểm tra dữ liệu trước khi gửi lại.",
+          "error",
+        );
+        banner.hidden = false;
+      }
+      function historyMatch(k, e, date, id) {
+        const a = $("filter" + k + "From").value,
+          b = $("filter" + k + "To").value,
+          v = $("filter" + k + "Id").value,
+          d = dfDate(e[date]);
+        return (!a || d >= a) && (!b || d <= b) && (!v || String(e[id]) === v);
+      }
+      function clearHistory(k) {
+        for (const x of ["From", "To", "Id"]) $("filter" + k + x).value = "";
+        dfRenderRecords();
+      }
       async function khoiTaoDuLieuSQL() {
-        if(loadingSQL||activeWrites)return;
+        if (loadingSQL || activeWrites) return;
         failedReads.delete("/write-uncertain");
-        loadingSQL=true; clearTimeout(retryTimer); $("retrySQL").disabled=true;
-        setConnection("Đang kết nối…","Vui lòng chờ cập nhật dữ liệu.","loading");
-        banner.hidden=false;
+        loadingSQL = true;
+        clearTimeout(retryTimer);
+        $("retrySQL").disabled = true;
+        setConnection(
+          "Đang kết nối…",
+          "Vui lòng chờ cập nhật dữ liệu.",
+          "loading",
+        );
+        banner.hidden = false;
         try {
-        await taiDanVitTuSQL();
-        await Promise.all([taiChuongTraiTuSQL(),dfLoadRecords()]);
-        for (const type of ["feed", "health", "transaction"]) {
-          try {
-            await taiDuLieuSQL(type);
-          } catch (err) {
-            console.error("Không tải được SQL " + type + ":", err);
-            // Khong hien thi du lieu demo nhu du lieu that khi API loi.
-            if(type==="transaction") smartLoaded.finance=false;
-            failedReads.add(sqlConfig[type].path);
-            renderAll();
+          await taiDanVitTuSQL();
+          await Promise.all([taiChuongTraiTuSQL(), dfLoadRecords()]);
+          for (const type of ["feed", "health", "transaction"]) {
+            try {
+              await taiDuLieuSQL(type);
+            } catch (err) {
+              console.error("Không tải được SQL " + type + ":", err);
+              // Khong hien thi du lieu demo nhu du lieu that khi API loi.
+              if (type === "transaction") smartLoaded.finance = false;
+              failedReads.add(sqlConfig[type].path);
+              renderAll();
+            }
           }
-        }
-        await v2Load();
+          await v2Load();
         } finally {
-          loadingSQL=false; $("retrySQL").disabled=false;
-          if(failedReads.size){setConnection(lastSQL?"Mất kết nối · dữ liệu có thể cũ":"Chưa kết nối · đang thử lại","Vui lòng chờ hoặc nhấn tải lại.","error");retryDelay=Math.min(retryDelay*2,120000);retryTimer=setTimeout(autoSync,retryDelay);}
-          else {lastSQL=new Date();retryDelay=30000;document.documentElement.classList.remove("df-await-data");setConnection("Đã cập nhật "+lastSQL.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"}),"Dữ liệu đã được cập nhật.","ok");}
+          loadingSQL = false;
+          $("retrySQL").disabled = false;
+          if (failedReads.size) {
+            setConnection(
+              lastSQL
+                ? "Mất kết nối · dữ liệu có thể cũ"
+                : "Chưa kết nối · đang thử lại",
+              "Vui lòng chờ hoặc nhấn tải lại.",
+              "error",
+            );
+            retryDelay = Math.min(retryDelay * 2, 120000);
+            retryTimer = setTimeout(autoSync, retryDelay);
+          } else {
+            lastSQL = new Date();
+            retryDelay = 30000;
+            document.documentElement.classList.remove("df-await-data");
+            setConnection(
+              "Đã cập nhật " +
+                lastSQL.toLocaleTimeString("vi-VN", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }),
+              "Dữ liệu đã được cập nhật.",
+              "ok",
+            );
+          }
           smartRender();
         }
       }
 
-let v2Data=null, v2Busy=false, v2Request=null, growthEditId=null;
-function v2Init(){
- const field=(name,label,type='number',extra='')=>`<label>${label}<input name="${name}" type="${type}" required ${extra}></label>`;
- const select=(name,label)=>`<label>${label}<select name="${name}" required></select></label>`;
- const panel=(id,title,body)=>{const el=document.createElement('div');el.className='card v2panel';el.style.marginTop='18px';el.innerHTML=`<h3>${title}</h3>${body}`;$(id).append(el);};
- const form=(id,body)=>`<form id="${id}" class="v2form">${body}<button class="btn" type="submit">Lưu thông tin</button></form>`;
- const style=document.createElement('style');style.textContent='.v2form{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:15px 0}.v2form label{display:grid;gap:5px;flex:1;min-width:145px}.v2form input,.v2form select{padding:10px;border:1px solid #cdded4;border-radius:8px;width:100%;background:white;color:#174d39}.v2result{overflow:auto;line-height:1.8}.v2result table{width:100%}';document.head.append(style);
- panel('page-feed','Ghi nhận sử dụng thức ăn & vật tư',form('v2Use',select('MaDan','Đàn vịt')+select('MaThucAn','Vật tư (theo đơn vị kho)')+field('Ngay','Ngày sử dụng','date')+field('SoLuong','Số lượng','number','min="0.01" step="0.01"')+'<label>Ghi chú<input name="GhiChu" maxlength="500"></label>')+'<div id="v2Stock" class="v2result"></div><h3>Lịch sử sử dụng</h3><label>Từ ngày <input type="date" id="v2From"></label> <label>Đến ngày <input type="date" id="v2To"></label><div id="v2History" class="v2result"></div>');
- panel('page-flocks','Theo dõi tăng trưởng',form('v2Growth',select('MaDan','Đàn vịt')+field('Ngay','Ngày cân','date')+field('CanNang','Cân nặng TB (kg)','number','min="0.001" step="0.001"')+'<label>Mục tiêu (kg)<input name="MucTieu" type="number" min="0.001" step="0.001"></label>'+field('SoCon','Số con trong đàn tại ngày cân','number','min="1" step="1"'))+'<div id="growthEditNote" class="growth-edit-note" hidden>Đang chỉnh sửa bản ghi. <button type="button" class="btn" id="growthCancel">Hủy chỉnh sửa</button></div><label>Chọn đàn <select id="v2GrowthFilter"></select></label><div id="v2GrowthResult" class="v2result"></div>');
- panel('page-finance','Hiệu quả kinh tế theo đàn & dự kiến xuất bán',form('v2Plan',select('MaDan','Đàn vịt')+field('Ngay','Ngày dự kiến bán','date')+field('SoCon','Số con dự kiến bán','number','min="1" step="1"')+field('CanNang','Cân nặng dự kiến (kg)','number','min="0.001" step="0.001"')+field('Gia','Giá bán/kg (đ)','number','min="0" step="1"')+field('ChiPhiThem','Chi phí còn dự kiến (đ)','number','min="0" step="1"'))+'<div id="v2Finance" class="v2result"></div>');
- for(const [id,path] of [['v2Use','sudungvattu'],['v2Growth','tangtruong'],['v2Plan','kehoachxuatban']]){const f=$(id);f.elements.Ngay.value=smartDay();f.onsubmit=async ev=>{ev.preventDefault();if(v2Busy||loadingSQL||!v2Data)return;const data=Object.fromEntries(new FormData(f));for(const k of ['MaDan','MaThucAn','SoLuong','CanNang','MucTieu','SoCon','Gia','ChiPhiThem'])if(k in data)data[k]=data[k]===''?null:Number(data[k]);if(id==='v2Use'){const signature=JSON.stringify(data);if(!v2Request||v2Request.signature!==signature)v2Request={signature,id:crypto.randomUUID()};data.RequestId=v2Request.id;}v2Busy=true;const btn=f.querySelector('button');btn.disabled=true;try{await goiAPI('/'+path+(id==='v2Growth'&&growthEditId!==null?'/'+growthEditId:''),id==='v2Growth'&&growthEditId!==null?'PUT':'POST',data);if(id==='v2Growth'){ $('v2GrowthFilter').value=String(data.MaDan);growthReset(); }if(id==='v2Use')v2Request=null;toast('Đã lưu thông tin');await khoiTaoDuLieuSQL();}catch(e){toast(e.message);}finally{v2Busy=false;btn.disabled=false;}};}
- $('growthCancel').onclick=growthReset;
- $('v2GrowthResult').addEventListener('click',e=>{const btn=e.target.closest('button[data-growth]');if(!btn)return;const id=Number(btn.dataset.growth);if(btn.dataset.action==='edit')growthEdit(id);else growthDelete(id);});
- for(const id of ['v2From','v2To','v2GrowthFilter'])$(id).onchange=v2Render;
-}
-function growthReset(){growthEditId=null;const f=$('v2Growth');f.reset();f.elements.Ngay.value=smartDay();f.elements.MaDan.value=$('v2GrowthFilter').value;f.querySelector('button[type=submit]').textContent='Thêm bản ghi';$('growthEditNote').hidden=true;}
-function growthEdit(id){if(v2Busy||loadingSQL||!v2Data)return;const r=v2Data.growth.find(x=>Number(x.Id)===id);if(!r)return;growthEditId=id;const f=$('v2Growth');for(const k of ['MaDan','Ngay','CanNang','MucTieu','SoCon'])f.elements[k].value=k==='Ngay'?dfDate(r[k]):r[k]??'';f.querySelector('button[type=submit]').textContent='Lưu chỉnh sửa';$('growthEditNote').hidden=false;f.scrollIntoView({block:'center',behavior:'smooth'});}
-async function growthDelete(id){if(v2Busy||loadingSQL||!v2Data)return;if(!confirm('Bạn có chắc muốn xóa bản ghi tăng trưởng này?'))return;v2Busy=true;try{await goiAPI('/tangtruong/'+id,'DELETE');if(growthEditId===id)growthReset();toast('Đã xóa bản ghi');await khoiTaoDuLieuSQL();}catch(e){toast(e.message);}finally{v2Busy=false;}}
-function v2DisplayDate(d){return dfDate(d).split('-').reverse().join('/');}
-function growthTable(g){return '<table><thead><tr>'+['Ngày cân','Thực tế (kg)','Mục tiêu (kg)','Số con','Thao tác'].map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+g.map(r=>'<tr>'+[v2DisplayDate(r.Ngay),num(r.CanNang),r.MucTieu==null?'—':num(r.MucTieu),num(r.SoCon)].map(x=>'<td>'+safe(String(x))+'</td>').join('')+'<td><div class="growth-actions"><button type="button" class="btn" data-growth="'+Number(r.Id)+'" data-action="edit">Sửa</button><button type="button" class="btn" data-growth="'+Number(r.Id)+'" data-action="delete">Xóa</button></div></td></tr>').join('')+(g.length?'':'<tr><td colspan="5">Chưa có bản ghi tăng trưởng.</td></tr>')+'</tbody></table>';}
-async function v2Load(){try{const [use,growth,plans]=await Promise.all(['sudungvattu','tangtruong','kehoachxuatban'].map(x=>goiAPI('/'+x)));v2Data={use,growth,plans};failedReads.delete("/v2-batch");}catch(e){failedReads.add("/v2-batch");}v2Render();}
-function v2Options(el,rows,label){const old=el.value;el.innerHTML=rows.map(x=>`<option value="${x.id}">${safe(label(x))}</option>`).join('');if(rows.some(x=>String(x.id)===old))el.value=old;}
-function v2Forecast(){if(!v2Data)return [];const today=smartDay();return db.feed.map(f=>{const rows=v2Data.use.filter(r=>r.MaThucAn===f.id&&r.DonVi===f.unit&&smartDays(today,dfDate(r.Ngay))>=1&&smartDays(today,dfDate(r.Ngay))<=7);const days=new Set(rows.map(r=>dfDate(r.Ngay))).size;const avg=rows.reduce((s,r)=>s+Number(r.SoLuong),0)/7;return {f,days,left:days===7&&avg>0?f.stock/avg:null};});}
-function v2Alerts(){return v2Forecast().filter(x=>x.left!==null&&x.left<=3).map(x=>['warn',x.f.name+' còn khoảng '+x.left.toFixed(1)+' ngày sử dụng.']);}
-function v2Table(headers,rows){return '<table><thead><tr>'+headers.map(x=>'<th>'+safe(x)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+safe(String(x))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';}
-function v2Render(){if(!$('v2Use'))return;for(const id of ['v2Use','v2Growth','v2Plan'])v2Options($(id).elements.MaDan,db.flocks,x=>x.name);v2Options($('v2Use').elements.MaThucAn,db.feed,x=>x.name+' ('+x.unit+', tồn '+num(x.stock)+')');v2Options($('v2GrowthFilter'),db.flocks,x=>x.name);
- if(!v2Data){$('v2Today').textContent='—';for(const id of ['v2Stock','v2History','v2GrowthResult','v2Finance'])$(id).textContent='Chưa tải được dữ liệu mới. Vui lòng tải lại.';return;}
- const today=smartDay(),kg=r=>String(r.DonVi).trim().toLowerCase()==='kg',sum=rs=>rs.reduce((s,r)=>s+Number(r.SoLuong),0);$('v2Today').textContent=num(sum(v2Data.use.filter(r=>kg(r)&&dfDate(r.Ngay)===today)))+' kg';
- $('v2Stock').innerHTML='<h3>Tiêu thụ theo kỳ (kg)</h3>'+[1,7,30].map(n=>`${n} ngày: ${num(sum(v2Data.use.filter(r=>kg(r)&&smartDays(today,dfDate(r.Ngay))>=0&&smartDays(today,dfDate(r.Ngay))<n)))} kg`).join(' · ')+'<h3>Dự báo tồn kho</h3>'+v2Table(['Vật tư','Số ngày còn lại'],v2Forecast().map(x=>[x.f.name,x.left===null?'Chưa đủ 7 ngày ghi nhận':x.left.toFixed(1)+' ngày']));
- $('v2History').innerHTML=v2Table(['Ngày','Đàn','Vật tư','Số lượng','Ghi chú'],v2Data.use.filter(r=>(!$('v2From').value||dfDate(r.Ngay)>=$('v2From').value)&&(!$('v2To').value||dfDate(r.Ngay)<=$('v2To').value)).sort((a,b)=>dfDate(b.Ngay).localeCompare(dfDate(a.Ngay))).map(r=>[dfDate(r.Ngay),dfFlockName(r.MaDan),db.feed.find(f=>f.id===r.MaThucAn)?.name||r.MaThucAn,num(r.SoLuong)+' '+r.DonVi,r.GhiChu||'']));
- const id=Number($('v2GrowthFilter').value),g=v2Data.growth.filter(r=>r.MaDan===id).sort((a,b)=>dfDate(a.Ngay).localeCompare(dfDate(b.Ngay)));let fcr='Chưa đủ dữ liệu';if(g.length>=2){const a=g[0],b=g.at(-1),gain=(Number(b.CanNang)-Number(a.CanNang))*a.SoCon;const feed=v2Data.use.filter(r=>r.MaDan===id&&kg(r)&&dfDate(r.Ngay)>dfDate(a.Ngay)&&dfDate(r.Ngay)<=dfDate(b.Ngay));if(g.every(r=>r.SoCon===a.SoCon)&&gain>0&&feed.length&&new Set(feed.map(r=>dfDate(r.Ngay))).size===smartDays(dfDate(b.Ngay),dfDate(a.Ngay)))fcr=(sum(feed)/gain).toFixed(2)+' (ước tính, giả định không thay đổi đàn và kg ghi nhận là thức ăn)';}
- const max=Math.max(1,...g.flatMap(r=>[Number(r.CanNang),Number(r.MucTieu)||0]));$('v2GrowthResult').innerHTML=g.map(r=>`<div>${safe(v2DisplayDate(r.Ngay))} · ${num(r.CanNang)} kg / mục tiêu ${r.MucTieu??'—'}<div style="background:#238363;height:9px;width:${100*r.CanNang/max}%"></div><div style="background:#d6ae55;height:5px;width:${100*(r.MucTieu||0)/max}%"></div></div>`).join('')+growthTable(g);
- $('v2Finance').innerHTML=failedReads.has('/giaodichtaichinh')?'Chưa tải được tài chính': '<p>Chỉ tính giao dịch gắn mã đàn; chưa gồm chi phí chung chưa phân bổ. Chênh lệch thu chi không đồng nghĩa lợi nhuận kế toán.</p>'+v2Table(['Đàn','Thu','Chi','Chênh lệch','Ngày bán dự kiến','Doanh thu dự kiến','Chênh lệch dự kiến cả lứa','Giá hòa vốn/kg'],db.flocks.map(f=>{const tx=db.transactions.filter(t=>Number(t.flockId)===f.id),inc=tx.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0),cost=tx.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0),p=v2Data.plans.find(r=>r.MaDan===f.id),kg=p?p.SoCon*p.CanNang:0;return [f.name,money(inc),money(cost),money(inc-cost),p?dfDate(p.Ngay):'—',p?money(kg*p.Gia):'—',p?money(inc+kg*p.Gia-cost-p.ChiPhiThem):'—',p&&kg?money(Math.max(0,cost+p.ChiPhiThem-inc)/kg):'—'];}));
-}
+      let v2Data = null,
+        v2Busy = false,
+        v2Request = null,
+        growthEditId = null;
+      function v2Init() {
+        const field = (name, label, type = "number", extra = "") =>
+          `<label>${label}<input name="${name}" type="${type}" required ${extra}></label>`;
+        const select = (name, label) =>
+          `<label>${label}<select name="${name}" required></select></label>`;
+        const panel = (id, title, body) => {
+          const el = document.createElement("div");
+          el.className = "card v2panel";
+          el.style.marginTop = "18px";
+          el.innerHTML = `<h3>${title}</h3>${body}`;
+          $(id).append(el);
+        };
+        const form = (id, body) =>
+          `<form id="${id}" class="v2form">${body}<button class="btn" type="submit">Lưu thông tin</button></form>`;
+        const style = document.createElement("style");
+        style.textContent =
+          ".v2form{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:15px 0}.v2form label{display:grid;gap:5px;flex:1;min-width:145px}.v2form input,.v2form select{padding:10px;border:1px solid #cdded4;border-radius:8px;width:100%;background:white;color:#174d39}.v2result{overflow:auto;line-height:1.8}.v2result table{width:100%}";
+        document.head.append(style);
+        panel(
+          "page-feed",
+          "Ghi nhận sử dụng thức ăn & vật tư",
+          form(
+            "v2Use",
+            select("MaDan", "Đàn vịt") +
+              select("MaThucAn", "Vật tư (theo đơn vị kho)") +
+              field("Ngay", "Ngày sử dụng", "date") +
+              field("SoLuong", "Số lượng", "number", 'min="0.01" step="0.01"') +
+              '<label>Ghi chú<input name="GhiChu" maxlength="500"></label>',
+          ) +
+            '<div id="v2Stock" class="v2result"></div><h3>Lịch sử sử dụng</h3><label>Từ ngày <input type="date" id="v2From"></label> <label>Đến ngày <input type="date" id="v2To"></label><div id="v2History" class="v2result"></div>',
+        );
+        panel(
+          "page-flocks",
+          "Theo dõi tăng trưởng",
+          form(
+            "v2Growth",
+            select("MaDan", "Đàn vịt") +
+              field("Ngay", "Ngày cân", "date") +
+              field(
+                "CanNang",
+                "Cân nặng TB (kg)",
+                "number",
+                'min="0.001" step="0.001"',
+              ) +
+              '<label>Mục tiêu (kg)<input name="MucTieu" type="number" min="0.001" step="0.001"></label>' +
+              field(
+                "SoCon",
+                "Số con trong đàn tại ngày cân",
+                "number",
+                'min="1" step="1"',
+              ),
+          ) +
+            '<div id="growthEditNote" class="growth-edit-note" hidden>Đang chỉnh sửa bản ghi. <button type="button" class="btn" id="growthCancel">Hủy chỉnh sửa</button></div><label>Chọn đàn <select id="v2GrowthFilter"></select></label><div id="v2GrowthResult" class="v2result"></div>',
+        );
+        panel(
+          "page-finance",
+          "Hiệu quả kinh tế theo đàn & dự kiến xuất bán",
+          form(
+            "v2Plan",
+            select("MaDan", "Đàn vịt") +
+              field("Ngay", "Ngày dự kiến bán", "date") +
+              field(
+                "SoCon",
+                "Số con dự kiến bán",
+                "number",
+                'min="1" step="1"',
+              ) +
+              field(
+                "CanNang",
+                "Cân nặng dự kiến (kg)",
+                "number",
+                'min="0.001" step="0.001"',
+              ) +
+              field("Gia", "Giá bán/kg (đ)", "number", 'min="0" step="1"') +
+              field(
+                "ChiPhiThem",
+                "Chi phí còn dự kiến (đ)",
+                "number",
+                'min="0" step="1"',
+              ),
+          ) + '<div id="v2Finance" class="v2result"></div>',
+        );
+        for (const [id, path] of [
+          ["v2Use", "sudungvattu"],
+          ["v2Growth", "tangtruong"],
+          ["v2Plan", "kehoachxuatban"],
+        ]) {
+          const f = $(id);
+          f.elements.Ngay.value = smartDay();
+          f.onsubmit = async (ev) => {
+            ev.preventDefault();
+            if (v2Busy || loadingSQL || !v2Data) return;
+            const data = Object.fromEntries(new FormData(f));
+            for (const k of [
+              "MaDan",
+              "MaThucAn",
+              "SoLuong",
+              "CanNang",
+              "MucTieu",
+              "SoCon",
+              "Gia",
+              "ChiPhiThem",
+            ])
+              if (k in data) data[k] = data[k] === "" ? null : Number(data[k]);
+            if (id === "v2Use") {
+              const signature = JSON.stringify(data);
+              if (!v2Request || v2Request.signature !== signature)
+                v2Request = { signature, id: crypto.randomUUID() };
+              data.RequestId = v2Request.id;
+            }
+            v2Busy = true;
+            const btn = f.querySelector("button");
+            btn.disabled = true;
+            try {
+              await goiAPI(
+                "/" +
+                  path +
+                  (id === "v2Growth" && growthEditId !== null
+                    ? "/" + growthEditId
+                    : ""),
+                id === "v2Growth" && growthEditId !== null ? "PUT" : "POST",
+                data,
+              );
+              if (id === "v2Growth") {
+                $("v2GrowthFilter").value = String(data.MaDan);
+                growthReset();
+              }
+              if (id === "v2Use") v2Request = null;
+              toast("Đã lưu thông tin");
+              await khoiTaoDuLieuSQL();
+            } catch (e) {
+              toast(e.message);
+            } finally {
+              v2Busy = false;
+              btn.disabled = false;
+            }
+          };
+        }
+        $("growthCancel").onclick = growthReset;
+        $("v2GrowthResult").addEventListener("click", (e) => {
+          const btn = e.target.closest("button[data-growth]");
+          if (!btn) return;
+          const id = Number(btn.dataset.growth);
+          if (btn.dataset.action === "edit") growthEdit(id);
+          else growthDelete(id);
+        });
+        for (const id of ["v2From", "v2To", "v2GrowthFilter"])
+          $(id).onchange = v2Render;
+      }
+      function growthReset() {
+        growthEditId = null;
+        const f = $("v2Growth");
+        f.reset();
+        f.elements.Ngay.value = smartDay();
+        f.elements.MaDan.value = $("v2GrowthFilter").value;
+        f.querySelector("button[type=submit]").textContent = "Thêm bản ghi";
+        $("growthEditNote").hidden = true;
+      }
+      function growthEdit(id) {
+        if (v2Busy || loadingSQL || !v2Data) return;
+        const r = v2Data.growth.find((x) => Number(x.Id) === id);
+        if (!r) return;
+        growthEditId = id;
+        const f = $("v2Growth");
+        for (const k of ["MaDan", "Ngay", "CanNang", "MucTieu", "SoCon"])
+          f.elements[k].value = k === "Ngay" ? dfDate(r[k]) : (r[k] ?? "");
+        f.querySelector("button[type=submit]").textContent = "Lưu chỉnh sửa";
+        $("growthEditNote").hidden = false;
+        f.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+      async function growthDelete(id) {
+        if (v2Busy || loadingSQL || !v2Data) return;
+        if (!confirm("Bạn có chắc muốn xóa bản ghi tăng trưởng này?")) return;
+        v2Busy = true;
+        try {
+          await goiAPI("/tangtruong/" + id, "DELETE");
+          if (growthEditId === id) growthReset();
+          toast("Đã xóa bản ghi");
+          await khoiTaoDuLieuSQL();
+        } catch (e) {
+          toast(e.message);
+        } finally {
+          v2Busy = false;
+        }
+      }
+      function v2DisplayDate(d) {
+        return dfDate(d).split("-").reverse().join("/");
+      }
+      function growthTable(g) {
+        return (
+          "<table><thead><tr>" +
+          ["Ngày cân", "Thực tế (kg)", "Mục tiêu (kg)", "Số con", "Thao tác"]
+            .map((x) => "<th>" + x + "</th>")
+            .join("") +
+          "</tr></thead><tbody>" +
+          g
+            .map(
+              (r) =>
+                "<tr>" +
+                [
+                  v2DisplayDate(r.Ngay),
+                  num(r.CanNang),
+                  r.MucTieu == null ? "—" : num(r.MucTieu),
+                  num(r.SoCon),
+                ]
+                  .map((x) => "<td>" + safe(String(x)) + "</td>")
+                  .join("") +
+                '<td><div class="growth-actions"><button type="button" class="btn" data-growth="' +
+                Number(r.Id) +
+                '" data-action="edit">Sửa</button><button type="button" class="btn" data-growth="' +
+                Number(r.Id) +
+                '" data-action="delete">Xóa</button></div></td></tr>',
+            )
+            .join("") +
+          (g.length
+            ? ""
+            : '<tr><td colspan="5">Chưa có bản ghi tăng trưởng.</td></tr>') +
+          "</tbody></table>"
+        );
+      }
+      async function v2Load() {
+        try {
+          const [use, growth, plans] = await Promise.all(
+            ["sudungvattu", "tangtruong", "kehoachxuatban"].map((x) =>
+              goiAPI("/" + x),
+            ),
+          );
+          v2Data = { use, growth, plans };
+          failedReads.delete("/v2-batch");
+        } catch (e) {
+          failedReads.add("/v2-batch");
+        }
+        v2Render();
+      }
+      function v2Options(el, rows, label) {
+        const old = el.value;
+        el.innerHTML = rows
+          .map((x) => `<option value="${x.id}">${safe(label(x))}</option>`)
+          .join("");
+        if (rows.some((x) => String(x.id) === old)) el.value = old;
+      }
+      function v2Forecast() {
+        if (!v2Data) return [];
+        const today = smartDay();
+        return db.feed.map((f) => {
+          const rows = v2Data.use.filter(
+            (r) =>
+              r.MaThucAn === f.id &&
+              r.DonVi === f.unit &&
+              smartDays(today, dfDate(r.Ngay)) >= 1 &&
+              smartDays(today, dfDate(r.Ngay)) <= 7,
+          );
+          const days = new Set(rows.map((r) => dfDate(r.Ngay))).size;
+          const avg = rows.reduce((s, r) => s + Number(r.SoLuong), 0) / 7;
+          return {
+            f,
+            days,
+            left: days === 7 && avg > 0 ? f.stock / avg : null,
+          };
+        });
+      }
+      function v2Alerts() {
+        return v2Forecast()
+          .filter((x) => x.left !== null && x.left <= 3)
+          .map((x) => [
+            "warn",
+            x.f.name + " còn khoảng " + x.left.toFixed(1) + " ngày sử dụng.",
+          ]);
+      }
+      function v2Table(headers, rows) {
+        return (
+          "<table><thead><tr>" +
+          headers.map((x) => "<th>" + safe(x) + "</th>").join("") +
+          "</tr></thead><tbody>" +
+          rows
+            .map(
+              (r) =>
+                "<tr>" +
+                r.map((x) => "<td>" + safe(String(x)) + "</td>").join("") +
+                "</tr>",
+            )
+            .join("") +
+          "</tbody></table>"
+        );
+      }
+      function v2Render() {
+        if (!$("v2Use")) return;
+        for (const id of ["v2Use", "v2Growth", "v2Plan"])
+          v2Options($(id).elements.MaDan, db.flocks, (x) => x.name);
+        v2Options(
+          $("v2Use").elements.MaThucAn,
+          db.feed,
+          (x) => x.name + " (" + x.unit + ", tồn " + num(x.stock) + ")",
+        );
+        v2Options($("v2GrowthFilter"), db.flocks, (x) => x.name);
+        if (!v2Data) {
+          $("v2Today").textContent = "—";
+          for (const id of [
+            "v2Stock",
+            "v2History",
+            "v2GrowthResult",
+            "v2Finance",
+          ])
+            $(id).textContent = "Chưa tải được dữ liệu mới. Vui lòng tải lại.";
+          return;
+        }
+        const today = smartDay(),
+          kg = (r) => String(r.DonVi).trim().toLowerCase() === "kg",
+          sum = (rs) => rs.reduce((s, r) => s + Number(r.SoLuong), 0);
+        $("v2Today").textContent =
+          num(
+            sum(v2Data.use.filter((r) => kg(r) && dfDate(r.Ngay) === today)),
+          ) + " kg";
+        $("v2Stock").innerHTML =
+          "<h3>Tiêu thụ theo kỳ (kg)</h3>" +
+          [1, 7, 30]
+            .map(
+              (n) =>
+                `${n} ngày: ${num(sum(v2Data.use.filter((r) => kg(r) && smartDays(today, dfDate(r.Ngay)) >= 0 && smartDays(today, dfDate(r.Ngay)) < n)))} kg`,
+            )
+            .join(" · ") +
+          "<h3>Dự báo tồn kho</h3>" +
+          v2Table(
+            ["Vật tư", "Số ngày còn lại"],
+            v2Forecast().map((x) => [
+              x.f.name,
+              x.left === null
+                ? "Chưa đủ 7 ngày ghi nhận"
+                : x.left.toFixed(1) + " ngày",
+            ]),
+          );
+        $("v2History").innerHTML = v2Table(
+          ["Ngày", "Đàn", "Vật tư", "Số lượng", "Ghi chú"],
+          v2Data.use
+            .filter(
+              (r) =>
+                (!$("v2From").value || dfDate(r.Ngay) >= $("v2From").value) &&
+                (!$("v2To").value || dfDate(r.Ngay) <= $("v2To").value),
+            )
+            .sort((a, b) => dfDate(b.Ngay).localeCompare(dfDate(a.Ngay)))
+            .map((r) => [
+              dfDate(r.Ngay),
+              dfFlockName(r.MaDan),
+              db.feed.find((f) => f.id === r.MaThucAn)?.name || r.MaThucAn,
+              num(r.SoLuong) + " " + r.DonVi,
+              r.GhiChu || "",
+            ]),
+        );
+        const id = Number($("v2GrowthFilter").value),
+          g = v2Data.growth
+            .filter((r) => r.MaDan === id)
+            .sort((a, b) => dfDate(a.Ngay).localeCompare(dfDate(b.Ngay)));
+        let fcr = "Chưa đủ dữ liệu";
+        if (g.length >= 2) {
+          const a = g[0],
+            b = g.at(-1),
+            gain = (Number(b.CanNang) - Number(a.CanNang)) * a.SoCon;
+          const feed = v2Data.use.filter(
+            (r) =>
+              r.MaDan === id &&
+              kg(r) &&
+              dfDate(r.Ngay) > dfDate(a.Ngay) &&
+              dfDate(r.Ngay) <= dfDate(b.Ngay),
+          );
+          if (
+            g.every((r) => r.SoCon === a.SoCon) &&
+            gain > 0 &&
+            feed.length &&
+            new Set(feed.map((r) => dfDate(r.Ngay))).size ===
+              smartDays(dfDate(b.Ngay), dfDate(a.Ngay))
+          )
+            fcr =
+              (sum(feed) / gain).toFixed(2) +
+              " (ước tính, giả định không thay đổi đàn và kg ghi nhận là thức ăn)";
+        }
+        const max = Math.max(
+          1,
+          ...g.flatMap((r) => [Number(r.CanNang), Number(r.MucTieu) || 0]),
+        );
+        $("v2GrowthResult").innerHTML =
+          g
+            .map(
+              (r) =>
+                `<div>${safe(v2DisplayDate(r.Ngay))} · ${num(r.CanNang)} kg / mục tiêu ${r.MucTieu ?? "—"}<div style="background:#238363;height:9px;width:${(100 * r.CanNang) / max}%"></div><div style="background:#d6ae55;height:5px;width:${(100 * (r.MucTieu || 0)) / max}%"></div></div>`,
+            )
+            .join("") + growthTable(g);
+        $("v2Finance").innerHTML = failedReads.has("/giaodichtaichinh")
+          ? "Chưa tải được tài chính"
+          : "<p>Chỉ tính giao dịch gắn mã đàn; chưa gồm chi phí chung chưa phân bổ. Chênh lệch thu chi không đồng nghĩa lợi nhuận kế toán.</p>" +
+            v2Table(
+              [
+                "Đàn",
+                "Thu",
+                "Chi",
+                "Chênh lệch",
+                "Ngày bán dự kiến",
+                "Doanh thu dự kiến",
+                "Chênh lệch dự kiến cả lứa",
+                "Giá hòa vốn/kg",
+              ],
+              db.flocks.map((f) => {
+                const tx = db.transactions.filter(
+                    (t) => Number(t.flockId) === f.id,
+                  ),
+                  inc = tx
+                    .filter((t) => t.type === "income")
+                    .reduce((s, t) => s + t.amount, 0),
+                  cost = tx
+                    .filter((t) => t.type === "expense")
+                    .reduce((s, t) => s + t.amount, 0),
+                  p = v2Data.plans.find((r) => r.MaDan === f.id),
+                  kg = p ? p.SoCon * p.CanNang : 0;
+                return [
+                  f.name,
+                  money(inc),
+                  money(cost),
+                  money(inc - cost),
+                  p ? dfDate(p.Ngay) : "—",
+                  p ? money(kg * p.Gia) : "—",
+                  p ? money(inc + kg * p.Gia - cost - p.ChiPhiThem) : "—",
+                  p && kg
+                    ? money(Math.max(0, cost + p.ChiPhiThem - inc) / kg)
+                    : "—",
+                ];
+              }),
+            );
+      }
 
       v2Init();
       growthReset();
       khoiTaoDuLieuSQL();
-      function autoSync(){
-        if(document.hidden||!navigator.onLine||loadingSQL||activeWrites||v2Busy||growthEditId!==null||document.querySelector('.modal-backdrop.open')||document.activeElement?.matches('input,select,textarea,[contenteditable=true]')||Date.now()-lastEdit<120000)return;
+      function autoSync() {
+        if (
+          document.hidden ||
+          !navigator.onLine ||
+          loadingSQL ||
+          activeWrites ||
+          v2Busy ||
+          growthEditId !== null ||
+          document.querySelector(".modal-backdrop.open") ||
+          document.activeElement?.matches(
+            "input,select,textarea,[contenteditable=true]",
+          ) ||
+          Date.now() - lastEdit < 120000
+        )
+          return;
         khoiTaoDuLieuSQL();
       }
-      document.addEventListener('input',()=>{lastEdit=Date.now();});
-      document.addEventListener('change',()=>{lastEdit=Date.now();});
-      document.addEventListener('visibilitychange',()=>{if(!document.hidden)autoSync();});
-      window.addEventListener('online',autoSync);
-      window.addEventListener('offline',()=>setConnection('Mất kết nối mạng','Dữ liệu có thể cũ.','error'));
-      setInterval(autoSync,120000);
-      setInterval(smartRender,60000);
+      document.addEventListener("input", () => {
+        lastEdit = Date.now();
+      });
+      document.addEventListener("change", () => {
+        lastEdit = Date.now();
+      });
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) autoSync();
+      });
+      window.addEventListener("online", autoSync);
+      window.addEventListener("offline", () =>
+        setConnection("Mất kết nối mạng", "Dữ liệu có thể cũ.", "error"),
+      );
+      setInterval(autoSync, 120000);
+      setInterval(smartRender, 60000);
     </script>
   </body>
 </html>
