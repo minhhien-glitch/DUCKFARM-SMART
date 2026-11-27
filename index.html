@@ -5551,8 +5551,18 @@
           const msg = document.createElement("div");
           msg.className = "df-wait";
           msg.setAttribute("role", "status");
-          msg.textContent =
-            "Đang kết nối dữ liệu trang trại. Vui lòng nhấn Tải lại ở đầu trang và chờ khoảng 1 phút để hệ thống cập nhật.";
+          msg.innerHTML = `
+    Đang kết nối dữ liệu trang trại. Vui lòng nhấn Tải lại ở đầu trang và chờ khoảng 1 phút để hệ thống cập nhật.
+    <br><br>
+    Nếu hệ thống chưa thể kết nối, quý khách có thể trải nghiệm
+    <a href="https://duckfarmsmart-demo.vercel.app"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="color:#176b54; font-weight:600; text-decoration:underline;">
+       phiên bản dự phòng DUCKFARM SMART 2.0
+    </a>
+    với đầy đủ các chức năng và dữ liệu mẫu.
+`;
           page.append(msg);
         });
       let loadingSQL = false,
